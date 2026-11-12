@@ -28,6 +28,14 @@ function cssIn(dir: string) {
     .join('\n')
 }
 
+// Both playgrounds load @trevui/theme/theme.css, which maps tokens into Tailwind.
+function expectTokenUtilities(css: string) {
+  expect(css).toMatch(/\.bg-primary\{background-color:var\(--tre-primary\)\}/)
+  expect(css).toMatch(/\.h-control-md\{height:var\(--tre-control-md\)\}/)
+  expect(css).toMatch(/--tre-primary:/)
+  expect(css).toMatch(/--tre-raw-primary-600:/)
+}
+
 type ViteServer = {
   ssrLoadModule(id: string): Promise<unknown>
   close(): Promise<void>
@@ -53,6 +61,10 @@ describe('vite playground', () => {
 
   it('builds Tailwind utilities from registry/', () => {
     expect(cssIn(join(app, 'dist'))).toMatch(placeholderUtility)
+  })
+
+  it('vite playground resolves token utilities through theme.css', () => {
+    expectTokenUtilities(cssIn(join(app, 'dist')))
   })
 
   describe('first paint', () => {
@@ -234,6 +246,10 @@ describe('nuxt playground', () => {
 
   it('builds Tailwind utilities from registry/', () => {
     expect(cssIn(join(app, '.output/public'))).toMatch(placeholderUtility)
+  })
+
+  it('nuxt playground resolves token utilities through theme.css', () => {
+    expectTokenUtilities(cssIn(join(app, '.output/public')))
   })
 
   it('nuxt playground renders the placeholder demo', async () => {

@@ -2,7 +2,33 @@
   "name": "@trevui/theme",
   "version": "0.0.0",
   "private": true,
-  "description": "Theme knobs to CSS. Stub until P0-05.",
+  "description": "Theme knobs to CSS: OKLCH scales, semantic tokens, contrast checks and the Tailwind mapping.",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./theme.css": "./css/theme.css",
+    "./tokens.css": "./css/tokens.css"
+  },
+  "files": [
+    "dist",
+    "css"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepare": "tsdown",
+    "test": "vitest run",
+    "generate": "tsdown && node scripts/generate.mjs"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=4.0.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "4.3.5",
+    "tsdown": "0.23.7",
+    "vitest": "5.1.0"
+  }
 }

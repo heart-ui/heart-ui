@@ -1,0 +1,9 @@
+{
+  "name": "default",
+  "primary": "oklch(0.55 0.2 260)",
+  "neutral": { "hue": 260, "chroma": 0.02 },
+  "radius": 0.5,
+  "density": "default",
+  "font": { "sans": "Inter, system-ui, sans-serif", "mono": "ui-monospace, monospace" },
+  "shadow": "soft"
+}
