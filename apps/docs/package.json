@@ -1,0 +1,8 @@
+{
+  "name": "docs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "TrevUI docs site (VitePress). Stub until P0-13.",
+  "license": "MIT",
+  "type": "module"
+}

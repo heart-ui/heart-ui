@@ -1,0 +1,8 @@
+{
+  "name": "customizer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Theme customizer app. Stub until Phase 4.",
+  "license": "MIT",
+  "type": "module"
+}

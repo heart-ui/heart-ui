@@ -1,0 +1,28 @@
+{
+  "min_plugin_version": "3.5.0",
+  "project": {
+    "kind": "greenfield",
+    "stack": [
+      "typescript"
+    ]
+  },
+  "docs_dir": "docs/sdlc",
+  "commands": {
+    "install": "pnpm install --frozen-lockfile",
+    "test": "pnpm test",
+    "lint": null,
+    "typecheck": "pnpm typecheck",
+    "build": null
+  },
+  "areas": {
+    "sensitive": [
+      "**/{auth,authn,authz,session,sessions}/**",
+      "**/*{secret,credential,crypto}*",
+      "**/.env*",
+      ".changeset/**",
+      ".npmrc"
+    ]
+  },
+  "prd": "docs/spec.md",
+  "design": "builtin"
+}
