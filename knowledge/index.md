@@ -27,7 +27,7 @@ The specs in `docs/` are the primary source (see `CLAUDE.md`). This folder holds
 -
 
 ## Gotchas
--
+- [gotchas/toolchain.md](gotchas/toolchain.md) — TS 7 vs vue-tsc, seeded-error tests, tsconfig and gitignore traps
 
 ## Runbooks
 -

@@ -10,7 +10,7 @@
   "commands": {
     "install": "pnpm install --frozen-lockfile",
     "test": "pnpm test",
-    "lint": null,
+    "lint": "pnpm lint",
     "typecheck": "pnpm typecheck",
     "build": null
   },

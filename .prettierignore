@@ -1,0 +1,5 @@
+*.md
+pnpm-lock.yaml
+.sdlc/
+.claude/
+.github/
