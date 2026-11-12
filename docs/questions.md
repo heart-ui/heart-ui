@@ -15,7 +15,8 @@ Gaps and conflicts found while building. Format in
 
 - 2026-11-12 P0-05: tokens.md says `primary` is "any CSS color", but no doc
   names a color library. Answered by the maintainer: add `culori` (4.0.2)
-  and parse with it; translucent colors are rejected. The OKLCH math,
+  and parse with it; translucent colors are rejected. `@types/culori`
+  (4.0.1, devDependency) approved by the maintainer too. The OKLCH math,
   clamping and contrast stay hand-written.
 - 2026-11-12 P0-05: tokens.md names the `shadow` knob values but not the
   shadows. Chose: `soft` is a wide, faint blur, `crisp` a tight, darker
