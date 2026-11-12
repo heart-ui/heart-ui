@@ -22,5 +22,6 @@
       ".changeset/**",
       ".npmrc"
     ]
-  }
+  },
+  "prd": "docs/spec.md"
 }
