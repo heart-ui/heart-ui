@@ -1,0 +1,41 @@
+{
+  "scaffold_version": "3.5.0",
+  "hosts": [
+    "claude-code"
+  ],
+  "files": {},
+  "merged": {},
+  "migrations": {
+    "applied": [],
+    "skipped": {}
+  },
+  "setup": {
+    "kind": "greenfield",
+    "completed_steps": [
+      "detect"
+    ],
+    "complete": false
+  },
+  "command_runs": {
+    "(root)": {
+      "install": {
+        "command": "pnpm install --frozen-lockfile",
+        "ran": true,
+        "exit": 0,
+        "at": "2026-11-12T04:04:09Z"
+      },
+      "typecheck": {
+        "command": "pnpm typecheck",
+        "ran": true,
+        "exit": 0,
+        "at": "2026-11-12T04:04:10Z"
+      },
+      "test": {
+        "command": "pnpm test",
+        "ran": true,
+        "exit": 0,
+        "at": "2026-11-12T04:04:11Z"
+      }
+    }
+  }
+}
