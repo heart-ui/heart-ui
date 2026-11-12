@@ -23,5 +23,6 @@
       ".npmrc"
     ]
   },
-  "prd": "docs/spec.md"
+  "prd": "docs/spec.md",
+  "design": "builtin"
 }
