@@ -13,5 +13,14 @@
     "lint": null,
     "typecheck": "pnpm typecheck",
     "build": null
+  },
+  "areas": {
+    "sensitive": [
+      "**/{auth,authn,authz,session,sessions}/**",
+      "**/*{secret,credential,crypto}*",
+      "**/.env*",
+      ".changeset/**",
+      ".npmrc"
+    ]
   }
 }
