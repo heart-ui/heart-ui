@@ -28,7 +28,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-03 Lint, format, typecheck
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P0-02
 - Read: [conventions.md](../docs/conventions.md#toolchain)
