@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.output/
+.nuxt/
+.vitepress/cache/
+.vitepress/dist/
+coverage/
+test-results/
+playwright-report/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example

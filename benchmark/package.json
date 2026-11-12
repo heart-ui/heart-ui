@@ -1,0 +1,8 @@
+{
+  "name": "benchmark",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Agent benchmark: screen specs, runner, scorer. Stub until Phase 2.",
+  "license": "MIT",
+  "type": "module"
+}

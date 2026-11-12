@@ -1,0 +1,8 @@
+{
+  "name": "@trevui/chart-echarts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ECharts engine for TrevUI charts. Stub until Phase 3.",
+  "license": "MIT",
+  "type": "module"
+}
