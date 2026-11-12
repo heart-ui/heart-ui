@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TrevUI item meta",
+  "description": "The fields TrevUI adds under a registry item's meta (docs/registry.md, Item metadata).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "tier": { "enum": [1, 2, 3] },
+    "useWhen": { "type": "string", "minLength": 1 },
+    "avoidWhen": { "type": "string", "minLength": 1 },
+    "regions": { "type": "object", "additionalProperties": { "type": "string" } },
+    "data": { "type": "object" },
+    "states": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "enum": ["empty", "loading", "error", "long"] }
+    }
+  }
+}
