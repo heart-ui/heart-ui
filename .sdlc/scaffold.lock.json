@@ -130,7 +130,13 @@
       "template": "templates/project/hookify/sdlc-ui-hardcoded-values.md"
     }
   },
-  "merged": {},
+  "merged": {
+    ".claude/settings.json": [
+      "Bash(pnpm install --frozen-lockfile:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm typecheck:*)"
+    ]
+  },
   "migrations": {
     "applied": [],
     "skipped": {}
@@ -145,7 +151,8 @@
       "ci",
       "rules",
       "guardrails",
-      "lint"
+      "lint",
+      "allowlist"
     ],
     "complete": false
   },
