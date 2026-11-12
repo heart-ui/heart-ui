@@ -173,7 +173,8 @@
       "gitignore",
       "prd",
       "constitution",
-      "design-system"
+      "design-system",
+      "knowledge"
     ],
     "complete": false
   },
