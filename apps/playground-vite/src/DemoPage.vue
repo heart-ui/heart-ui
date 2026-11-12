@@ -11,6 +11,6 @@ const demo = computed(() => {
 </script>
 
 <template>
-  <component :is="demo" v-if="demo" />
+  <main v-if="demo"><component :is="demo" /></main>
   <p v-else>No demo at “{{ path }}”.</p>
 </template>

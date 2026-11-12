@@ -17,3 +17,4 @@ playwright-report/
 .sdlc/state/*.events.jsonl
 .sdlc/state/*.commands/
 .claude/*.local.md
+.vitest/

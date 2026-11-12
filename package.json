@@ -10,6 +10,12 @@
   },
   "scripts": {
     "test": "pnpm --dir packages/eslint-plugin run build && vitest run",
+    "test:unit": "vitest run",
+    "test:browser": "pnpm --dir apps/playground-vite run test:browser",
+    "test:visual": "pnpm --dir apps/playground-vite run test:visual",
+    "test:ssr": "pnpm --dir apps/playground-nuxt run test:ssr",
+    "test:harness": "vitest run --config tests/harness.config.ts",
+    "test:install": "pnpm --dir apps/playground-vite exec playwright install chromium",
     "lint": "pnpm --dir packages/eslint-plugin run build && eslint --max-warnings 0 . && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "vue-tsc -p tsconfig.json --noEmit && vue-tsc -p registry/tsconfig.json --noEmit",

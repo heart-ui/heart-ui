@@ -1,11 +1,11 @@
-import { spawn, spawnSync, type ChildProcess } from 'node:child_process'
+import { spawnSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, rmSync } from 'node:fs'
-import { createServer } from 'node:net'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { createRequire } from 'node:module'
 import { runInNewContext } from 'node:vm'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { startNodeServer } from '../apps/test-utils'
 
 const root = join(import.meta.dirname, '..')
 const buildTimeout = 600_000
@@ -186,53 +186,15 @@ describe('vite playground', () => {
 describe('nuxt playground', () => {
   const app = join(root, 'apps/playground-nuxt')
   let built: { status: number | null; output: string }
-  let server: ChildProcess | undefined
+  let stop: (() => void) | undefined
   let base = ''
-
-  async function freePort() {
-    return new Promise<number>((resolve, reject) => {
-      const probe = createServer()
-      probe.once('error', reject)
-      probe.listen(0, '127.0.0.1', () => {
-        const address = probe.address()
-        probe.close(() => resolve(typeof address === 'object' && address ? address.port : 0))
-      })
-    })
-  }
 
   beforeAll(async () => {
     built = build('playground-nuxt', '.output')
     if (built.status !== 0) throw new Error(`nuxt build failed:\n${built.output}`)
-    const port = await freePort()
-    base = `http://127.0.0.1:${port}`
-    server = spawn(process.execPath, [join(app, '.output/server/index.mjs')], {
-      env: { ...process.env, PORT: String(port), HOST: '127.0.0.1' },
-      stdio: ['ignore', 'pipe', 'pipe'],
-    })
-    let log = ''
-    let spawnError: Error | undefined
-    server.stdout!.on('data', (chunk: Buffer) => (log += chunk))
-    server.stderr!.on('data', (chunk: Buffer) => (log += chunk))
-    server.once('error', (error) => (spawnError = error))
-    const deadline = Date.now() + 30_000
-    for (;;) {
-      if (spawnError) throw spawnError
-      if (server.exitCode !== null || server.signalCode !== null) {
-        throw new Error(`nuxt server exited (${server.exitCode ?? server.signalCode}): ${log}`)
-      }
-      if (Date.now() > deadline) throw new Error(`nuxt server did not answer in 30 s: ${log}`)
-      try {
-        const response = await fetch(base, { signal: AbortSignal.timeout(2_000) })
-        await response.body?.cancel()
-        break
-      } catch {
-        await new Promise((resolve) => setTimeout(resolve, 100))
-      }
-    }
+    ;({ base, stop } = await startNodeServer(join(app, '.output/server/index.mjs')))
   }, buildTimeout)
-  afterAll(() => {
-    server?.kill()
-  })
+  afterAll(() => stop?.())
 
   async function htmlAttributes(path: string) {
     const html = await (await fetch(base + path)).text()

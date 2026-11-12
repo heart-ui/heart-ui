@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test:ssr": "nuxt prepare && vitest run --config vitest.config.ts"
   },
   "dependencies": {
     "@trevui/theme": "workspace:*",
@@ -17,6 +18,8 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.5",
-    "tailwindcss": "4.3.5"
+    "playwright": "1.65.0",
+    "tailwindcss": "4.3.5",
+    "vitest": "5.1.0"
   }
 }

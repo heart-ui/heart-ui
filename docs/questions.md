@@ -13,6 +13,17 @@ Gaps and conflicts found while building. Format in
   `/demo/<name>` named by the item folder. Why: P0-07 and P0-09 check it as
   an item (`check:item placeholder`).
 
+- 2026-11-12 P0-07: the visual runner walks every theme in
+  `registry/themes/`, but the playgrounds load only the default theme's
+  `tokens.css`, so a second theme would render as the default. Decided by
+  the agent (maintainer delegated decisions): keep one theme's CSS until
+  the first preset theme lands; that task scopes each theme under
+  `[data-tre-theme="<name>"]` and loads them all in the playgrounds.
+- 2026-11-12 P0-07: visual baselines need human approval, but the
+  maintainer reviews only the final product. Decided by the agent: generate
+  the placeholder baselines with `pnpm test:visual --update` and flag them
+  for approval in the Phase 0 summary.
+
 - 2026-11-12 P0-05: tokens.md says `primary` is "any CSS color", but no doc
   names a color library. Answered by the maintainer: add `culori` (4.0.2)
   and parse with it; translucent colors are rejected. `@types/culori`

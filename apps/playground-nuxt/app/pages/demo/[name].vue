@@ -15,5 +15,5 @@ const Demo = defineAsyncComponent(load)
 </script>
 
 <template>
-  <Demo />
+  <main><Demo /></main>
 </template>
