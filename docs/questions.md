@@ -40,9 +40,11 @@ Gaps and conflicts found while building. Format in
   and `ring` with it. `disabled-foreground` isn't checked (WCAG 1.4.3).
 - 2026-11-12 P0-05: status colors (`danger`, `warning`, ...) are fills;
   tokens.md pairs only their `-foreground` and `-subtle-foreground`. Chose:
-  don't check `text-danger` on page backgrounds. Open: if field errors use
-  `text-danger`, add a text token (for example `danger-text`) rather than
-  moving the fill.
+  don't check `text-danger` on page backgrounds. Decided by the agent
+  (maintainer delegated decisions): components don't use status fills as
+  text. The first component that needs error or status text (input, P0-11)
+  adds `<s>-text` tokens checked on `background` and `surface`, in a task
+  that says to add tokens.
 - 2026-11-12 P0-05: the playgrounds set `data-tre-theme` from `?theme=`,
   but `tokens.css` is scoped to `:root` and only the default theme exists.
   Chose: leave per-theme scoping to the first preset theme and the P0-07
