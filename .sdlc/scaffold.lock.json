@@ -135,7 +135,14 @@
       "Bash(pnpm install --frozen-lockfile:*)",
       "Bash(pnpm test:*)",
       "Bash(pnpm typecheck:*)"
-    ]
+    ],
+    ".claude/settings.json#plugin": [
+      "extraKnownMarketplaces.sdlc",
+      "enabledPlugins.sdlc@sdlc",
+      "enabledPlugins.sdlc-extras@sdlc",
+      "enabledPlugins.sdlc-stepper@sdlc"
+    ],
+    ".claude/settings.local.json#plugin": []
   },
   "migrations": {
     "applied": [],
@@ -152,7 +159,8 @@
       "rules",
       "guardrails",
       "lint",
-      "allowlist"
+      "allowlist",
+      "enable-plugin"
     ],
     "complete": false
   },
