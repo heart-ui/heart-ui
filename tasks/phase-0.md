@@ -53,7 +53,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-05 Theme package
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P0-04
 - Read: [tokens.md](../docs/tokens.md)

@@ -63,23 +63,23 @@ Colors. Each row is `--tre-<name>`; values name a raw step.
 | `muted` | neutral-100 | neutral-800 | Neutral fills, hover |
 | `muted-hover` | neutral-200 | neutral-700 | Pressed neutral fills |
 | `foreground` | neutral-900 | neutral-50 | Body text |
-| `muted-foreground` | neutral-600 | neutral-400 | Secondary text |
-| `subtle-foreground` | neutral-500 | neutral-500 | Placeholders, hints |
+| `muted-foreground` | neutral-600 | neutral-300 | Secondary text |
+| `subtle-foreground` | neutral-500 | neutral-400 | Placeholders, hints |
 | `disabled-foreground` | neutral-400 | neutral-600 | Disabled text |
 | `border` | neutral-200 | neutral-800 | Dividers, card edges |
-| `border-control` | neutral-400 | neutral-600 | Input and checkbox edges |
-| `ring` | primary-500 | primary-400 | Focus ring |
+| `border-control` | neutral-500 | neutral-500 | Input and checkbox edges |
+| `ring` | primary-500 | primary-500 | Focus ring |
 | `overlay` | black at 50% | black at 70% | Scrim behind dialogs |
-| `primary` | primary-600 | primary-500 | Primary actions |
-| `primary-hover` | primary-700 | primary-400 | |
-| `primary-active` | primary-800 | primary-300 | |
+| `primary` | primary-600 | primary-400 | Primary actions |
+| `primary-hover` | primary-700 | primary-300 | |
+| `primary-active` | primary-800 | primary-200 | |
 | `primary-foreground` | white | neutral-950 | Text on `primary` |
 | `primary-subtle` | primary-50 | primary-950 | Tinted fills, selected rows |
 | `primary-subtle-foreground` | primary-700 | primary-300 | Text on `primary-subtle` |
 | `link` | primary-700 | primary-300 | Inline links |
 
 Each status (`success`, `warning`, `danger`, `info`) gets four tokens with
-the same step mapping as primary: `<s>` (600 / 500), `<s>-foreground`
+the same step mapping as primary: `<s>` (600 / 400), `<s>-foreground`
 (white / neutral-950), `<s>-subtle` (50 / 950), `<s>-subtle-foreground`
 (700 / 300).
 
@@ -89,7 +89,10 @@ warning, danger, and neutral 500 steps (400 in dark mode).
 Contrast: the generator checks every foreground against its background.
 Text pairs must reach 4.5:1 and `border-control` and `ring` must reach 3:1
 against `background` and `surface`. A failing token moves one step at a
-time toward more contrast until it passes.
+time toward more contrast until it passes. When the foreground is already at
+the end of its scale, the background moves instead, and `primary` takes
+`primary-hover`, `primary-active` and `ring` with it so they stay distinct.
+The default theme needs no moves.
 
 Shape, size, and motion:
 

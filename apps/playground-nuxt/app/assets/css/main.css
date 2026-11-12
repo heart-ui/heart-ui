@@ -1,2 +1,2 @@
-@import 'tailwindcss';
+@import '@trevui/theme/theme.css';
 @source '../../../../../registry';
