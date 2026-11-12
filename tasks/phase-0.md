@@ -16,7 +16,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-02 Workspace scaffold
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: none
 - Read: [conventions.md](../docs/conventions.md#repository-layout)
