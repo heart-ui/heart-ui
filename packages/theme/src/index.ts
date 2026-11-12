@@ -54,7 +54,7 @@ function check(knobs: Knobs) {
     fail('name', 'must be kebab-case, like "default"')
   }
   const primary = typeof knobs.primary === 'string' ? parseColor(knobs.primary) : undefined
-  if (!primary) fail('primary', 'must be an opaque hex, rgb(), hsl() or oklch() color')
+  if (!primary) fail('primary', 'must be an opaque CSS color')
   const neutral = knobs.neutral as Partial<Knobs['neutral']> | undefined
   if (!inRange(neutral?.hue, 0, 360) || !inRange(neutral?.chroma, 0, 0.04)) {
     fail('neutral', 'needs hue 0-360 and chroma 0-0.04')

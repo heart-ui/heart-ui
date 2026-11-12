@@ -184,33 +184,67 @@ describe('checkContrast', () => {
     expect(report.checks.some((check) => check.foreground === 'disabled-foreground')).toBe(false)
   })
 
-  it('moves a failing token one step at a time and emits the moved step', () => {
-    // Dark subtle-foreground (neutral-500) is about 4.2:1 on neutral-950: one step lighter passes.
-    expect(report.adjustments).toContainEqual({
-      mode: 'dark',
-      token: 'subtle-foreground',
-      from: 'neutral-500',
-      to: 'neutral-400',
-    })
+  it('default theme needs no moves, so tokens.css is the tokens.md table', () => {
+    expect(report.adjustments).toEqual([])
     const dark = declarations(generateTheme(defaults), '.dark,\n[data-theme="dark"] {')
-    expect(dark.get('subtle-foreground')).toBe('var(--tre-raw-neutral-400)')
-  })
-
-  it('moves the background when the foreground is at the end of its scale, with its states', () => {
-    // Dark primary-foreground is neutral-950, the darkest step, so primary lightens instead.
-    const moved = report.adjustments.filter(
-      (move) => move.mode === 'dark' && move.token.startsWith('primary'),
-    )
-    expect(moved.map((move) => move.token)).toEqual(
-      expect.arrayContaining(['primary', 'primary-hover', 'primary-active']),
-    )
-    const dark = declarations(generateTheme(defaults), '.dark,\n[data-theme="dark"] {')
-    const states = ['primary', 'primary-hover', 'primary-active'].map((name) => dark.get(name))
-    expect(new Set(states).size).toBe(3)
+    const raw = (step: string) => `var(--tre-raw-${step})`
+    expect(dark.get('primary')).toBe(raw('primary-400'))
+    expect(dark.get('primary-hover')).toBe(raw('primary-300'))
+    expect(dark.get('primary-active')).toBe(raw('primary-200'))
+    expect(dark.get('ring')).toBe(raw('primary-500'))
+    expect(dark.get('muted-foreground')).toBe(raw('neutral-300'))
+    expect(dark.get('subtle-foreground')).toBe(raw('neutral-400'))
+    expect(dark.get('border-control')).toBe(raw('neutral-500'))
+    for (const status of statuses) expect(dark.get(status)).toBe(raw(`${status}-400`))
+    const light = declarations(generateTheme(defaults), ':root {')
+    expect(light.get('border-control')).toBe(raw('neutral-500'))
   })
 })
 
-describe('contrast moves keep states apart', () => {
+describe('contrast moves', () => {
+  const gray = (l: number): Oklch => ({ l, c: 0, h: 0 })
+  const neutral = lightness
+  const flat = lightness.map(() => gray(0.5))
+  const scalesWith = (overrides: Partial<Scales>) =>
+    ({
+      neutral: neutral.map(gray),
+      primary: neutral.map(gray),
+      success: flat,
+      warning: flat,
+      danger: flat,
+      info: flat,
+      ...overrides,
+    }) as Scales
+
+  it('moves a failing foreground one step at a time and emits the moved step', () => {
+    // neutral-400, dark subtle-foreground, is too dark on neutral-950; 300 passes.
+    const dimmed = [...neutral]
+    dimmed[4] = 0.5
+    const { values, report } = resolveSemantic(scalesWith({ neutral: dimmed.map(gray) }))
+    expect(report.adjustments).toContainEqual({
+      mode: 'dark',
+      token: 'subtle-foreground',
+      from: 'neutral-400',
+      to: 'neutral-300',
+    })
+    expect(values.dark.get('subtle-foreground')).toBe('var(--tre-raw-neutral-300)')
+  })
+
+  it('moves the background, with its states and ring, when the foreground is at the end', () => {
+    // Dark primary-foreground is neutral-950, the darkest step; primary-400 is too dark for it.
+    const primary = [...neutral]
+    primary[4] = 0.45
+    const { values, report } = resolveSemantic(scalesWith({ primary: primary.map(gray) }))
+    const moved = report.adjustments.filter((move) => move.mode === 'dark').map((m) => m.token)
+    expect(moved).toEqual(
+      expect.arrayContaining(['primary', 'primary-hover', 'primary-active', 'ring']),
+    )
+    const tokens = ['primary', 'primary-hover', 'primary-active', 'ring'].map((t) =>
+      values.dark.get(t),
+    )
+    expect(new Set(tokens).size).toBe(4)
+  })
+
   it('keeps the ring off the primary fill', () => {
     for (const selector of [':root {', '.dark,\n[data-theme="dark"] {']) {
       const tokens = declarations(generateTheme(defaults), selector)
@@ -220,20 +254,9 @@ describe('contrast moves keep states apart', () => {
   })
 
   it('keeps a ring that moves on its own off the primary states', () => {
-    const neutral = [0.985, 0.968, 0.929, 0.869, 0.704, 0.554, 0.446, 0.372, 0.279, 0.208, 0.129]
-    const gray = (l: number): Oklch => ({ l, c: 0, h: 0 })
     // primary-500 is too light for a ring on white; 600 and darker pass.
     const primary = [0.99, 0.97, 0.95, 0.9, 0.85, 0.8, 0.45, 0.37, 0.28, 0.2, 0.13].map(gray)
-    const flat = Array.from({ length: 11 }, () => gray(0.5))
-    const scales = {
-      neutral: neutral.map(gray),
-      primary,
-      success: flat,
-      warning: flat,
-      danger: flat,
-      info: flat,
-    } as Scales
-    const { values } = resolveSemantic(scales)
+    const { values } = resolveSemantic(scalesWith({ primary }))
     const ring = values.light.get('ring')
     for (const state of ['primary', 'primary-hover', 'primary-active']) {
       expect(ring, state).not.toBe(values.light.get(state))
@@ -242,19 +265,7 @@ describe('contrast moves keep states apart', () => {
 
   it('moves a background only while its states can follow', () => {
     // A primary scale too light for white text at every step: primary darkens until a state hits 950.
-    const flat = (l: number): Oklch[] => Array.from({ length: 11 }, () => ({ l, c: 0, h: 0 }))
-    const base = { l: 0.5, c: 0, h: 0 }
-    const scales = {
-      neutral: [0.985, 0.968, 0.929, 0.869, 0.704, 0.554, 0.446, 0.372, 0.279, 0.208, 0.129].map(
-        (l) => ({ ...base, l }),
-      ),
-      primary: flat(0.95),
-      success: flat(0.5),
-      warning: flat(0.5),
-      danger: flat(0.5),
-      info: flat(0.5),
-    } as Scales
-    const { values } = resolveSemantic(scales)
+    const { values } = resolveSemantic(scalesWith({ primary: lightness.map(() => gray(0.95)) }))
     const states = ['primary', 'primary-hover', 'primary-active'].map((t) => values.light.get(t))
     expect(new Set(states).size).toBe(3)
   })
@@ -281,9 +292,9 @@ describe('knobs', () => {
     ['a missing font', { font: undefined }, /font/],
     ['a name that is not kebab-case', { name: 'My Theme */' }, /name/],
     ['an unreadable primary', { primary: 'banana' }, /primary/],
-    ['a named-color primary', { primary: 'red' }, /primary/],
     ['a translucent primary', { primary: 'oklch(0.55 0.2 260 / 0.5)' }, /primary/],
     ['a translucent hex primary', { primary: '#3b5bdb80' }, /primary/],
+    ['a primary with alpha none', { primary: 'oklch(0.55 0.2 260 / none)' }, /primary/],
     ['an rgb() channel in degrees', { primary: 'rgb(59deg 91 219)' }, /primary/],
     ['an hsl() hue in percent', { primary: 'hsl(50% 50% 50%)' }, /primary/],
     ['legacy hsl() without percent', { primary: 'hsl(228, 69, 55)' }, /primary/],
@@ -316,6 +327,48 @@ describe('knobs', () => {
     const color = oklch(raw.get('raw-primary-500')!)
     expect(color.h).toBeGreaterThan(250)
     expect(color.h).toBeLessThan(275)
+  })
+
+  it.each([
+    ['a named color', 'royalblue'],
+    ['lab()', 'lab(45% 20 -70)'],
+    ['hwb()', 'hwb(220 10% 20%)'],
+    ['color(display-p3)', 'color(display-p3 0.2 0.4 0.8)'],
+    ['a gray', 'gray'],
+  ])('accepts any CSS color: %s', (_, primary) => {
+    const color = oklch(
+      declarations(generateTheme({ ...defaults, primary }), ':root {').get('raw-primary-500')!,
+    )
+    if (primary === 'gray') expect(color).toEqual({ l: 0.554, c: 0, h: 0 })
+    else {
+      // Every sample is a blue between 255 and 300 degrees with real chroma.
+      expect(color.h).toBeGreaterThan(255)
+      expect(color.h).toBeLessThan(300)
+      expect(color.c).toBeGreaterThan(0.05)
+    }
+  })
+
+  it('accepts any CSS color: hues outside 0-360 normalize to the same theme', () => {
+    const at = (h: number) => generateTheme({ ...defaults, primary: `oklch(0.6 0.2 ${h})` })
+    expect(at(-100)).toBe(at(260))
+    expect(at(620)).toBe(at(260))
+  })
+
+  it.each([
+    ['rgb(none 0 255)', 'rgb(0 0 255)'],
+    ['hsl(none 100% 50%)', 'hsl(0 100% 50%)'],
+    ['oklch(0.5 none 260)', 'oklch(0.5 0 0)'],
+    ['oklch(none 0.2 260)', 'oklch(0 0.2 260)'],
+  ])('accepts any CSS color: none means 0, as in CSS (%s)', (withNone, zero) => {
+    expect(generateTheme({ ...defaults, primary: withNone })).toBe(
+      generateTheme({ ...defaults, primary: zero }),
+    )
+  })
+
+  it('accepts any CSS color: out-of-range rgb() channels clamp as browsers do', () => {
+    expect(generateTheme({ ...defaults, primary: 'rgb(-50 0 300)' })).toBe(
+      generateTheme({ ...defaults, primary: 'rgb(0 0 255)' }),
+    )
   })
 
   it('accepts primary forms: hsl() bare numbers are percent', () => {

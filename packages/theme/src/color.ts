@@ -1,21 +1,30 @@
+import {
+  converter,
+  getMode,
+  modeA98,
+  modeHsl,
+  modeHwb,
+  modeLab,
+  modeLch,
+  modeLrgb,
+  modeOklab,
+  modeOklch,
+  modeP3,
+  modeProphoto,
+  modeRec2020,
+  modeRgb,
+  modeXyz50,
+  modeXyz65,
+  parse,
+  useMode,
+} from 'culori/fn'
+
 // OKLab and OKLCH after Björn Ottosson (bottosson.github.io/posts/oklab); contrast per WCAG 2.
 
 export type Oklch = { l: number; c: number; h: number }
 type Rgb = [number, number, number]
 
-const toLinear = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
 const toGamma = (c: number) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055)
-
-function linearToOklch([r, g, b]: Rgb): Oklch {
-  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b)
-  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b)
-  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b)
-  const lightness = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s
-  const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s
-  const bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s
-  const hue = (Math.atan2(bb, a) * 180) / Math.PI
-  return { l: lightness, c: Math.hypot(a, bb), h: hue < 0 ? hue + 360 : hue }
-}
 
 function toLinearRgb({ l, c, h }: Oklch): Rgb {
   const a = c * Math.cos((h * Math.PI) / 180)
@@ -71,82 +80,33 @@ export function contrast(a: Oklch, b: Oklch) {
   return (light! + 0.05) / (dark! + 0.05)
 }
 
-const channelPattern = /^([+-]?(?:\d+\.?\d*|\.\d+))(%|deg)?$/
-
-// A channel as [value, unit], unit '' for a bare number; undefined when it isn't one.
-function token(part: string | undefined): [number, string] | undefined {
-  const match = part === undefined ? null : channelPattern.exec(part)
-  return match ? [Number.parseFloat(match[1]!), match[2] ?? ''] : undefined
+// Only the color spaces CSS Color 4 can write, so a bundle doesn't carry the rest of culori.
+for (const mode of [modeRgb, modeHsl, modeHwb, modeLab, modeLch, modeOklab, modeOklch])
+  useMode(mode)
+for (const mode of [modeLrgb, modeP3, modeA98, modeProphoto, modeRec2020, modeXyz50, modeXyz65]) {
+  useMode(mode)
 }
+const toOklch = converter('oklch')
+const clamp = (channel: number) => Math.min(1, Math.max(0, channel))
 
-// CSS Color 4: alpha is a number or a percentage; only full opacity is accepted.
-function opaque(part: string | undefined) {
-  const alpha = token(part)
-  return (
-    part === undefined ||
-    (alpha !== undefined && alpha[0] === (alpha[1] === '%' ? 100 : 1) && alpha[1] !== 'deg')
-  )
-}
-
-function hslToRgb(h: number, s: number, l: number): Rgb {
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12
-    return l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1))
-  }
-  return [f(0), f(8), f(4)]
-}
-
-/** Parses hex, rgb(), hsl() or oklch() (CSS Color 4 syntax, opaque) into OKLCH; else undefined. */
+/** Parses any opaque CSS color into OKLCH; translucent or unreadable gives undefined. */
 export function parseColor(input: string): Oklch | undefined {
-  const text = input.trim().toLowerCase()
-  const hex = /^#([\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/.exec(text)
-  if (hex) {
-    const short = hex[1]!.length <= 4
-    const digits = short ? [...hex[1]!].map((d) => d + d) : hex[1]!.match(/../g)!
-    if (digits.length === 4 && digits.pop() !== 'ff') return undefined
-    return linearToOklch(digits.map((d) => toLinear(Number.parseInt(d, 16) / 255)) as Rgb)
+  const text = input.trim()
+  // culori reads alpha `none` (transparent in CSS) as missing, which means opaque.
+  if (/\/\s*none\b/i.test(text)) return undefined
+  const parsed = parse(text)
+  if (!parsed || (parsed.alpha !== undefined && parsed.alpha < 1)) return undefined
+  // A `none` channel is 0 in CSS; culori leaves it out. Alpha stays out, meaning opaque.
+  const filled = { ...parsed }
+  for (const channel of getMode(parsed.mode).channels) {
+    if (channel !== 'alpha') (filled as Record<string, unknown>)[channel] ??= 0
   }
-  const call = /^(rgba?|hsla?|oklch)\(([^()]*)\)$/.exec(text)
-  if (!call) return undefined
-  const kind = call[1]!.replace(/a$/, '')
-  const body = call[2]!
-  const legacy = body.includes(',')
-  let parts: string[]
-  let alpha: string | undefined
-  if (legacy) {
-    if (kind === 'oklch' || body.includes('/')) return undefined
-    parts = body.split(',').map((part) => part.trim())
-    if (parts.length === 4) alpha = parts.pop()
-  } else {
-    const [color, after, ...rest] = body.split('/')
-    if (rest.length > 0 || (after !== undefined && after.trim() === '')) return undefined
-    parts = color!.trim().split(/\s+/)
-    alpha = after?.trim()
+  // Browsers clamp channels when they parse rgb(), hex or a named color; culori keeps them.
+  if (filled.mode === 'rgb' && !/^color\(/i.test(text)) {
+    Object.assign(filled, { r: clamp(filled.r), g: clamp(filled.g), b: clamp(filled.b) })
   }
-  const parsed = parts.map(token)
-  if (parts.length !== 3 || !opaque(alpha) || parsed.some((c) => c === undefined)) return undefined
-  const channels = parsed as [number, string][]
-  const [first, second, third] = channels as [[number, string], [number, string], [number, string]]
-  if (kind === 'rgb') {
-    if (channels.some((c) => c[1] === 'deg')) return undefined
-    // Legacy commas take all numbers or all percentages; only the modern form mixes them.
-    if (legacy && new Set(channels.map((c) => c[1])).size > 1) return undefined
-    const rgb = channels.map(([value, unit]) => (unit === '%' ? value / 100 : value / 255))
-    return rgb.every((c) => c >= 0 && c <= 1) ? linearToOklch(rgb.map(toLinear) as Rgb) : undefined
-  }
-  const hue = first[1] === '%' ? Number.NaN : ((first[0] % 360) + 360) % 360
-  if (kind === 'hsl') {
-    // Legacy commas need percentages; the modern form also takes bare numbers as percent.
-    const percent = (c: [number, string]) =>
-      c[1] === '%' || (c[1] === '' && !legacy) ? c[0] / 100 : Number.NaN
-    const [sat, light] = [percent(second), percent(third)]
-    if (!(sat >= 0 && sat <= 1 && light >= 0 && light <= 1 && Number.isFinite(hue)))
-      return undefined
-    return linearToOklch(hslToRgb(hue, sat, light).map(toLinear) as Rgb)
-  }
-  if (second[1] === 'deg' || third[1] === '%') return undefined
-  const l = first[1] === '%' ? first[0] / 100 : first[1] === '' ? first[0] : Number.NaN
-  const c = second[1] === '%' ? (second[0] / 100) * 0.4 : second[0]
-  const h = ((third[0] % 360) + 360) % 360
-  return l >= 0 && l <= 1 && c >= 0 ? { l, c, h } : undefined
+  const { l, c, h } = toOklch(filled)
+  if (!Number.isFinite(l) || !Number.isFinite(c)) return undefined
+  // An oklch() input comes back as written, so its hue isn't normalized yet.
+  return { l, c, h: h === undefined || c === 0 ? 0 : ((h % 360) + 360) % 360 }
 }

@@ -165,7 +165,7 @@
   --tre-disabled-foreground: var(--tre-raw-neutral-600);
   --tre-border: var(--tre-raw-neutral-800);
   --tre-border-control: var(--tre-raw-neutral-500);
-  --tre-ring: var(--tre-raw-primary-300);
+  --tre-ring: var(--tre-raw-primary-500);
   --tre-primary: var(--tre-raw-primary-400);
   --tre-primary-hover: var(--tre-raw-primary-300);
   --tre-primary-active: var(--tre-raw-primary-200);
@@ -173,7 +173,7 @@
   --tre-primary-subtle: var(--tre-raw-primary-950);
   --tre-primary-subtle-foreground: var(--tre-raw-primary-300);
   --tre-link: var(--tre-raw-primary-300);
-  --tre-success: var(--tre-raw-success-500);
+  --tre-success: var(--tre-raw-success-400);
   --tre-success-foreground: var(--tre-raw-neutral-950);
   --tre-success-subtle: var(--tre-raw-success-950);
   --tre-success-subtle-foreground: var(--tre-raw-success-300);
