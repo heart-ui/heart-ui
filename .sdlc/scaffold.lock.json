@@ -14,7 +14,8 @@
     "completed_steps": [
       "detect",
       "stack",
-      "skeleton"
+      "skeleton",
+      "commands"
     ],
     "complete": false
   },
