@@ -9,6 +9,7 @@
     "packages/theme/src/**/*.ts",
     "packages/theme/test/**/*.ts",
     "packages/eslint-plugin/src/**/*.ts",
-    "packages/eslint-plugin/test/**/*.ts"
+    "packages/eslint-plugin/test/**/*.ts",
+    "scripts/**/*.ts"
   ]
 }

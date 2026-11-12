@@ -1,0 +1,9 @@
+{
+  "name": "utils",
+  "type": "registry:lib",
+  "title": "Utils",
+  "description": "cn() merges class values and resolves Tailwind conflicts so a passed class wins.",
+  "dependencies": ["clsx", "tailwind-merge"],
+  "files": ["utils.ts"],
+  "meta": { "version": "0.1.0" }
+}
