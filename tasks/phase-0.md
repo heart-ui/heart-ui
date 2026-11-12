@@ -68,7 +68,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-06 Lint plugin
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P0-03
 - Read: [tokens.md](../docs/tokens.md#lint-rule)

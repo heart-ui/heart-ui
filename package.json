@@ -9,8 +9,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "vitest run",
-    "lint": "eslint --max-warnings 0 . && prettier --check .",
+    "test": "pnpm --dir packages/eslint-plugin run build && vitest run",
+    "lint": "pnpm --dir packages/eslint-plugin run build && eslint --max-warnings 0 . && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "vue-tsc -p tsconfig.json --noEmit"
   },

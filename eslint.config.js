@@ -3,6 +3,8 @@ import prettier from 'eslint-config-prettier/flat'
 import vue from 'eslint-plugin-vue'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import ts from 'typescript-eslint'
+// Built by the package's prepare script on install; `pnpm lint` rebuilds it first.
+import trevui from './packages/eslint-plugin/dist/index.mjs'
 
 export default defineConfig(
   // The generated folders in .gitignore, which flat config does not read.
@@ -33,6 +35,11 @@ export default defineConfig(
       ...ts.configs.eslintRecommended.rules,
       'vue/block-lang': ['error', { script: { lang: 'ts' } }],
     },
+  },
+  {
+    files: ['registry/**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue}'],
+    plugins: { trevui },
+    rules: { 'trevui/no-raw-values': 'error', 'trevui/no-reka-outside-ui': 'error' },
   },
   prettier,
 )

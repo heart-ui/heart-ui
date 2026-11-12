@@ -3,5 +3,12 @@
   "compilerOptions": {
     "types": ["node"]
   },
-  "include": ["tests/**/*.ts", "vitest.config.ts", "registry/**/*.ts", "registry/**/*.vue"]
+  "include": [
+    "tests/**/*.ts",
+    "vitest.config.ts",
+    "registry/**/*.ts",
+    "registry/**/*.vue",
+    "packages/eslint-plugin/src/**/*.ts",
+    "packages/eslint-plugin/test/**/*.ts"
+  ]
 }
