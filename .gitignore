@@ -12,3 +12,8 @@ playwright-report/
 .env
 .env.*
 !.env.example
+.sdlc/.work/
+.sdlc/state/*.json
+.sdlc/state/*.events.jsonl
+.sdlc/state/*.commands/
+.claude/*.local.md
