@@ -39,7 +39,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-04 Playgrounds
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P0-03
 - Deliver: `apps/playground-vite` and `apps/playground-nuxt` with Tailwind

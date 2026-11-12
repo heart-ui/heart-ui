@@ -34,5 +34,14 @@ export default defineConfig(
       'vue/block-lang': ['error', { script: { lang: 'ts' } }],
     },
   },
+  {
+    // Demo files and Nuxt's app.vue and route files are named by convention, not by component.
+    files: [
+      '**/*.demo.vue',
+      'apps/playground-nuxt/app/app.vue',
+      'apps/playground-nuxt/app/pages/**/*.vue',
+    ],
+    rules: { 'vue/multi-word-component-names': 'off' },
+  },
   prettier,
 )

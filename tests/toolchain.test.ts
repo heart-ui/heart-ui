@@ -34,13 +34,18 @@ const toolchainFiles = [
   '.prettierrc.json',
   '.prettierignore',
   '.gitignore',
+  'vitest.config.ts',
+  'registry/tsconfig.json',
 ]
 
 // Seeded problems go into a throwaway copy of the toolchain, never the working tree, so a
 // killed run or a concurrent lint can't see them.
 function sandbox(files: Record<string, string>) {
   const dir = mkdtempSync(join(tmpdir(), 'trevui-seeded-'))
-  for (const file of toolchainFiles) cpSync(join(root, file), join(dir, file))
+  for (const file of toolchainFiles) {
+    mkdirSync(dirname(join(dir, file)), { recursive: true })
+    cpSync(join(root, file), join(dir, file))
+  }
   symlinkSync(join(root, 'node_modules'), join(dir, 'node_modules'))
   for (const [file, code] of Object.entries(files)) {
     mkdirSync(dirname(join(dir, file)), { recursive: true })
@@ -108,6 +113,17 @@ describe('toolchain', () => {
         const result = run('typecheck', dir)
         expect(result.status).not.toBe(0)
         expect(result.output).toMatch(/seeded\.ts.*TS2322/)
+      },
+      timeout,
+    )
+
+    it(
+      'typecheck fails when registry code uses a Node global',
+      () => {
+        const dir = seed({ 'registry/lib/seeded/env.ts': 'export const mode = process.env.MODE\n' })
+        const result = run('typecheck', dir)
+        expect(result.status).not.toBe(0)
+        expect(result.output).toMatch(/env\.ts.*Cannot find name 'process'/)
       },
       timeout,
     )
