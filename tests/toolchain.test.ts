@@ -47,6 +47,12 @@ function sandbox(files: Record<string, string>) {
     cpSync(join(root, file), join(dir, file))
   }
   symlinkSync(join(root, 'node_modules'), join(dir, 'node_modules'))
+  // A copy of the plugin, so the sandbox's lint rebuilds its own dist, not the working tree's.
+  const plugin = join(dir, 'packages/eslint-plugin')
+  mkdirSync(plugin, { recursive: true })
+  cpSync(join(root, 'packages/eslint-plugin/package.json'), join(plugin, 'package.json'))
+  cpSync(join(root, 'packages/eslint-plugin/src'), join(plugin, 'src'), { recursive: true })
+  symlinkSync(join(root, 'packages/eslint-plugin/node_modules'), join(plugin, 'node_modules'))
   for (const [file, code] of Object.entries(files)) {
     mkdirSync(dirname(join(dir, file)), { recursive: true })
     writeFileSync(join(dir, file), code)
@@ -216,6 +222,20 @@ describe('toolchain', () => {
     expect(messages).toContainEqual(
       expect.objectContaining({ ruleId: 'vue/require-v-for-key', severity: 2 }),
     )
+  })
+
+  it.each([
+    ['registry/ui/sample/sample.variants.ts', ['trevui/no-raw-values']],
+    ['registry/blocks/sample/sample.ts', ['trevui/no-raw-values', 'trevui/no-reka-outside-ui']],
+    ['registry/blocks/sample/sample.mts', ['trevui/no-raw-values', 'trevui/no-reka-outside-ui']],
+    ['apps/playground-vite/src/sample.ts', []],
+    ['packages/cli/src/sample.ts', []],
+  ])('root config applies the TrevUI rules to registry/ only: %s', async (file, expected) => {
+    const code = "export { Primitive } from 'reka-ui'\nexport const brand = '#0f172a'\n"
+    const rules = (await lint(file, code))
+      .map((message) => message.ruleId)
+      .filter((id) => id?.startsWith('trevui/'))
+    expect([...new Set(rules)].sort()).toEqual(expected)
   })
 
   it('eslint accepts TypeScript overloads in a .vue file', async () => {

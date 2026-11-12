@@ -2,7 +2,27 @@
   "name": "@trevui/eslint-plugin",
   "version": "0.0.0",
   "private": true,
-  "description": "TrevUI lint rules. Stub until P0-06.",
+  "description": "TrevUI lint rules: no-raw-values and no-reka-outside-ui.",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown --no-clean",
+    "prepare": "tsdown --no-clean",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "eslint": ">=10.0.0"
+  },
+  "devDependencies": {
+    "tsdown": "0.23.7"
+  }
 }

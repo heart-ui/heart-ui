@@ -49,6 +49,20 @@ Gaps and conflicts found while building. Format in
   visual runner. Why: tokens.md defines `:root` output; scoping changes
   the file shape for every theme.
 
+- 2026-11-12 P0-06: tokens.md bans the `dark:` variant but does not mention
+  CSS `light-dark()` or `color-mix()`. Chose: `no-raw-values` reports
+  `light-dark()` as a dark variant (it styles each mode separately, which
+  tokens own) and allows `color-mix()` when its colors are all tokens
+  (`color-mix(in oklab, var(--tre-primary) 50%, transparent)`). Why: same
+  intent as the `dark:` ban; token-only mixes are how translucent overlays
+  are written.
+
+- 2026-11-12 P0-06: tokens.md's lint rule section lists five kinds of raw
+  value, but constitution II and CLAUDE.md also ban pixel and rem literals
+  and say the plugin enforces it. Chose: `no-raw-values` also reports `px`
+  and `rem` literals. Why: the constitution is the stricter source; numeric
+  spacing utilities (`p-4`) stay allowed.
+
 - 2026-11-12 P0-03: conventions name ESLint with eslint-plugin-vue and
   Prettier, but not the packages that make them work together. Chose: add
   `typescript-eslint` (parser for `.ts` and `<script lang="ts">`),
