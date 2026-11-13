@@ -4,7 +4,8 @@
     "noEmit": true,
     "types": [],
     "paths": {
-      "@/lib/*": ["./lib/*"]
+      "@/lib/*": ["./lib/*"],
+      "@/components/ui/*": ["./ui/*"]
     }
   },
   "include": ["**/*.ts", "**/*.vue"],

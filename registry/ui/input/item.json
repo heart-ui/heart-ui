@@ -1,0 +1,10 @@
+{
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "description": "Single-line text field with v-model, three sizes, an invalid state, and leading and trailing slots.",
+  "dependencies": ["class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils"],
+  "files": ["Input.vue", "input.variants.ts", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

@@ -26,6 +26,8 @@ describe('cn with TrevUI token utilities', () => {
     ['px-control-px-md', 'px-4'],
     ['gap-gap-sm', 'gap-gap-lg'],
     ['rounded-button', 'rounded-lg'],
+    ['rounded-input', 'rounded-none'],
+    ['rounded-dialog', 'rounded-full'],
     ['p-4', 'px-page-px'],
     ['duration-fast', 'duration-slow'],
     ['z-overlay', 'z-modal'],

@@ -60,6 +60,7 @@
   --shadow-lg: var(--tre-shadow-lg);
   /* Component tokens fall back to their semantic token (tokens.md, Component layer). */
   --radius-button: var(--tre-button-radius, var(--tre-radius-md));
+  --radius-input: var(--tre-input-radius, var(--tre-radius-md));
   --font-sans: var(--tre-font-sans);
   --font-mono: var(--tre-font-mono);
 

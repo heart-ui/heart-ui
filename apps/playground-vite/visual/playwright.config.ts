@@ -18,7 +18,9 @@ export default defineConfig({
     baseURL: `http://host.docker.internal:${port}`,
     connectOptions: { wsEndpoint },
   },
-  expect: { toHaveScreenshot: { maxDiffPixels: 0 } },
+  // Exact: the container renders deterministically, and a subtle token change must show up.
+  // Playwright's default per-pixel threshold (0.2) would hide small color shifts.
+  expect: { toHaveScreenshot: { maxDiffPixels: 0, threshold: 0 } },
   webServer: {
     command: `vite build && vite preview --host ${host} --port ${port} --strictPort`,
     cwd: '..',

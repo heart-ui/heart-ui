@@ -3,7 +3,8 @@
   "compilerOptions": {
     "types": ["node"],
     "paths": {
-      "@/lib/*": ["./registry/lib/*"]
+      "@/lib/*": ["./registry/lib/*"],
+      "@/components/ui/*": ["./registry/ui/*"]
     }
   },
   "include": [

@@ -18,12 +18,16 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
     resolve: {
       dedupe: ['vue'],
-      // Registry items import shared code as the CLI writes it: `@/lib/...`. Nuxt's own `@`
+      // Registry items import shared code as the CLI writes it: `@/lib/...`, `@/components/ui/...`. Nuxt's own `@`
       // alias points at app/, so this has to match first.
       alias: [
         {
           find: /^@\/lib\//,
           replacement: `${fileURLToPath(new URL('../../registry/lib', import.meta.url))}/`,
+        },
+        {
+          find: /^@\/components\/ui\//,
+          replacement: `${fileURLToPath(new URL('../../registry/ui', import.meta.url))}/`,
         },
       ],
     },

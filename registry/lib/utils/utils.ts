@@ -15,7 +15,8 @@ const twMerge = extendTailwindMerge({
         'page-px',
         'section-gap',
       ],
-      radius: ['button'],
+      // Component radius tokens (`rounded-button`, `rounded-dialog`): any single word.
+      radius: [(value: string) => /^[a-z]+$/.test(value)],
       container: ['content-max', 'content-narrow'],
       ease: ['standard'],
     },

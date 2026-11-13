@@ -427,6 +427,7 @@ describe('theme.css', () => {
       ...sizes.map((s) => `--spacing-control-px-${s}: var(--tre-control-px-${s});`),
       ...sizes.map((s) => `--spacing-gap-${s}: var(--tre-gap-${s});`),
       '--radius-button: var(--tre-button-radius, var(--tre-radius-md));',
+      '--radius-input: var(--tre-input-radius, var(--tre-radius-md));',
       '--ring-offset-width-focus: var(--tre-ring-offset);',
     ]
     for (const line of lines) expect(theme, line).toContain(line)
