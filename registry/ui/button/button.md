@@ -1,7 +1,8 @@
 # Button
 
-Triggers an action. Use `as="a"` or `asChild` with a router link for
-navigation that should look like a button.
+Triggers an action; choose it over a link when the result happens on this
+page. Use `as="a"` or `asChild` with a router link for navigation that
+should look like a button.
 
 ## Usage
 
@@ -34,7 +35,9 @@ An icon-only button puts the icon in `default` and must set `aria-label`.
 
 ## Events
 
-Native events pass through. No custom events.
+| Event | Payload | When |
+| --- | --- | --- |
+| — | — | None of its own; native events such as `click` pass through. |
 
 ## Tokens
 
