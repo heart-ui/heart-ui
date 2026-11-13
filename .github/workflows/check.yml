@@ -1,0 +1,31 @@
+# Runs the full gate (docs/conventions.md, Checks) on every pull request.
+# Actions are pinned to commits (a tag can be moved); the version is in the comment.
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22.x
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Chromium for browser and SSR tests
+        run: pnpm test:install --with-deps
+      - run: pnpm check
+      - name: Every check still fails on a seeded regression
+        run: pnpm test:harness

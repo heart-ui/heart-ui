@@ -6,6 +6,11 @@ import { demoFiles } from '../../demo-files'
 import { startNodeServer } from '../../test-utils'
 
 const app = join(import.meta.dirname, '..')
+// `pnpm check:item <name>` narrows the run to that item's demo.
+const only = process.env.TREVUI_ITEM
+const names = demoFiles()
+  .map(({ name }) => name)
+  .filter((name) => !only || name === only)
 let stop: (() => void) | undefined
 let browser: Browser | undefined
 let base = ''
@@ -23,7 +28,7 @@ afterAll(async () => {
 })
 
 describe.each(['light', 'dark'])('every demo server-renders and hydrates in %s mode', (mode) => {
-  it.each(demoFiles().map(({ name }) => name))('%s hydrates without a warning', async (name) => {
+  it.each(names)('%s hydrates without a warning', async (name) => {
     const page = await browser!.newPage()
     const problems: string[] = []
     page.on('console', (message) => {

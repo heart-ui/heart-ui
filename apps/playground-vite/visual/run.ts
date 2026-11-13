@@ -53,7 +53,8 @@ const container = docker(
   '-d',
   '--rm',
   '--init',
-  '--ipc=host',
+  // Chromium needs a larger /dev/shm than Docker's 64 MB; this avoids sharing the host's IPC.
+  '--shm-size=1g',
   // One platform for every machine: an arm Mac would otherwise render the arm64 image.
   '--platform',
   'linux/amd64',

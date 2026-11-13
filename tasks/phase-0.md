@@ -111,7 +111,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-09 Check command and CI
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P0-05, P0-06, P0-07, P0-08
 - Read: [conventions.md](../docs/conventions.md#checks)
