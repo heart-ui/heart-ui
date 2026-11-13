@@ -29,6 +29,7 @@ The specs in `docs/` are the primary source (see `CLAUDE.md`). This folder holds
 ## Gotchas
 - [gotchas/lint-rules.md](gotchas/lint-rules.md) — context resolution and Vue parser traps in custom ESLint rules
 - [gotchas/toolchain.md](gotchas/toolchain.md) — TS 7 vs vue-tsc, seeded-error tests, tsconfig and gitignore traps
+- [gotchas/registry-items.md](gotchas/registry-items.md) — @/lib imports, cn token utilities, pinned deps, click blocking
 - [gotchas/test-harness.md](gotchas/test-harness.md) — visual container runner, preview hosts, nuxt prepare, seeded sandboxes
 - [gotchas/theme.md](gotchas/theme.md) — contrast moves, CSS color syntax, Tailwind namespaces for tokens
 - [gotchas/registry-build.md](gotchas/registry-build.md) — safe --out deletion via marker, macOS case, broken links

@@ -55,6 +55,8 @@
   --shadow-sm: var(--tre-shadow-sm);
   --shadow-md: var(--tre-shadow-md);
   --shadow-lg: var(--tre-shadow-lg);
+  /* Component tokens fall back to their semantic token (tokens.md, Component layer). */
+  --radius-button: var(--tre-button-radius, var(--tre-radius-md));
   --font-sans: var(--tre-font-sans);
   --font-mono: var(--tre-font-mono);
 
@@ -81,6 +83,8 @@
   --default-transition-timing-function: var(--tre-ease);
   --default-transition-duration: var(--tre-duration-normal);
   --default-ring-width: var(--tre-ring-width);
+  /* ring-offset-focus: Tailwind reads ring-offset-<name> from --ring-offset-width-<name>. */
+  --ring-offset-width-focus: var(--tre-ring-offset);
 }
 
 /* Tailwind has no theme namespace for durations or z-index. */

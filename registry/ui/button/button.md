@@ -17,10 +17,10 @@ should look like a button.
 | `variant` | `primary \| secondary \| outline \| ghost \| danger \| link` | `secondary` | |
 | `size` | `sm \| md \| lg` | `md` | Height from `control-*` |
 | `disabled` | `boolean` | `false` | |
-| `loading` | `boolean` | `false` | Spinner replaces the `leading` slot; clicks are blocked |
+| `loading` | `boolean` | `false` | A spinner shows over the content, which stays in place; clicks are blocked |
 | `type` | `button \| submit \| reset` | `button` | Ignored when not rendering a `button` |
 | `as` | `string \| Component` | `button` | |
-| `asChild` | `boolean` | `false` | Merge onto the child element |
+| `asChild` | `boolean` | `false` | Merge onto the child element, which brings its own content: set `type` on a child `button`, and show progress inside the child when `loading` |
 | `class` | `string` | none | Merged last |
 
 ## Slots
@@ -61,9 +61,15 @@ variants and three sizes. Icon-only. With leading and trailing icons.
 - `loading` sets `aria-busy="true"` and `aria-disabled="true"`, and keeps
   the button focusable.
 - `disabled` uses the native attribute on `button`, `aria-disabled` and
-  `tabindex="-1"` on other elements.
+  `tabindex="-1"` on other elements. A disabled or loading `as="a"` link
+  drops its `href` and keeps `role="link"`; while loading it stays in the
+  tab order. With `asChild` or a router component (`to`), remove the link
+  yourself while disabled.
 - Focus ring uses `ring`, `ring-width`, `ring-offset`.
 - The width does not change when `loading` toggles.
+- Loading looks busy, not disabled: it keeps full opacity.
+- Clicks on a disabled or loading button don't reach its parent.
+- Focus stays visible in forced-colors mode.
 
 ## Do
 

@@ -14,6 +14,28 @@ describe('cn', () => {
   })
 })
 
+describe('cn with TrevUI token utilities', () => {
+  it('keeps the focus ring offset width and color apart', () => {
+    expect(cn('ring-offset-focus', 'ring-offset-background')).toBe(
+      'ring-offset-focus ring-offset-background',
+    )
+  })
+
+  it.each([
+    ['h-control-md', 'h-control-lg'],
+    ['px-control-px-md', 'px-4'],
+    ['gap-gap-sm', 'gap-gap-lg'],
+    ['rounded-button', 'rounded-lg'],
+    ['p-4', 'px-page-px'],
+    ['duration-fast', 'duration-slow'],
+    ['z-overlay', 'z-modal'],
+    ['max-w-content-max', 'max-w-content-narrow'],
+    ['ease-standard', 'ease-in'],
+  ])('lets the later of %s and %s win', (first, second) => {
+    expect(cn(first, second)).toBe(first === 'p-4' ? `${first} ${second}` : second)
+  })
+})
+
 describe('Icon', () => {
   it.each([
     ['check', 'fluent:checkmark-20-regular'],

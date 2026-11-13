@@ -3,7 +3,7 @@
   "type": "registry:lib",
   "title": "Icon",
   "description": "Icon component: renders an internal icon name from the Fluent set through Iconify.",
-  "dependencies": ["@iconify/vue"],
+  "dependencies": ["@iconify/vue@5.0.5"],
   "registryDependencies": ["utils"],
   "files": ["icon.ts", "index.ts", "sets/fluent.ts"],
   "meta": { "version": "0.1.0" }

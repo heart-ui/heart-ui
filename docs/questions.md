@@ -13,6 +13,38 @@ Gaps and conflicts found while building. Format in
   `/demo/<name>` named by the item folder. Why: P0-07 and P0-09 check it as
   an item (`check:item placeholder`).
 
+- 2026-11-13 P0-10: a component token (`--tre-button-radius`) must fall
+  back to its semantic token, but `registry/` bans arbitrary values such as
+  `rounded-(--tre-button-radius)`. Decided by the agent (maintainer
+  delegated decisions): `theme.css` maps each component token as a theme
+  key with its fallback (`--radius-button: var(--tre-button-radius,
+  var(--tre-radius-md))`), used as `rounded-button`. `cn()` learns each
+  new key (`registry/lib/utils`).
+- 2026-11-13 P0-10: the button spec said the spinner replaces the
+  `leading` slot, and also that the width doesn't change when `loading`
+  toggles; a leading icon of another size, or an empty slot, broke the
+  second. Decided by the agent: the spinner always sits over the content,
+  which turns transparent but stays in place and in the accessibility tree.
+  The spec now says so.
+- 2026-11-13 P0-10: tokens.md has `primary-hover` and `primary-active` but
+  no hover or pressed tokens for `danger` or `muted` (secondary). Decided
+  by the agent for now: `danger` darkens with an opaque `brightness-95` and
+  `-90` filter (never a translucent fill), and secondary has no separate
+  pressed color. Open: add `danger-hover`, `danger-active` and
+  `muted-active` in a task that says to add tokens.
+- 2026-11-13 P0-10: a component token's mapping lives in the shared
+  `theme.css` and the `utils` item's `cn()` config, which `trevui add`
+  won't update in a project that already has them. Open for the CLI task:
+  ship each item's mappings with the item (the shadcn `cssVars` or `css`
+  field) and merge them into the user's files.
+- 2026-11-13 P0-10: conventions name the file `Button.vue`, but
+  eslint-plugin-vue's `multi-word-component-names` rejects single-word
+  names. Decided by the agent: keep the rule and give each component a
+  `Trev`-prefixed name with `defineOptions` (`TrevButton`), as `Icon` does.
+- 2026-11-13 P0-10: registry items aren't npm packages, but the definition
+  of done asks for a changeset. Decided by the agent: an empty changeset
+  (no package bump) whose summary describes the item.
+
 - 2026-11-12 P0-07: the visual runner walks every theme in
   `registry/themes/`, but the playgrounds load only the default theme's
   `tokens.css`, so a second theme would render as the default. Decided by
@@ -80,12 +112,12 @@ Gaps and conflicts found while building. Format in
   field that doesn't apply to the kind fails. Why: no doc says `tier` or
   `useWhen` is mandatory; the first component and block tasks should
   decide, and the build then requires them per kind.
-- 2026-11-12 P0-08: item files import each other by relative path
-  (`icon.ts` imports `../utils/utils`), which assumes the CLI keeps `lib/`
-  items side by side under the `lib` alias. Chose: keep relative imports.
-  Why: the registry sources need no path alias to compile in this repo;
-  the CLI task (`trevui add`, "Rewrite import aliases") should decide
-  whether sources use `@/lib/...` instead.
+- 2026-11-12 P0-08: item files imported each other by relative path,
+  which breaks once the CLI writes `ui` and `lib` under different aliases.
+  Decided by the agent (P0-10 review): registry code imports shared code as
+  `@/lib/...`, the `lib` alias registry.md names, mapped to `registry/lib`
+  in the repo's tsconfig and Vite configs; the registry build rejects a
+  relative import that leaves its item.
 - 2026-11-12 P0-08: no doc limits item names. Chose: lowercase letters,
   digits, `-` and `_`, starting with a letter or digit. Why: the name is
   both a file name (`r/<name>.json`) and a URL segment, and two names that

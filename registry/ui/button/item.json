@@ -1,0 +1,10 @@
+{
+  "name": "button",
+  "type": "registry:ui",
+  "title": "Button",
+  "description": "Triggers an action, in six variants and three sizes, with loading and disabled states.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils", "icon"],
+  "files": ["Button.vue", "button.variants.ts", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

@@ -181,6 +181,20 @@ function writeOut(out: string, registry: string, files: Map<string, string>) {
   }
 }
 
+// Import and export specifiers only (not `Array.from('..')`); `src=` attributes and `require`
+// aren't used in registry code and aren't checked.
+const relativeImport = /(?:(?<![.\w])from|\bimport)\s*\(?\s*['"`](\.{1,2}(?:\/[^'"`]*)?)['"`]/g
+
+// The exact versions the repo installs, from the root package.json.
+function repoVersions() {
+  const manifest = readJson(join(repo, 'package.json'), 'package.json') as Record<string, unknown>
+  return new Map(
+    ['dependencies', 'devDependencies'].flatMap((field) =>
+      Object.entries((manifest[field] ?? {}) as Record<string, string>),
+    ),
+  )
+}
+
 function checkDependency(name: string, built: Set<string>) {
   if (!name.includes('/') && !name.includes(':')) return built.has(name)
   const scoped = /^@([^/]+)\/([^/]+)$/.exec(name)
@@ -337,6 +351,15 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
         } catch (error) {
           throw new RegistryError(`${label}: ${file} cannot be read (${errorCode(error)})`)
         }
+        // The CLI writes each kind under its own alias, so a relative path out of the item breaks
+        // in the user's project; shared code is imported as `@/lib/...`, which the CLI rewrites.
+        for (const [, specifier] of content.matchAll(relativeImport)) {
+          if (!within(resolve(dirname(path), specifier!), resolve(dir))) {
+            throw new RegistryError(
+              `${label}: ${file} imports ${specifier} from outside the item; import shared code from @/lib/...`,
+            )
+          }
+        }
         return {
           // Always from registry/, as the CLI expects, however --registry was spelled.
           path: ['registry', kind, name, ...spelled.split(sep)].join('/'),
@@ -366,7 +389,25 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
   if (items.length === 0) throw new RegistryError(`--registry ${registry} holds no items`)
 
   const names = new Set(labels.keys())
+  const tested = repoVersions()
   for (const item of items) {
+    const label = labels.get(String(item.name))
+    // Users get the versions the repo tests, not whatever is latest on install day.
+    for (const dependency of (item.dependencies ?? []) as string[]) {
+      const at = dependency.lastIndexOf('@')
+      const [name, version] =
+        at > 0 ? [dependency.slice(0, at), dependency.slice(at + 1)] : [dependency, '']
+      if (!version) {
+        throw new RegistryError(
+          `${label}: dependency "${dependency}" needs a pinned version (name@version)`,
+        )
+      }
+      if (tested.get(name) !== version) {
+        throw new RegistryError(
+          `${label}: dependency "${dependency}" differs from the version the repo tests (${tested.get(name) ?? 'not installed'})`,
+        )
+      }
+    }
     const dependencies = (item.registryDependencies ?? []) as string[]
     const missing = dependencies.filter((name) => !checkDependency(name, names))
     if (missing.length > 0) {

@@ -2,7 +2,11 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "noEmit": true,
-    "types": []
+    "types": [],
+    "paths": {
+      "@/lib/*": ["./lib/*"]
+    }
   },
-  "include": ["**/*.ts", "**/*.vue"]
+  "include": ["**/*.ts", "**/*.vue"],
+  "exclude": ["**/*.test.ts"]
 }

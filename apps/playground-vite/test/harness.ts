@@ -1,7 +1,7 @@
 // Helpers for component browser tests (Vitest browser mode on Playwright).
 import axe from 'axe-core'
 import { userEvent } from 'vitest/browser'
-import { createApp, type App } from 'vue'
+import { createApp, type App, type VNode } from 'vue'
 import { demos } from '../../gallery-rules'
 import '../src/style.css'
 
@@ -19,6 +19,16 @@ export async function mountDemo(
   const root = document.createElement('main')
   document.body.append(root)
   const app = createApp((await load()).default)
+  app.mount(root)
+  mounted.push({ app, root })
+  return root
+}
+
+/** Mounts a render function, such as `() => h(Button, { variant: 'primary' }, () => 'Save')`. */
+export function render(view: () => VNode) {
+  const root = document.createElement('main')
+  document.body.append(root)
+  const app = createApp({ render: view })
   app.mount(root)
   mounted.push({ app, root })
   return root

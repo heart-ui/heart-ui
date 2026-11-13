@@ -1,7 +1,7 @@
 import { Icon as IconifyIcon } from '@iconify/vue'
 import type { ClassValue } from 'clsx'
 import { defineComponent, h, type PropType } from 'vue'
-import { cn } from '../utils/utils'
+import { cn } from '@/lib/utils/utils'
 import { fluent, type IconName } from './sets/fluent'
 
 /** Renders an internal icon name. Decorative: the control holding it supplies the accessible name. */

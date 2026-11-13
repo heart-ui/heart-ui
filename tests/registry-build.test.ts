@@ -79,7 +79,7 @@ describe('registry:build', () => {
       const index = readJson(join(root, 'dist/registry/registry.json'))
       expect(validateIndex(index), JSON.stringify(validateIndex.errors)).toBe(true)
       const names = (index.items as { name: string }[]).map((entry) => entry.name).sort()
-      expect(names).toEqual(['icon', 'utils'])
+      expect(names).toEqual(['button', 'icon', 'utils'])
 
       for (const name of names) {
         const built = readJson(join(root, `dist/registry/r/${name}.json`))
@@ -445,6 +445,54 @@ describe('registry:build', () => {
         /ui\/sample.*@trevui\/utl/,
       ],
       [
+        'an npm dependency without a pinned version',
+        {
+          'registry/ui/sample/item.json': item({ dependencies: ['reka-ui'] }),
+          'registry/ui/sample/Sample.vue': vue,
+        },
+        [],
+        /ui\/sample.*reka-ui.*version/,
+      ],
+      [
+        'an npm dependency pinned to another version than the repo tests',
+        {
+          'registry/ui/sample/item.json': item({ dependencies: ['reka-ui@1.0.0'] }),
+          'registry/ui/sample/Sample.vue': vue,
+        },
+        [],
+        /ui\/sample.*reka-ui@1\.0\.0/,
+      ],
+      [
+        'a bare parent-folder import',
+        {
+          'registry/ui/sample/item.json': item({}),
+          'registry/ui/sample/Sample.vue':
+            '<script setup lang="ts">\nimport { cn } from \'..\'\n</script>\n',
+        },
+        [],
+        /ui\/sample.*Sample\.vue.*@\/lib/,
+      ],
+      [
+        'a template-literal import that leaves the item folder',
+        {
+          'registry/ui/sample/item.json': item({}),
+          'registry/ui/sample/Sample.vue':
+            '<script setup lang="ts">\nconst x = import(`../../lib/icon`)\n</script>\n',
+        },
+        [],
+        /ui\/sample.*Sample\.vue.*@\/lib/,
+      ],
+      [
+        'a relative import that leaves the item folder',
+        {
+          'registry/ui/sample/item.json': item({}),
+          'registry/ui/sample/Sample.vue':
+            '<script setup lang="ts">\nimport { cn } from \'../../lib/utils/utils\'\n</script>\n',
+        },
+        [],
+        /ui\/sample.*Sample\.vue.*@\/lib/,
+      ],
+      [
         'a dependency that is neither a name, a scoped name nor a URL',
         {
           'registry/ui/sample/item.json': item({ registryDependencies: ['ui/button'] }),
@@ -510,6 +558,20 @@ describe('registry:build', () => {
         const result = build(args)
         expect(result.status).toBe(1)
         expect(result.output).toMatch(message)
+      },
+      timeout,
+    )
+
+    it(
+      'does not mistake Array.from with a dotted string for an import',
+      () => {
+        const dir = registry({
+          'registry/ui/sample/item.json': item({}),
+          'registry/ui/sample/Sample.vue':
+            '<script setup lang="ts">\nconst parts = Array.from(\'..\')\n</script>\n',
+        })
+        const result = buildIn(dir)
+        expect(result.status, result.output).toBe(0)
       },
       timeout,
     )
