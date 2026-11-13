@@ -10,6 +10,7 @@
   --color-surface-sunken: var(--tre-surface-sunken);
   --color-muted: var(--tre-muted);
   --color-muted-hover: var(--tre-muted-hover);
+  --color-muted-active: var(--tre-muted-active);
   --color-foreground: var(--tre-foreground);
   --color-muted-foreground: var(--tre-muted-foreground);
   --color-subtle-foreground: var(--tre-subtle-foreground);
@@ -37,6 +38,8 @@
   --color-danger-foreground: var(--tre-danger-foreground);
   --color-danger-subtle: var(--tre-danger-subtle);
   --color-danger-subtle-foreground: var(--tre-danger-subtle-foreground);
+  --color-danger-hover: var(--tre-danger-hover);
+  --color-danger-active: var(--tre-danger-active);
   --color-info: var(--tre-info);
   --color-info-foreground: var(--tre-info-foreground);
   --color-info-subtle: var(--tre-info-subtle);

@@ -20,14 +20,13 @@ export const buttonVariants = cva(
         primary:
           'bg-primary text-primary-foreground not-disabled:not-aria-disabled:hover:bg-primary-hover not-disabled:not-aria-disabled:active:bg-primary-active',
         secondary:
-          'bg-muted text-foreground not-disabled:not-aria-disabled:hover:bg-muted-hover not-disabled:not-aria-disabled:active:bg-muted-hover',
+          'bg-muted text-foreground not-disabled:not-aria-disabled:hover:bg-muted-hover not-disabled:not-aria-disabled:active:bg-muted-active',
         outline:
           'border border-border-control bg-background text-foreground not-disabled:not-aria-disabled:hover:bg-muted not-disabled:not-aria-disabled:active:bg-muted-hover',
         ghost:
           'bg-transparent text-foreground not-disabled:not-aria-disabled:hover:bg-muted not-disabled:not-aria-disabled:active:bg-muted-hover',
-        // No danger-hover token yet (docs/questions.md): an opaque filter, never a translucent fill.
         danger:
-          'bg-danger text-danger-foreground not-disabled:not-aria-disabled:hover:brightness-95 not-disabled:not-aria-disabled:active:brightness-90',
+          'bg-danger text-danger-foreground not-disabled:not-aria-disabled:hover:bg-danger-hover not-disabled:not-aria-disabled:active:bg-danger-active',
         link: 'bg-transparent text-link underline-offset-4 not-disabled:not-aria-disabled:hover:underline',
       },
       size: {

@@ -52,6 +52,7 @@ const mapping: [string, string, string][] = [
   ['surface-sunken', 'neutral-100', 'neutral-950'],
   ['muted', 'neutral-100', 'neutral-800'],
   ['muted-hover', 'neutral-200', 'neutral-700'],
+  ['muted-active', 'neutral-300', 'neutral-600'],
   ['foreground', 'neutral-900', 'neutral-50'],
   ['muted-foreground', 'neutral-600', 'neutral-300'],
   ['subtle-foreground', 'neutral-500', 'neutral-400'],
@@ -67,6 +68,8 @@ const mapping: [string, string, string][] = [
   ['primary-subtle-foreground', 'primary-700', 'primary-300'],
   ['link', 'primary-700', 'primary-300'],
   ...statuses.flatMap(status),
+  ['danger-hover', 'danger-700', 'danger-300'],
+  ['danger-active', 'danger-800', 'danger-200'],
   ...chartScales.map((scale, at): [string, string, string] => [
     `chart-${at + 1}`,
     `${scale}-500`,
@@ -80,21 +83,24 @@ const surfaces = ['background', 'surface', 'surface-raised', 'surface-sunken', '
 const pages = ['background', 'surface']
 // Foreground, backgrounds, required ratio. disabled-foreground is exempt (WCAG 1.4.3).
 const pairs: [string, string[], number][] = [
-  ['foreground', [...surfaces, 'muted-hover'], 4.5],
-  ['muted-foreground', [...surfaces, 'muted-hover'], 4.5],
+  ['foreground', [...surfaces, 'muted-hover', 'muted-active'], 4.5],
+  ['muted-foreground', [...surfaces, 'muted-hover', 'muted-active'], 4.5],
   ['subtle-foreground', pages, 4.5],
   ['link', [...pages, 'surface-raised'], 4.5],
   ['primary-foreground', ['primary', 'primary-hover', 'primary-active'], 4.5],
   ['primary-subtle-foreground', ['primary-subtle'], 4.5],
   ...statuses.flatMap((s): [string, string[], number][] => [
-    [`${s}-foreground`, [s], 4.5],
+    [`${s}-foreground`, s === 'danger' ? [s, 'danger-hover', 'danger-active'] : [s], 4.5],
     [`${s}-subtle-foreground`, [`${s}-subtle`], 4.5],
   ]),
   ['border-control', pages, 3],
   ['ring', pages, 3],
 ]
 // A background that moves takes its states and its focus ring with it, so they stay distinct.
-const states: Record<string, string[]> = { primary: ['primary-hover', 'primary-active', 'ring'] }
+const states: Record<string, string[]> = {
+  primary: ['primary-hover', 'primary-active', 'ring'],
+  danger: ['danger-hover', 'danger-active'],
+}
 // A foreground that moves on its own skips the steps these tokens hold.
 const apart: Record<string, string[]> = { ring: ['primary', 'primary-hover', 'primary-active'] }
 

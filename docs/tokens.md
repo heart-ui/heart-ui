@@ -61,7 +61,8 @@ Colors. Each row is `--tre-<name>`; values name a raw step.
 | `surface-raised` | white | neutral-800 | Popovers, menus, dialogs |
 | `surface-sunken` | neutral-100 | neutral-950 | Wells, table headers |
 | `muted` | neutral-100 | neutral-800 | Neutral fills, hover |
-| `muted-hover` | neutral-200 | neutral-700 | Pressed neutral fills |
+| `muted-hover` | neutral-200 | neutral-700 | Hovered neutral fills |
+| `muted-active` | neutral-300 | neutral-600 | Pressed neutral fills |
 | `foreground` | neutral-900 | neutral-50 | Body text |
 | `muted-foreground` | neutral-600 | neutral-300 | Secondary text |
 | `subtle-foreground` | neutral-500 | neutral-400 | Placeholders, hints |
@@ -81,7 +82,8 @@ Colors. Each row is `--tre-<name>`; values name a raw step.
 Each status (`success`, `warning`, `danger`, `info`) gets four tokens with
 the same step mapping as primary: `<s>` (600 / 400), `<s>-foreground`
 (white / neutral-950), `<s>-subtle` (50 / 950), `<s>-subtle-foreground`
-(700 / 300).
+(700 / 300). `danger` also has `danger-hover` (700 / 300) and
+`danger-active` (800 / 200), the same steps as primary's.
 
 Charts use `chart-1` to `chart-6`: primary-500, then the info, success,
 warning, danger, and neutral 500 steps (400 in dark mode).

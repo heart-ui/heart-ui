@@ -18,6 +18,7 @@ const semanticColors = [
   'surface-sunken',
   'muted',
   'muted-hover',
+  'muted-active',
   'foreground',
   'muted-foreground',
   'subtle-foreground',
@@ -34,6 +35,8 @@ const semanticColors = [
   'primary-subtle-foreground',
   'link',
   ...statuses.flatMap((s) => [s, `${s}-foreground`, `${s}-subtle`, `${s}-subtle-foreground`]),
+  'danger-hover',
+  'danger-active',
   ...[1, 2, 3, 4, 5, 6].map((n) => `chart-${n}`),
 ]
 const sizes = ['sm', 'md', 'lg']
@@ -161,7 +164,7 @@ describe('checkContrast', () => {
     expect(report.pass).toBe(true)
     for (const mode of ['light', 'dark'] as const) {
       const checks = report.checks.filter((check) => check.mode === mode)
-      expect(checks).toHaveLength(33)
+      expect(checks).toHaveLength(37)
       for (const check of checks) {
         expect(
           check.ratio,
@@ -180,6 +183,8 @@ describe('checkContrast', () => {
     pair('border-control', 'surface', 3)
     pair('ring', 'background', 3)
     pair('foreground', 'muted-hover', 4.5)
+    pair('foreground', 'muted-active', 4.5)
+    pair('danger-foreground', 'danger-active', 4.5)
     pair('link', 'surface-raised', 4.5)
     expect(report.checks.some((check) => check.foreground === 'disabled-foreground')).toBe(false)
   })
@@ -196,8 +201,14 @@ describe('checkContrast', () => {
     expect(dark.get('subtle-foreground')).toBe(raw('neutral-400'))
     expect(dark.get('border-control')).toBe(raw('neutral-500'))
     for (const status of statuses) expect(dark.get(status)).toBe(raw(`${status}-400`))
+    expect(dark.get('danger-hover')).toBe(raw('danger-300'))
+    expect(dark.get('danger-active')).toBe(raw('danger-200'))
+    expect(dark.get('muted-active')).toBe(raw('neutral-600'))
     const light = declarations(generateTheme(defaults), ':root {')
     expect(light.get('border-control')).toBe(raw('neutral-500'))
+    expect(light.get('danger-hover')).toBe(raw('danger-700'))
+    expect(light.get('danger-active')).toBe(raw('danger-800'))
+    expect(light.get('muted-active')).toBe(raw('neutral-300'))
   })
 })
 

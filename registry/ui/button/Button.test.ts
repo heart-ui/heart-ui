@@ -224,6 +224,18 @@ describe('Button', () => {
     })
   })
 
+  describe('state tokens', () => {
+    it.each([
+      ['danger', 'hover:bg-danger-hover', 'active:bg-danger-active'],
+      ['secondary', 'hover:bg-muted-hover', 'active:bg-muted-active'],
+    ] as const)('%s hovers and presses with its state tokens', (variant, hover, active) => {
+      const classes = buttonVariants({ variant }).split(' ')
+      expect(classes.some((name) => name.endsWith(hover))).toBe(true)
+      expect(classes.some((name) => name.endsWith(active))).toBe(true)
+      expect(classes.some((name) => name.includes('brightness'))).toBe(false)
+    })
+  })
+
   describe('keyboard', () => {
     it.each(['Enter', ' '])('activates on %j', async (key) => {
       const onClick = vi.fn()
