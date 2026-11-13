@@ -1,7 +1,8 @@
 # Input
 
-Single-line text field. Use `textarea` for multi-line text, `number-input`
-for numbers with steppers, and `combobox` for a filterable list.
+Single-line text field; choose it for short free text. Use `textarea` for
+multi-line text, `number-input` for numbers with steppers, and `combobox`
+for a filterable list.
 
 ## Usage
 
