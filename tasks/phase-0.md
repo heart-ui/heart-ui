@@ -53,7 +53,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-05 Theme package
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P0-04
 - Read: [tokens.md](../docs/tokens.md)
@@ -68,7 +68,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-06 Lint plugin
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P0-03
 - Read: [tokens.md](../docs/tokens.md#lint-rule)
@@ -80,7 +80,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-07 Test harness
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P0-04, P0-05
 - Deliver: Vitest browser mode in `playground-vite` with helpers
@@ -96,7 +96,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-08 Registry helpers and build
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P0-03
 - Read: [registry.md](../docs/registry.md)
@@ -111,7 +111,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-09 Check command and CI
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P0-05, P0-06, P0-07, P0-08
 - Read: [conventions.md](../docs/conventions.md#checks)
@@ -127,7 +127,7 @@ Recipe C. For these three, step 1 moves the existing spec from
 
 | ID | Item | Depends on | Status |
 | --- | --- | --- | --- |
-| P0-10 | `button` | P0-09 | review |
+| P0-10 | `button` | P0-09 | done |
 | P0-11 | `input` | P0-10 | todo |
 | P0-12 | `dialog` | P0-10 | todo |
 

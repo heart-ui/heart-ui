@@ -30,13 +30,18 @@ Gaps and conflicts found while building. Format in
   no hover or pressed tokens for `danger` or `muted` (secondary). Decided
   by the agent for now: `danger` darkens with an opaque `brightness-95` and
   `-90` filter (never a translucent fill), and secondary has no separate
-  pressed color. Open: add `danger-hover`, `danger-active` and
-  `muted-active` in a task that says to add tokens.
+  pressed color. Answered 2026-11-13 by the maintainer: add
+  `danger-hover`, `danger-active` and `muted-active`, following primary's
+  steps (light 700/800, dark 300/200; muted-active neutral-300 light,
+  neutral-600 dark).
 - 2026-11-13 P0-10: a component token's mapping lives in the shared
   `theme.css` and the `utils` item's `cn()` config, which `trevui add`
-  won't update in a project that already has them. Open for the CLI task:
-  ship each item's mappings with the item (the shadcn `cssVars` or `css`
-  field) and merge them into the user's files.
+  won't update in a project that already has them. Answered 2026-11-13 by
+  the maintainer: each item carries its mapping in `item.json`'s `css`
+  field (`@theme inline { --radius-button: … }`) and `trevui add` merges it
+  into the user's `theme.css`; `cn()` recognises component utilities by
+  pattern (any `rounded-<word>`) instead of a hand-kept list. Built in the
+  CLI task.
 - 2026-11-13 P0-10: conventions name the file `Button.vue`, but
   eslint-plugin-vue's `multi-word-component-names` rejects single-word
   names. Decided by the agent: keep the rule and give each component a
@@ -53,9 +58,9 @@ Gaps and conflicts found while building. Format in
   `[data-tre-theme="<name>"]` and loads them all in the playgrounds.
 - 2026-11-12 P0-07: visual baselines need human approval, but the
   maintainer reviews only the final product. Decided by the agent: generate
-  the placeholder baselines with `pnpm test:visual --update` and flag them
-  for approval in the Phase 0 summary.
-
+  the baselines with `pnpm test:visual --update` and flag them in the
+  summary. Answered 2026-11-13: the maintainer approved the placeholder and
+  button baselines (light and dark) and marked P0-05 to P0-10 done.
 - 2026-11-12 P0-05: tokens.md says `primary` is "any CSS color", but no doc
   names a color library. Answered by the maintainer: add `culori` (4.0.2)
   and parse with it; translucent colors are rejected. `@types/culori`
