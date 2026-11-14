@@ -61,6 +61,7 @@
   /* Component tokens fall back to their semantic token (tokens.md, Component layer). */
   --radius-button: var(--tre-button-radius, var(--tre-radius-md));
   --radius-input: var(--tre-input-radius, var(--tre-radius-md));
+  --radius-dialog: var(--tre-dialog-radius, var(--tre-radius-lg));
   --font-sans: var(--tre-font-sans);
   --font-mono: var(--tre-font-mono);
 
@@ -89,7 +90,41 @@
   --default-ring-width: var(--tre-ring-width);
   /* ring-offset-focus: Tailwind reads ring-offset-<name> from --ring-offset-width-<name>. */
   --ring-offset-width-focus: var(--tre-ring-offset);
+
+  /* Enter and exit animations for overlays; --tre-duration-normal is 0 ms under reduced motion.
+     Keyframes carry the tre- prefix so they don't collide with a project's own. */
+  --animate-fade-in: tre-fade-in var(--tre-duration-normal) var(--tre-ease) both;
+  --animate-fade-out: tre-fade-out var(--tre-duration-normal) var(--tre-ease) both;
+  --animate-pop-in: tre-pop-in var(--tre-duration-normal) var(--tre-ease) both;
+  --animate-pop-out: tre-pop-out var(--tre-duration-normal) var(--tre-ease) both;
+
+  @keyframes tre-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes tre-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes tre-pop-in {
+    from {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+  @keyframes tre-pop-out {
+    to {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
 }
+
+/* Reka marks open and closed parts with data-state. */
+@custom-variant state-open (&[data-state='open']);
+@custom-variant state-closed (&[data-state='closed']);
 
 /* Tailwind has no theme namespace for durations or z-index. */
 

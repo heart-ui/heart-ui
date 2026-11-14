@@ -3,6 +3,23 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-14 P0-12: no doc names the enter and exit animations for overlays,
+  or how to style Reka's `data-state` without arbitrary variants
+  (`data-[state=open]:`). Chose (delegated to the agent): `theme.css` adds
+  `animate-fade-in`, `-fade-out`, `-pop-in` and `-pop-out`, timed by
+  `--tre-duration-normal` (0 ms under reduced motion), and the custom
+  variants `state-open` and `state-closed`. Why: no animation package is
+  named, and every later Reka part with `data-state` (popover, select,
+  tooltip, drawer) reuses them. Like `--radius-dialog`, they move into
+  `item.json`'s `css` field with the CLI task.
+- 2026-11-14 P0-12: the visual runner can't click, so a dialog demo that
+  starts closed records only its trigger buttons. Chose (delegated to the
+  agent): the dialog demo opens its main dialog on load. Why: Definition
+  of done 3 and 4 need the open dialog under axe and in the baseline, and
+  the runner has no hook for a click before the screenshot. P0-13 should
+  make sure the docs page's live preview doesn't open a modal over the page
+  (for example, render the preview in an iframe).
+
 - 2026-11-12 P0-04: the task says `theme` "sets the theme file", but no
   theme file exists before P0-05, and `data-theme="dark"` already means dark
   mode in tokens.md. Chose: `theme` sets `data-tre-theme="<name>"` on

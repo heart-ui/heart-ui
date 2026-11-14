@@ -19,6 +19,8 @@ const twMerge = extendTailwindMerge({
       radius: [(value: string) => /^[a-z]+$/.test(value)],
       container: ['content-max', 'content-narrow'],
       ease: ['standard'],
+      // Overlay animations (`animate-fade-in`, `animate-pop-out`): any kebab-case name.
+      animate: [(value: string) => /^[a-z]+(-[a-z]+)*$/.test(value)],
     },
     classGroups: {
       'ring-offset-w': [{ 'ring-offset': ['focus'] }],

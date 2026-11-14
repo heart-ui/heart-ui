@@ -1,0 +1,21 @@
+{
+  "name": "dialog",
+  "type": "registry:ui",
+  "title": "Dialog",
+  "description": "Modal window for a short decision or a small form, with a title, description, footer, close button and three sizes.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils", "icon", "button"],
+  "files": [
+    "Dialog.vue",
+    "DialogTrigger.vue",
+    "DialogContent.vue",
+    "DialogHeader.vue",
+    "DialogTitle.vue",
+    "DialogDescription.vue",
+    "DialogFooter.vue",
+    "DialogClose.vue",
+    "dialog.variants.ts",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

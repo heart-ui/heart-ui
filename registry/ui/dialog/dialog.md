@@ -34,8 +34,9 @@ to keep list context and a full page for long tasks
 | `DialogContent` | `showClose` | `boolean` | `true` | Corner close button |
 | `DialogContent` | `closeLabel` | `string` | `Close` | Accessible name of the close button |
 
-`DialogContent` renders the portal and the overlay. The other parts take
-`class` only.
+`DialogContent` renders the portal and the overlay. Its `class` styles the
+dialog box; padding and gap sit on the scrolling body inside it. The other
+parts take `class` only.
 
 ## Slots
 
@@ -46,7 +47,7 @@ Every part has a `default` slot.
 | Part | Event | Payload | When |
 | --- | --- | --- | --- |
 | `Dialog` | `update:open` | `boolean` | Open state changes |
-| `DialogContent` | `close` | none | After the close animation ends |
+| `DialogContent` | `close` | none | After the close animation ends; not when the dialog is removed while open |
 
 ## Tokens
 
@@ -54,7 +55,9 @@ Every part has a `default` slot.
 | --- | --- | --- |
 | `--tre-dialog-radius` | `--tre-radius-lg` | Corner radius |
 
-Surface is `surface-raised`; overlay is `overlay`; stacking is `z-modal`.
+Surface is `surface-raised`; overlay is `overlay`; stacking is `z-modal`. Enter and exit
+animations (`fade-*` on the overlay, `pop-*` on the content) last
+`--tre-duration-normal`, which is 0 ms under reduced motion.
 
 ## States
 
@@ -73,9 +76,12 @@ with page margin).
 
 - `DialogTitle` is required. A missing title fails the browser test.
 - Focus moves into the dialog on open and returns to the trigger on close.
+  When the content scrolls, the dialog itself takes focus, so reading starts
+  at the top.
 - Content behind the dialog is inert and does not scroll.
 - The close button's accessible name comes from the `closeLabel` prop on
   `DialogContent`, default `Close`.
+- Without a `DialogDescription` the content has no `aria-describedby`.
 
 ## Do
 

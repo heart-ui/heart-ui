@@ -33,6 +33,8 @@ describe('cn with Heart UI token utilities', () => {
     ['z-overlay', 'z-modal'],
     ['max-w-content-max', 'max-w-content-narrow'],
     ['ease-standard', 'ease-in'],
+    ['animate-fade-in', 'animate-pop-out'],
+    ['animate-pop-in', 'animate-slide-in'],
   ])('lets the later of %s and %s win', (first, second) => {
     expect(cn(first, second)).toBe(first === 'p-4' ? `${first} ${second}` : second)
   })

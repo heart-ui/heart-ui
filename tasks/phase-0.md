@@ -129,7 +129,7 @@ Recipe C. For these three, step 1 moves the existing spec from
 | --- | --- | --- | --- |
 | P0-10 | `button` | P0-09 | done |
 | P0-11 | `input` | P0-10 | review |
-| P0-12 | `dialog` | P0-10 | todo |
+| P0-12 | `dialog` | P0-10 | review |
 
 ### P0-13 Docs site skeleton
 

@@ -79,7 +79,7 @@ describe('registry:build', () => {
       const index = readJson(join(root, 'dist/registry/registry.json'))
       expect(validateIndex(index), JSON.stringify(validateIndex.errors)).toBe(true)
       const names = (index.items as { name: string }[]).map((entry) => entry.name).sort()
-      expect(names).toEqual(['button', 'icon', 'input', 'utils'])
+      expect(names).toEqual(['button', 'dialog', 'icon', 'input', 'utils'])
 
       for (const name of names) {
         const built = readJson(join(root, `dist/registry/r/${name}.json`))
