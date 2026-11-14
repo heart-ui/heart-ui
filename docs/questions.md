@@ -17,6 +17,11 @@ Gaps and conflicts found while building. Format in
   `## Props`. Why: the hand-written tables carry notes the types don't, and
   agents read the same Markdown raw. Revisit at the P0-14 review: either
   drop the hand-written tables or keep both.
+  **Answered (maintainer, 2026-11-14):** keep the hand-written tables as the
+  spec; the docs page shows one merged table per section (types and defaults
+  from the code, notes from the spec), and the build fails when they
+  disagree. Moved into
+  [conventions.md, Docs site](conventions.md#docs-site).
 - 2026-11-14 P0-13: an item's Markdown links to repo docs
   (`../../../docs/layout-rules.md`), which the docs site doesn't publish
   yet, and VitePress fails the build on a dead link. Chose (delegated to
@@ -24,6 +29,9 @@ Gaps and conflicts found while building. Format in
   other relative links become their plain text. Why: P2's agent-docs task
   publishes `layout-rules.md` and `tokens.md`; it can turn those links back
   on.
+  **Answered (maintainer, 2026-11-14):** publish `layout-rules.md` and
+  `tokens.md` now as `/guide/` pages and link to them; other repo docs stay
+  plain text. Moved into [conventions.md, Docs site](conventions.md#docs-site).
 - 2026-11-14 P0-13: the live preview runs in an `iframe` of a bare
   `/demo/<name>` page, answering the P0-12 entry below. VitePress's base
   styles are unlayered and override Tailwind's layered utilities, so demo

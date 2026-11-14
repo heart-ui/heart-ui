@@ -136,6 +136,22 @@ into a page with live preview, API table (generated from the component's
 types), and accessibility notes. The same Markdown is published raw for
 agents ([agent-support.md](agent-support.md#agent-docs)).
 
+- The `<name>.md` Props, Slots and Events tables are the spec, written
+  before the code. On the docs page each becomes one merged table: names,
+  types, defaults and payloads from the code; notes from the spec (JSDoc
+  when the spec cell is empty). A multi-part item's tables have a `Part`
+  column.
+- The docs build fails when a prop, slot or event is in the spec but not
+  the types, or in the types but not the spec, or when a default differs.
+  It also fails when the types have members of a kind that the spec has no
+  table for. `class` and `style` may be listed without being in the types;
+  a prop whose type includes boolean and has no default equals `false`.
+  `none` means no default; write a string default plainly (`md`), and quote
+  it only when it would read as no default (`''`, `'none'`).
+- `docs/layout-rules.md` and `docs/tokens.md` are published as `/guide/`
+  pages. A link to them, or to another published item, becomes a site
+  link; any other relative link keeps only its text.
+
 ## Git and pull requests
 
 - Branch: `task/<task-id>-<slug>`. One task per pull request.

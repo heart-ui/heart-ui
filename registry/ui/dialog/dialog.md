@@ -33,14 +33,32 @@ to keep list context and a full page for long tasks
 | `DialogContent` | `dismissible` | `boolean` | `true` | `false` blocks Escape and outside click |
 | `DialogContent` | `showClose` | `boolean` | `true` | Corner close button |
 | `DialogContent` | `closeLabel` | `string` | `Close` | Accessible name of the close button |
+| `DialogTrigger` | `asChild` | `boolean` | `false` | Merge onto the child, such as a `Button` |
+| `DialogTrigger` | `as` | `string \| Component` | none | Element to render; Reka renders a `button` |
+| `DialogClose` | `asChild` | `boolean` | `false` | Merge onto the child, such as a `Button` |
+| `DialogClose` | `as` | `string \| Component` | none | Element to render; Reka renders a `button` |
+| `DialogTitle` | `asChild` | `boolean` | `false` | Merge onto the child |
+| `DialogTitle` | `as` | `string \| Component` | none | Element to render; Reka renders an `h2` |
+| `DialogDescription` | `asChild` | `boolean` | `false` | Merge onto the child |
+| `DialogDescription` | `as` | `string \| Component` | none | Element to render; Reka renders a `p` |
 
 `DialogContent` renders the portal and the overlay. Its `class` styles the
-dialog box; padding and gap sit on the scrolling body inside it. The other
-parts take `class` only.
+dialog box; padding and gap sit on the scrolling body inside it. `Dialog`
+renders no element of its own, so it takes no `class`; every other part
+does. `DialogHeader` and `DialogFooter` take nothing else.
 
 ## Slots
 
-Every part has a `default` slot.
+| Part | Slot | Content |
+| --- | --- | --- |
+| `Dialog` | `default` | The trigger and the content |
+| `DialogTrigger` | `default` | The control that opens the dialog |
+| `DialogContent` | `default` | Header, body and footer |
+| `DialogHeader` | `default` | Title and description |
+| `DialogTitle` | `default` | The dialog's name |
+| `DialogDescription` | `default` | One line under the title |
+| `DialogFooter` | `default` | Actions, the primary one last |
+| `DialogClose` | `default` | The control that closes the dialog |
 
 ## Events
 

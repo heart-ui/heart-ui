@@ -21,20 +21,43 @@ describe('docs build', () => {
     for (const [name, text] of Object.entries(demoText)) {
       const page = html(`components/${name}.html`)
       expect(page).toMatch(new RegExp(`<iframe[^>]+src="/demo/${name}"`))
-      expect(page).toContain('id="api"')
-      expect(page).toMatch(/<th>Prop<\/th>/)
+      // The API table is the Props section's table, merged with the types.
+      expect(page).toContain('id="props"')
+      expect(page).toMatch(/<th>Prop<\/th>[\s\S]*<th>Notes<\/th>/)
       const demo = html(`demo/${name}.html`)
       expect(demo).toContain(text)
       expect(demo).not.toContain('class="VPNav')
     }
     const dialog = html('components/dialog.html')
     expect(dialog).not.toContain('role="dialog"')
-    // The spec's link to repo docs the site doesn't publish keeps only its text.
-    expect(dialog).toContain('(layout-rules.md)')
-    expect(dialog).not.toContain('layout-rules.md"')
     expect(existsSync(join(dist, 'components/placeholder.html'))).toBe(false)
     const index = html('components/index.html')
     for (const name of Object.keys(demoText)) expect(index).toContain(`href="/components/${name}"`)
+  })
+
+  it('guide pages: layout rules and tokens, linked from the nav, the sidebar and item pages', () => {
+    for (const [name, heading, body] of [
+      ['layout-rules', 'Layout rules', 'Screen workflow'],
+      ['tokens', 'Tokens', '--tre-'],
+    ] as const) {
+      const guide = html(`guide/${name}.html`)
+      const content = guide.slice(guide.indexOf('class="vp-doc'))
+      expect(content).toMatch(new RegExp(`<h1 id="${name}"[^>]*>${heading}`))
+      expect(content).toContain(body)
+      expect(guide).toMatch(new RegExp(`class="VPSidebarItem[\\s\\S]*?href="/guide/${name}"`))
+    }
+    for (const page of ['components/button.html', 'guide/tokens.html']) {
+      expect(html(page)).toMatch(
+        /class="[^"]*VPNavBarMenuLink[^"]*"[^>]*href="\/guide\/layout-rules"/,
+      )
+    }
+    // The Guides entry is active on every guide page, not only the one it links to.
+    expect(html('guide/tokens.html')).toMatch(
+      /class="[^"]*VPNavBarMenuLink active"[^>]*href="\/guide\/layout-rules"/,
+    )
+    expect(html('components/dialog.html')).toContain(
+      '<a href="/guide/layout-rules#detail-and-editing">layout-rules.md</a>',
+    )
   })
 
   it('cloudflare pages config: output folder set, nothing deploys', () => {

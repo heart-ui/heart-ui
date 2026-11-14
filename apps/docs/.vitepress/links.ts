@@ -1,25 +1,29 @@
+import { posix } from 'node:path'
 import type { MarkdownOptions } from 'vitepress'
+import type { SitePage } from '../scripts/items.ts'
 
 type MarkdownIt = Parameters<NonNullable<MarkdownOptions['config']>>[0]
 type Token = ReturnType<MarkdownIt['parse']>[number]
 
 /**
- * Item pages render Markdown written for `registry/ui/<name>/<name>.md`. On those pages a link to another
- * item becomes its page, a link to the item itself becomes an anchor, and any other relative link (repo docs
- * the site doesn't publish) keeps only its text. It works on parsed link tokens, so every Markdown link form
- * is covered, code and images are untouched, and links in the generated API tables follow the same rules.
+ * Pages generated from repo Markdown (items, guides) keep links written for the repo. A relative link is
+ * resolved against the page's source: another published source becomes its site URL, the source itself an
+ * anchor, and anything else (a doc or item the site doesn't publish) keeps only its text. Working on parsed
+ * link tokens covers every Markdown link form and leaves code and images alone.
  */
-export function itemLinks(md: MarkdownIt) {
-  md.core.ruler.push('heart-ui-item-links', (state) => {
-    const page = /^components\/([a-z0-9-]+)\.md$/.exec(String(state.env?.relativePath ?? ''))?.[1]
+export function siteLinks(md: MarkdownIt, { pages }: { pages: SitePage[] }) {
+  md.core.ruler.push('heart-ui-site-links', (state) => {
+    const page = pages.find((entry) => entry.file === state.env?.relativePath)
     if (!page) return
     for (const token of state.tokens) {
-      if (token.type === 'inline' && token.children) token.children = rewrite(token.children, page)
+      if (token.type === 'inline' && token.children) {
+        token.children = rewrite(token.children, page, pages)
+      }
     }
   })
 }
 
-function rewrite(tokens: Token[], page: string) {
+function rewrite(tokens: Token[], page: SitePage, pages: SitePage[]) {
   const dropped = new Set<number>()
   tokens.forEach((token, index) => {
     if (token.type !== 'link_open') return
@@ -27,10 +31,10 @@ function rewrite(tokens: Token[], page: string) {
     if (/^([a-z][a-z0-9+.-]*:|#|\/)/i.test(href)) return
     const [path = '', hash] = href.split('#', 2)
     const anchor = hash === undefined ? '' : `#${hash}`
-    const other = /^\.\.\/([a-z0-9-]+)\/\1\.md$/.exec(path)?.[1]
-    if (other) return token.attrSet('href', `./${other}${anchor}`)
-    if (path === `${page}.md` || path === `./${page}.md`)
-      return token.attrSet('href', anchor || '#')
+    const source = posix.normalize(posix.join(posix.dirname(page.source), path))
+    const target = pages.find((entry) => entry.source === source)
+    if (target === page) return token.attrSet('href', anchor || '#')
+    if (target) return token.attrSet('href', `${target.url}${anchor}`)
     dropped.add(index)
     let depth = 0
     for (let close = index + 1; close < tokens.length; close++) {

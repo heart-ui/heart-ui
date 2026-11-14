@@ -10,6 +10,9 @@
 
 ## Props
 
+<!-- The docs build checks Props, Slots and Events against the component's types
+     (conventions.md, Docs site). A multi-part item adds a first column, Part. -->
+
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
 
