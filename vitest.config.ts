@@ -10,7 +10,12 @@ export default defineConfig({
     },
   },
   test: {
-    include: ['tests/**/*.test.ts', 'packages/*/test/**/*.test.ts'],
+    include: [
+      'tests/**/*.test.ts',
+      'packages/*/test/**/*.test.ts',
+      // Kept inside the docs app so their imports resolve VitePress, which only apps/docs depends on.
+      'apps/docs/test/**/*.test.ts',
+    ],
     // Seeded regressions run every heavy script in a sandbox: `pnpm test:harness`.
     exclude: ['tests/harness.test.ts', '**/node_modules/**'],
   },

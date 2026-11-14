@@ -133,7 +133,7 @@ Recipe C. For these three, step 1 moves the existing spec from
 
 ### P0-13 Docs site skeleton
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P0-10
 - Read: [conventions.md](../docs/conventions.md#docs-site)

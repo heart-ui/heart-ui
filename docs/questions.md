@@ -3,6 +3,32 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-14 P0-13: no doc names the tool that reads a component's types
+  for the API table. Chose (delegated to the agent): `vue-component-meta`
+  3.3.14, a dev dependency of `apps/docs`. Why: it is the Vue language
+  tools' own extractor, the same release as `vue-tsc`, so the table reads
+  types exactly as the typecheck does. `apps/docs` also pins `vite` 5.4.21,
+  the version VitePress 1.6.4 bundles, so `@tailwindcss/vite` binds to it
+  and not to the playground's Vite 8.
+- 2026-11-14 P0-13: an item's Markdown already has hand-written Props,
+  Slots and Events tables, and the task asks for an API table generated
+  from the types. Chose (delegated to the agent): the docs page keeps the
+  Markdown as written and adds a generated `## API` section before
+  `## Props`. Why: the hand-written tables carry notes the types don't, and
+  agents read the same Markdown raw. Revisit at the P0-14 review: either
+  drop the hand-written tables or keep both.
+- 2026-11-14 P0-13: an item's Markdown links to repo docs
+  (`../../../docs/layout-rules.md`), which the docs site doesn't publish
+  yet, and VitePress fails the build on a dead link. Chose (delegated to
+  the agent): links to another item's Markdown become that item's page;
+  other relative links become their plain text. Why: P2's agent-docs task
+  publishes `layout-rules.md` and `tokens.md`; it can turn those links back
+  on.
+- 2026-11-14 P0-13: the live preview runs in an `iframe` of a bare
+  `/demo/<name>` page, answering the P0-12 entry below. VitePress's base
+  styles are unlayered and override Tailwind's layered utilities, so demo
+  pages reset every property to the layered value (`all: revert-layer`).
+
 - 2026-11-14 P0-12: no doc names the enter and exit animations for overlays,
   or how to style Reka's `data-state` without arbitrary variants
   (`data-[state=open]:`). Chose (delegated to the agent): `theme.css` adds

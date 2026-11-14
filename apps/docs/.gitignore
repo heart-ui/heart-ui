@@ -1,0 +1,3 @@
+# Written by scripts/generate.ts from registry/ before every dev and build.
+/components/
+/demo/

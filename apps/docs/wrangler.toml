@@ -1,0 +1,4 @@
+# Cloudflare Pages project for the docs site. Build: `pnpm --filter docs build`; not deployed yet.
+name = "heart-ui-docs"
+compatibility_date = "2026-11-01"
+pages_build_output_dir = ".vitepress/dist"

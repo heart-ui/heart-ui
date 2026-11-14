@@ -1,0 +1,27 @@
+@import '@heart-ui/theme/theme.css';
+@source '../../../../registry';
+
+.demo-preview {
+  display: block;
+  inline-size: 100%;
+  /* Room for a demo's modal, which is fixed and so adds nothing to the frame's measured height. */
+  min-block-size: 28rem;
+  margin-block: 1rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background-color: var(--tre-background);
+}
+
+/* Demo pages: VitePress's base styles are unlayered, so they beat Tailwind's layered styles. Reverting every
+   property to the layered value leaves the demo styled as in a user's app: Tailwind's font and leading, no
+   100vh or 320px minimum on body. The selectors out-rank VitePress's strongest base rule,
+   `button:focus:not(:focus-visible)`. */
+:root:root:has(.tre-demo) body,
+:root:root:has(.tre-demo) body * {
+  all: revert-layer;
+}
+
+:root:root:has(.tre-demo) body {
+  background-color: var(--tre-background);
+  color: var(--tre-foreground);
+}

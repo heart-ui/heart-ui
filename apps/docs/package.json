@@ -2,7 +2,21 @@
   "name": "docs",
   "version": "0.0.0",
   "private": true,
-  "description": "Heart UI docs site (VitePress). Stub until P0-13.",
+  "description": "Heart UI docs site (VitePress): a page per registry item, built from its Markdown, demo and types.",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/generate.ts && vitepress dev",
+    "build": "node scripts/generate.ts && vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "@heart-ui/theme": "workspace:*",
+    "@tailwindcss/vite": "4.3.5",
+    "tailwindcss": "4.3.5",
+    "vite": "5.4.21",
+    "vitepress": "1.6.4",
+    "vue": "3.5.45",
+    "vue-component-meta": "3.3.14"
+  }
 }
