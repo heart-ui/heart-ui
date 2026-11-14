@@ -28,7 +28,7 @@ function cssIn(dir: string) {
     .join('\n')
 }
 
-// Both playgrounds load @trevui/theme/theme.css, which maps tokens into Tailwind.
+// Both playgrounds load @heart-ui/theme/theme.css, which maps tokens into Tailwind.
 function expectTokenUtilities(css: string) {
   expect(css).toMatch(/\.bg-primary\{background-color:var\(--tre-primary\)\}/)
   expect(css).toMatch(/\.h-control-md\{height:var\(--tre-control-md\)\}/)

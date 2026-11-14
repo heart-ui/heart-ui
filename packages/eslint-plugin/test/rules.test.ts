@@ -259,7 +259,7 @@ describe('no-reka-outside-ui', () => {
       },
       {
         code: "import { DialogRoot } from 'reka-ui'\nexport { DialogRoot }",
-        filename: '/work/registry/ui/trevui/registry/blocks/login/login.ts',
+        filename: '/work/registry/ui/heart-ui/registry/blocks/login/login.ts',
         errors: [{ messageId: 'rekaOutsideUi' }],
       },
     ],

@@ -7,7 +7,7 @@ import { startNodeServer } from '../../test-utils'
 
 const app = join(import.meta.dirname, '..')
 // `pnpm check:item <name>` narrows the run to that item's demo.
-const only = process.env.TREVUI_ITEM
+const only = process.env.HEART_UI_ITEM
 const names = demoFiles()
   .map(({ name }) => name)
   .filter((name) => !only || name === only)

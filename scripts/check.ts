@@ -81,7 +81,7 @@ function itemPlan(name: string, temp: () => string): Step[] {
   const hasBrowserTest = kind !== 'lib' && files.some((file) => file.endsWith('.test.ts'))
   const isItem = files.includes('item.json')
   const unitTests = unitTestsFor(folder)
-  const env = { TREVUI_ITEM: name }
+  const env = { HEART_UI_ITEM: name }
   const skip = (step: string, note: string): Step => ({ name: step, commands: [], note })
   const tsconfig = () => join(temp(), 'tsconfig.json')
   const registryOut = () => join(temp(), 'registry')
@@ -151,7 +151,7 @@ function itemPlan(name: string, temp: () => string): Step[] {
 
 const print = (text: string) => process.stdout.write(`${text}\n`)
 let tempDir: string | undefined
-const temp = () => (tempDir ??= mkdtempSync(join(tmpdir(), 'trevui-check-')))
+const temp = () => (tempDir ??= mkdtempSync(join(tmpdir(), 'heart-ui-check-')))
 const cleanUp = () => {
   if (tempDir) rmSync(tempDir, { recursive: true, force: true })
 }

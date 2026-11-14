@@ -2,15 +2,15 @@
 
 <!-- Project-owned. Written at setup (design-system step) with the user's approval; change it only with the team's approval. Every UI change follows it: `.claude/rules/sdlc-ui.md` loads with UI files and `sdlc:ui-reviewer` checks diffs against it. Point at the source of truth; don't copy values that live in code. -->
 
-TrevUI is a design system that other projects copy. This file only points
+Heart UI is a design system that other projects copy. This file only points
 at its specs. The specs win where this file and they differ.
 
 ## Source of truth
 
-- Library: TrevUI's own components in `registry/ui/`, built on Reka UI
+- Library: Heart UI's own components in `registry/ui/`, built on Reka UI
   primitives. Reka owns focus, keyboard handling and ARIA.
 - Tokens: [docs/tokens.md](../tokens.md) is the spec. The generated code
-  lives in `@trevui/theme` (`generateTheme(knobs)` writes `tokens.css`)
+  lives in `@heart-ui/theme` (`generateTheme(knobs)` writes `tokens.css`)
   and the static `theme.css` Tailwind mapping (task P0-05). Preset knob
   files go in `registry/themes/<name>.json`.
 - Components: `registry/ui/<name>/` (anatomy in
@@ -68,7 +68,7 @@ On top of the AI-slop list in `.claude/rules/sdlc-ui.md`:
 - No raw values in `registry/`: no hex, `rgb()`, `hsl()`, `oklch()` or
   named colors, no px or rem literals, and no palette or arbitrary-value
   classes. Don't reference `--tre-raw-*` or use the `dark:` variant.
-  (`@trevui/eslint-plugin` `no-raw-values`.)
+  (`@heart-ui/eslint-plugin` `no-raw-values`.)
 - Use logical properties only (`ps-*`, `me-*`, `start-*`), never left or
   right.
 - No `<style>` blocks except for keyframes that utilities can't express.

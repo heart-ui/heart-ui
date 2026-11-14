@@ -4,7 +4,7 @@
 
 **Request (verbatim):** "done" (P0-04 marked done; next ready task: P0-05), run unattended ("fix until no findings, continue without asking me, unattend please").
 
-Task [P0-05](../../../tasks/phase-0.md#p0-05-theme-package): `@trevui/theme` turns one knob file into `tokens.css`, the three-layer token set every item reads, per [tokens.md](../../tokens.md). `theme.css` maps the tokens into Tailwind so `bg-primary` and `h-control-md` exist.
+Task [P0-05](../../../tasks/phase-0.md#p0-05-theme-package): `@heart-ui/theme` turns one knob file into `tokens.css`, the three-layer token set every item reads, per [tokens.md](../../tokens.md). `theme.css` maps the tokens into Tailwind so `bg-primary` and `h-control-md` exist.
 
 ## Decisions
 
@@ -16,9 +16,9 @@ Task [P0-05](../../../tasks/phase-0.md#p0-05-theme-package): `@trevui/theme` tur
 | Pairs: `foreground` and `muted-foreground` on `background`, `surface`, `surface-raised`, `surface-sunken` and `muted`; `subtle-foreground` and `link` on `background` and `surface`; `primary-foreground` on `primary`, `primary-hover` and `primary-active`; each `<s>-foreground` on `<s>`; each `*-subtle-foreground` on its `*-subtle`; `border-control` and `ring` on `background` and `surface` at 3:1. `disabled-foreground` isn't checked. | check disabled text | WCAG 1.4.3 exempts inactive controls; disabled text is meant to read as unavailable. |
 | Shadow values: `soft` is a wide, faint blur, `crisp` a tight, darker one, all `oklch(0 0 0 / a)`; `none` sets all three to `none`. Logged in `docs/questions.md`. | — | tokens.md names the knob values but no shadows. |
 | Knob validation: out-of-range values, unknown enum values, a `name` that isn't kebab-case, and font stacks that aren't comma-separated family names (bare, or in matching quotes) throw an error naming the knob | a deny-list of characters | Knob files will come from the customizer (Phase 4) and font stacks are written into CSS; review r1 F1 showed `Inter(` getting past a deny-list. |
-| `tokens.css` is committed and the pin test compares `generateTheme(registry/themes/default.json)` with it; `pnpm --filter @trevui/theme generate` rewrites it from the built generator | a Vitest snapshot updated with `--update` | Review r1 F15: regenerating and approving a changed pin were one step; now the diff is reviewed before commit. |
+| `tokens.css` is committed and the pin test compares `generateTheme(registry/themes/default.json)` with it; `pnpm --filter @heart-ui/theme generate` rewrites it from the built generator | a Vitest snapshot updated with `--update` | Review r1 F15: regenerating and approving a changed pin were one step; now the diff is reviewed before commit. |
 | `theme.css` maps semantic colors, radius, shadow and font through `@theme inline`; control, control padding, gap and layout sizes through `--spacing-*` and `--container-*`; durations and z-index, which have no Tailwind namespace (checked on tailwindcss.com/docs/theme, 2026-11-12), through `@utility` (`duration-fast`, `z-modal`). The default transition and ring width go through `--default-transition-*` and `--default-ring-width`. | arbitrary values | Arbitrary-value classes are banned in `registry/`. |
-| Playgrounds depend on `@trevui/theme` (`workspace:*`) and import `@trevui/theme/theme.css` in place of `tailwindcss` | relative paths | Both playgrounds load the same file through the package's exports. |
+| Playgrounds depend on `@heart-ui/theme` (`workspace:*`) and import `@heart-ui/theme/theme.css` in place of `tailwindcss` | relative paths | Both playgrounds load the same file through the package's exports. |
 
 **Proposals not asked for:** None
 
@@ -57,7 +57,7 @@ Task [P0-05](../../../tasks/phase-0.md#p0-05-theme-package): `@trevui/theme` tur
 
 ## Out of scope
 
-- Theme items in the registry build and `trevui init` copying `theme.css` (CLI tasks); preset themes beyond `default` (P1); the customizer (Phase 4); a `ring-offset` utility (first focus ring, P0-10).
+- Theme items in the registry build and `heart-ui init` copying `theme.css` (CLI tasks); preset themes beyond `default` (P1); the customizer (Phase 4); a `ring-offset` utility (first focus ring, P0-10).
 
 ## Review
 
@@ -80,7 +80,7 @@ Task [P0-05](../../../tasks/phase-0.md#p0-05-theme-package): `@trevui/theme` tur
 - **Drift and manual checks:**
   - The default theme's emitted values differ from tokens.md in 11 places, all moves by the contrast rule and listed in questions.md.
   - The placeholder demo uses token utilities.
-  - Deviations: the internal module exports; the playgrounds depend on `@trevui/theme`; AC-009 and AC-010 moved into `tests/playgrounds.test.ts` (user accepted the change-file edit).
+  - Deviations: the internal module exports; the playgrounds depend on `@heart-ui/theme`; AC-009 and AC-010 moved into `tests/playgrounds.test.ts` (user accepted the change-file edit).
   - New devDependencies: `tsdown`, `vitest`, `tailwindcss` (also a peer). Proposed in the PR: `culori`, if full CSS color parsing is wanted.
   - No `manual` ACs.
 - **Lessons filed:** [knowledge/gotchas/theme.md](../../../knowledge/gotchas/theme.md)

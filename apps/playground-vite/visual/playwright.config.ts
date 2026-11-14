@@ -2,9 +2,9 @@ import { defineConfig } from '@playwright/test'
 
 // run.ts starts the browser in the official Playwright container and sets these. Screenshots
 // taken by a host browser would differ by machine, so the config refuses to run without them.
-const wsEndpoint = process.env.TREVUI_VISUAL_WS
-const port = process.env.TREVUI_VISUAL_PORT
-const host = process.env.TREVUI_VISUAL_HOST
+const wsEndpoint = process.env.HEART_UI_VISUAL_WS
+const port = process.env.HEART_UI_VISUAL_PORT
+const host = process.env.HEART_UI_VISUAL_HOST
 if (!wsEndpoint || !port || !host)
   throw new Error('Run visual tests with `pnpm test:visual`, not playwright directly')
 

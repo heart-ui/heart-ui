@@ -14,7 +14,7 @@ describe('cn', () => {
   })
 })
 
-describe('cn with TrevUI token utilities', () => {
+describe('cn with Heart UI token utilities', () => {
   it('keeps the focus ring offset width and color apart', () => {
     expect(cn('ring-offset-focus', 'ring-offset-background')).toBe(
       'ring-offset-focus ring-offset-background',

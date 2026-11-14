@@ -30,13 +30,13 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 - Owner: agent
 - Depends on: P0-14
 - Read: [registry.md](../docs/registry.md)
-- Deliver: `packages/cli` with the `trevui` bin; argument parsing; config
+- Deliver: `packages/cli` with the `heart-ui` bin; argument parsing; config
   read and write; project detection (Nuxt or Vite, package manager,
   Tailwind major version, path aliases); registry client with fetch and
   on-disk cache; import alias rewriting.
 - Accept: unit tests cover detection on four fixture projects (Nuxt and
-  Vite, pnpm and npm) and alias rewriting for every alias in `trevui.json`.
-- Check: `pnpm --filter trevui test`
+  Vite, pnpm and npm) and alias rewriting for every alias in `heart-ui.json`.
+- Check: `pnpm --filter heart-ui test`
 
 ### P1-14 `init`
 
@@ -47,7 +47,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
   message when Vue, Nuxt, Node, or Tailwind is below the minimum.
 - Accept: on a fixture project, `init --yes` produces a project that
   builds and resolves `bg-primary`.
-- Check: `pnpm --filter trevui test`
+- Check: `pnpm --filter heart-ui test`
 
 ### P1-15 `add` and the lock file
 
@@ -58,7 +58,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
   dependency install, `--overwrite`, and lock file updates.
 - Accept: adding `dialog` also installs `button` and `utils` once each;
   a second `add` of the same item changes nothing; hashes match files.
-- Check: `pnpm --filter trevui test`
+- Check: `pnpm --filter heart-ui test`
 
 ### P1-16 `list`
 
@@ -67,7 +67,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 - Depends on: P1-13
 - Deliver: `list` with `--type`, `--category`, `--json`.
 - Accept: `--json` output parses and matches the registry index.
-- Check: `pnpm --filter trevui test`
+- Check: `pnpm --filter heart-ui test`
 
 ### P1-17 CLI end-to-end test
 
@@ -111,7 +111,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 - Status: todo
 - Owner: human
 - Depends on: P1-18, P1-19
-- Deliver: `trevui` published under the `alpha` dist-tag with provenance;
+- Deliver: `heart-ui` published under the `alpha` dist-tag with provenance;
   registry and docs deployed.
 
 ### P1-21 Gate: alpha

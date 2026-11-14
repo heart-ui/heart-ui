@@ -1,5 +1,5 @@
 {
-  "name": "@trevui/theme",
+  "name": "@heart-ui/theme",
   "version": "0.0.0",
   "private": true,
   "description": "Theme knobs to CSS: OKLCH scales, semantic tokens, contrast checks and the Tailwind mapping.",

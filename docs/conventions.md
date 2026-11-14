@@ -8,13 +8,13 @@ apps/
   customizer/        Vite + Vue single-page app (Phase 4)
   playground-vite/   Vite app; hosts browser and visual tests
   playground-nuxt/   Nuxt 4 app; hosts SSR tests
-  example/           Example app built only on TrevUI (Phase 3)
+  example/           Example app built only on Heart UI (Phase 3)
 packages/
-  cli/               npm: trevui
-  mcp/               npm: @trevui/mcp
-  theme/             npm: @trevui/theme (knobs to CSS)
-  eslint-plugin/     npm: @trevui/eslint-plugin
-  chart-echarts/     npm: @trevui/chart-echarts (Phase 3)
+  cli/               npm: heart-ui
+  mcp/               npm: @heart-ui/mcp
+  theme/             npm: @heart-ui/theme (knobs to CSS)
+  eslint-plugin/     npm: @heart-ui/eslint-plugin
+  chart-echarts/     npm: @heart-ui/chart-echarts (Phase 3)
 registry/
   ui/<name>/         Components
   blocks/<name>/     Blocks
@@ -39,7 +39,7 @@ tasks/               Build plan
 | Browser tests | Vitest browser mode on Playwright |
 | Accessibility tests | `axe-core` inside browser tests |
 | Visual tests | Playwright `toHaveScreenshot` |
-| Lint | ESLint flat config with `eslint-plugin-vue` and `@trevui/eslint-plugin` |
+| Lint | ESLint flat config with `eslint-plugin-vue` and `@heart-ui/eslint-plugin` |
 | Format | Prettier |
 | Releases | Changesets; npm publish with provenance |
 | CI | GitHub Actions |

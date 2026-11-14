@@ -45,7 +45,7 @@ inline: this session builds it, one part
 - export `generateTheme` — AC-001
 - export `checkContrast` — AC-003
 - export `Knobs` — AC-006
-- command `pnpm --filter @trevui/theme generate` — AC-005
+- command `pnpm --filter @heart-ui/theme generate` — AC-005
 - dependency `tailwindcss` — AC-008
 - dependency `tsdown` — AC-001
 
@@ -59,9 +59,9 @@ inline: this session builds it, one part
 
 ## Deviations
 - 2026-11-12 registry/ui/placeholder/Placeholder.demo.vue What: demo uses bg-primary, text-primary-foreground and h-control-md Why: the playground test (AC-009) needs registry source using the utilities Tailwind scans for Effect: placeholder renders as a primary-colored bar
-- 2026-11-12 public surface What: Adjustment Why: the report types checkContrast returns, re-exported from index.ts Effect: public types of @trevui/theme
-- 2026-11-12 public surface What: ContrastCheck Why: the report types checkContrast returns, re-exported from index.ts Effect: public types of @trevui/theme
-- 2026-11-12 public surface What: ContrastReport Why: the report types checkContrast returns, re-exported from index.ts Effect: public types of @trevui/theme
+- 2026-11-12 public surface What: Adjustment Why: the report types checkContrast returns, re-exported from index.ts Effect: public types of @heart-ui/theme
+- 2026-11-12 public surface What: ContrastCheck Why: the report types checkContrast returns, re-exported from index.ts Effect: public types of @heart-ui/theme
+- 2026-11-12 public surface What: ContrastReport Why: the report types checkContrast returns, re-exported from index.ts Effect: public types of @heart-ui/theme
 - 2026-11-12 public surface What: Mode Why: shared between packages/theme/src modules (color.ts, semantic.ts, index.ts); not re-exported from index.ts Effect: internal to the package
 - 2026-11-12 public surface What: Oklch Why: shared between packages/theme/src modules (color.ts, semantic.ts, index.ts); not re-exported from index.ts Effect: internal to the package
 - 2026-11-12 public surface What: Resolved Why: shared between packages/theme/src modules (color.ts, semantic.ts, index.ts); not re-exported from index.ts Effect: internal to the package
@@ -78,7 +78,7 @@ inline: this session builds it, one part
 - 2026-11-12 public surface What: statuses Why: shared between packages/theme/src modules (color.ts, semantic.ts, index.ts); not re-exported from index.ts Effect: internal to the package
 - 2026-11-12 public surface What: steps Why: shared between packages/theme/src modules (color.ts, semantic.ts, index.ts); not re-exported from index.ts Effect: internal to the package
 - 2026-11-12 public surface What: toSrgb Why: shared between packages/theme/src modules (color.ts, semantic.ts, index.ts); not re-exported from index.ts Effect: internal to the package
-- 2026-11-12 public surface What: @trevui/theme Why: both playgrounds import @trevui/theme/theme.css (workspace:*) Effect: playgrounds depend on the theme package
+- 2026-11-12 public surface What: @heart-ui/theme Why: both playgrounds import @heart-ui/theme/theme.css (workspace:*) Effect: playgrounds depend on the theme package
 - 2026-11-12 public surface What: vitest Why: packages/theme test script runs vitest from the package, as P0-06's package does Effect: devDependency of packages/theme, same version as the root
 - 2026-11-12 tests/playgrounds.test.ts What: AC-009 and AC-010 assert token utilities in the existing Vite and Nuxt build tests; tests/playground-theme.test.ts removed; packages/theme/scripts/generate.ts writes tokens.css Why: review r1 F13 (duplicate build) and F15 (generate approved its own pin) Effect: AC-010 is tested, no longer manual
 

@@ -4,7 +4,7 @@ Goal: the theme tool, complete docs, a frozen API. Ends in 1.0.
 
 ## Customizer
 
-A static Vite and Vue app in `apps/customizer`, built from TrevUI's own
+A static Vite and Vue app in `apps/customizer`, built from Heart UI's own
 components. State is one knob object ([tokens.md](../docs/tokens.md#knobs)).
 No account, no backend.
 
@@ -60,7 +60,7 @@ No account, no backend.
 - Owner: agent
 - Depends on: P4-02
 - Deliver: download `tokens.css`; download the knob JSON; copy a
-  `trevui theme <url>` command; copy the share link.
+  `heart-ui theme <url>` command; copy the share link.
 - Accept: the downloaded CSS is byte-identical to `generateTheme` output
   for the same knobs.
 - Check: `pnpm --filter customizer test`
@@ -71,7 +71,7 @@ No account, no backend.
 - Owner: agent
 - Depends on: P4-05
 - Read: [registry.md](../docs/registry.md#commands)
-- Deliver: `trevui theme` accepting a knob file path, a preset name, or a
+- Deliver: `heart-ui theme` accepting a knob file path, a preset name, or a
   customizer share link.
 - Accept: e2e test applies each of the three input kinds and rebuilds.
 - Check: `pnpm test:cli-e2e`

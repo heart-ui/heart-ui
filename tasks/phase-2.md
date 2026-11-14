@@ -19,7 +19,7 @@ blocks, agent surface, benchmark.
   matrix now covers five themes.
 - Accept: all contrast pairs pass in every preset, light and dark; new
   baselines for existing components are listed for approval.
-- Check: `pnpm --filter @trevui/theme test && pnpm test:visual`
+- Check: `pnpm --filter @heart-ui/theme test && pnpm test:visual`
 
 ### P2-02 Form decision record
 
@@ -53,9 +53,9 @@ blocks, agent surface, benchmark.
 - Owner: agent
 - Depends on: P1-21
 - Read: [agent-support.md](../docs/agent-support.md#audit-checklist)
-- Deliver: `trevui audit` implementing A1 to A8 with `--json`.
+- Deliver: `heart-ui audit` implementing A1 to A8 with `--json`.
 - Accept: each check has one passing and one failing fixture screen.
-- Check: `pnpm --filter trevui test`
+- Check: `pnpm --filter heart-ui test`
 
 ## Tier 2 components
 
@@ -142,7 +142,7 @@ All depend on P2-03, P2-04, and the Tier 2 components they use.
 - Accept: integration tests call each tool over stdio against the local
   registry build; `search_items("table with filters")` ranks
   `list-filters` first.
-- Check: `pnpm --filter @trevui/mcp test`
+- Check: `pnpm --filter @heart-ui/mcp test`
 
 ### P2-50 Project rule files
 
@@ -165,7 +165,7 @@ All depend on P2-03, P2-04, and the Tier 2 components they use.
 - Read: [agent-support.md](../docs/agent-support.md#benchmark)
 - Deliver: 20 files in `benchmark/specs/` with frontmatter
   `acceptedLayouts` and `mustInclude`.
-- Accept: no spec names a TrevUI component, block, or layout in its body.
+- Accept: no spec names a Heart UI component, block, or layout in its body.
 
 ### P2-52 Benchmark runner
 
@@ -197,7 +197,7 @@ All depend on P2-03, P2-04, and the Tier 2 components they use.
 - Owner: agent
 - Depends on: P2-49
 - Deliver: pages for every Tier 2 component, layout, and block; guides for
-  building a screen, using TrevUI with coding agents, and the MCP server.
+  building a screen, using Heart UI with coding agents, and the MCP server.
 - Check: `pnpm --filter docs build`
 
 ### P2-55 Beta release
@@ -205,7 +205,7 @@ All depend on P2-03, P2-04, and the Tier 2 components they use.
 - Status: todo
 - Owner: human
 - Depends on: P2-53, P2-54
-- Deliver: `trevui` and `@trevui/mcp` published under `beta`; benchmark
+- Deliver: `heart-ui` and `@heart-ui/mcp` published under `beta`; benchmark
   result in the release notes.
 
 ### P2-56 Gate: beta

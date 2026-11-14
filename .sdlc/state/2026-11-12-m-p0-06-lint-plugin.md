@@ -37,11 +37,11 @@ inline
    - Files: `docs/questions.md`, `tasks/phase-0.md`
 
 ## Public Surface
-- export `@trevui/eslint-plugin` — AC-009
-- config `trevui/no-raw-values` — AC-001
-- config `trevui/no-reka-outside-ui` — AC-009
+- export `@heart-ui/eslint-plugin` — AC-009
+- config `heart-ui/no-raw-values` — AC-001
+- config `heart-ui/no-reka-outside-ui` — AC-009
 - dependency `tsdown` — AC-009
-- dependency `@trevui/eslint-plugin` — AC-010
+- dependency `@heart-ui/eslint-plugin` — AC-010
 
 ## Gate log
 - 2026-11-12 Stage 1: pass — plan not stopped for approval: low-risk M, unattended
@@ -56,7 +56,7 @@ inline
 ## Deviations
 - 2026-11-12 red step What: plugin source written before the red run Why: written in the same turn as the tests Effect: red recorded with src/ and dist/ moved aside, root config not yet wired
 - 2026-11-12 eslint.config.js What: root config imports ./packages/eslint-plugin/dist/index.mjs by path, no root workspace dependency Why: a workspace:* devDependency fails the exact-pin test, and the plugin is only used here Effect: lint script builds the plugin with pnpm --dir first; tests/toolchain.test.ts sandbox symlinks the package
-- 2026-11-12 public surface What: @trevui/eslint-plugin is not a root dependency Why: imported by path Effect: surface line kept for the record
+- 2026-11-12 public surface What: @heart-ui/eslint-plugin is not a root dependency Why: imported by path Effect: surface line kept for the record
 - 2026-11-12 changeset What: none added Why: Changesets is configured in P0-09 and the package is private Effect: P0-09 or the first publish adds it
 - 2026-11-12 public surface What: colorProperties Why: internal module export shared by the rules (src/raw-values.ts, src/named-colors.ts) Effect: not re-exported from the package entry
 - 2026-11-12 public surface What: findProblems Why: internal module export shared by the rules (src/raw-values.ts, src/named-colors.ts) Effect: not re-exported from the package entry

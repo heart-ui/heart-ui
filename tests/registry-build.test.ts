@@ -40,7 +40,7 @@ describe('registry:build', () => {
 
   // A throwaway registry holding one valid lib item plus the given files.
   function registry(files: Record<string, string>) {
-    const dir = mkdtempSync(join(tmpdir(), 'trevui-registry-'))
+    const dir = mkdtempSync(join(tmpdir(), 'heart-ui-registry-'))
     dirs.push(dir)
     cpSync(join(root, 'registry/lib/utils'), join(dir, 'registry/lib/utils'), { recursive: true })
     for (const [file, content] of Object.entries(files)) {
@@ -396,10 +396,10 @@ describe('registry:build', () => {
     it(
       'names the marker when it holds null',
       () => {
-        const dir = registry({ 'dist/.trevui-registry-build.json': 'null\n' })
+        const dir = registry({ 'dist/.heart-ui-registry-build.json': 'null\n' })
         const result = buildIn(dir)
         expect(result.status).toBe(1)
-        expect(result.output).toMatch(/--out.*\.trevui-registry-build\.json/)
+        expect(result.output).toMatch(/--out.*\.heart-ui-registry-build\.json/)
         expect(result.output).not.toMatch(/TypeError/)
       },
       timeout,
@@ -438,11 +438,11 @@ describe('registry:build', () => {
       [
         'a scoped dependency on a missing item of its own scope',
         {
-          'registry/ui/sample/item.json': item({ registryDependencies: ['@trevui/utl'] }),
+          'registry/ui/sample/item.json': item({ registryDependencies: ['@heart-ui/utl'] }),
           'registry/ui/sample/Sample.vue': vue,
         },
         [],
-        /ui\/sample.*@trevui\/utl/,
+        /ui\/sample.*@heart-ui\/utl/,
       ],
       [
         'an npm dependency without a pinned version',

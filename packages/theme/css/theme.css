@@ -1,4 +1,4 @@
-/* Maps TrevUI tokens into Tailwind's theme, so utilities read the variables in tokens.css
+/* Maps Heart UI tokens into Tailwind's theme, so utilities read the variables in tokens.css
    (docs/tokens.md, Tailwind mapping). Hand-written; tokens.css is generated. */
 @import 'tailwindcss';
 @import './tokens.css';

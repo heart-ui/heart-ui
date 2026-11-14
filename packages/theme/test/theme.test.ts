@@ -121,7 +121,7 @@ describe('generateTheme', () => {
   })
 
   it('pins the default output', async () => {
-    // Regenerate with `pnpm --filter @trevui/theme generate`, then review the diff.
+    // Regenerate with `pnpm --filter @heart-ui/theme generate`, then review the diff.
     expect(css).toBe(readFileSync(join(import.meta.dirname, '../css/tokens.css'), 'utf8'))
   })
 })

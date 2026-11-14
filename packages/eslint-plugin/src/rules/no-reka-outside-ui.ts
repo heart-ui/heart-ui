@@ -25,7 +25,7 @@ const rule: Rule.RuleModule = {
     schema: [],
     messages: {
       rekaOutsideUi:
-        'reka-ui is imported only inside registry/ui/: use the TrevUI component instead.',
+        'reka-ui is imported only inside registry/ui/: use the Heart UI component instead.',
     },
   },
   create(context) {

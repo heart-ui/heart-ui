@@ -10,7 +10,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 - Status: todo
 - Owner: human
 - Depends on: none
-- Deliver: npm package `trevui` and scope `@trevui` reserved; GitHub
+- Deliver: npm package `heart-ui` and scope `@heart-ui` reserved; GitHub
   organization; domain. Update "Open items" in `docs/spec.md`.
 - Accept: all four exist, or the docs are renamed in one commit.
 
@@ -64,7 +64,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 - Accept: every token in `tokens.md` is emitted; all contrast pairs pass
   for the default theme in light and dark; a snapshot test pins the
   default output; `bg-primary` and `h-control-md` resolve in a playground.
-- Check: `pnpm --filter @trevui/theme test`
+- Check: `pnpm --filter @heart-ui/theme test`
 
 ### P0-06 Lint plugin
 
@@ -76,7 +76,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
   `no-reka-outside-ui`, enabled for `registry/` in the root config.
 - Accept: rule tests include one failing and one passing case for every
   bullet in the lint rule section, in both `<template>` and `<script>`.
-- Check: `pnpm --filter @trevui/eslint-plugin test`
+- Check: `pnpm --filter @heart-ui/eslint-plugin test`
 
 ### P0-07 Test harness
 

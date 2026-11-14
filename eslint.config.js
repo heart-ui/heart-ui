@@ -4,7 +4,7 @@ import vue from 'eslint-plugin-vue'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import ts from 'typescript-eslint'
 // Built by the package's prepare script on install; `pnpm lint` rebuilds it first.
-import trevui from './packages/eslint-plugin/dist/index.mjs'
+import heartUi from './packages/eslint-plugin/dist/index.mjs'
 
 export default defineConfig(
   // The generated folders in .gitignore, which flat config does not read.
@@ -47,8 +47,8 @@ export default defineConfig(
   },
   {
     files: ['registry/**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue}'],
-    plugins: { trevui },
-    rules: { 'trevui/no-raw-values': 'error', 'trevui/no-reka-outside-ui': 'error' },
+    plugins: { 'heart-ui': heartUi },
+    rules: { 'heart-ui/no-raw-values': 'error', 'heart-ui/no-reka-outside-ui': 'error' },
   },
   prettier,
 )

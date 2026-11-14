@@ -1,8 +1,8 @@
-# TrevUI
+# Heart UI
 
 Open source Vue 3 UI library on Reka UI. Items (components, blocks, layouts,
 themes) are source files copied into user projects by a CLI from a
-shadcn-format registry. Package and CLI name: `trevui`.
+shadcn-format registry. Package and CLI name: `heart-ui`.
 
 ## Read before working
 

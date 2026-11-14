@@ -51,7 +51,7 @@ Each `no-raw-values` criterion has a failing and a passing case in a `.vue` `<te
 | AC-007 | packages/eslint-plugin/test/rules.test.ts › no-raw-values dark variant | `pnpm vitest run packages/eslint-plugin -t "dark variant"` |
 | AC-008 | packages/eslint-plugin/test/rules.test.ts › no-raw-values length literals | `pnpm vitest run packages/eslint-plugin -t "length literals"` |
 | AC-009 | packages/eslint-plugin/test/rules.test.ts › no-reka-outside-ui | `pnpm vitest run packages/eslint-plugin -t "no-reka-outside-ui"` |
-| AC-010 | tests/toolchain.test.ts › root config applies the TrevUI rules to registry/ only | `pnpm vitest run tests/toolchain.test.ts -t "TrevUI rules"` |
+| AC-010 | tests/toolchain.test.ts › root config applies the Heart UI rules to registry/ only | `pnpm vitest run tests/toolchain.test.ts -t "Heart UI rules"` |
 
 ## Must never break
 

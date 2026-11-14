@@ -11,7 +11,7 @@ semantic and component layers only, through Tailwind utilities.
 
 ## Knobs
 
-A theme is fully described by one knob file. `@trevui/theme` exports
+A theme is fully described by one knob file. `@heart-ui/theme` exports
 `generateTheme(knobs): string`, which returns `tokens.css`.
 
 ```json
@@ -170,7 +170,7 @@ against the Tailwind CSS v4 docs before writing `theme.css`.
 
 ## Lint rule
 
-`@trevui/eslint-plugin` rule `no-raw-values` fails on any of these inside
+`@heart-ui/eslint-plugin` rule `no-raw-values` fails on any of these inside
 `registry/`:
 
 - Hex, `rgb()`, `hsl()`, `oklch()`, or named colors.

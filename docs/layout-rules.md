@@ -11,7 +11,7 @@ them.
 2. Pick one layout from the catalog below. Justify it against `useWhen`.
 3. Fill each region with blocks. Add bare components only where no block fits.
 4. Build the empty, loading, error, and long-content states.
-5. Screenshot at 375, 768, and 1280 px. Run `trevui audit`. Fix findings.
+5. Screenshot at 375, 768, and 1280 px. Run `heart-ui audit`. Fix findings.
 
 ## Rules
 

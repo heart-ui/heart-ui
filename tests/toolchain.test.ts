@@ -41,7 +41,7 @@ const toolchainFiles = [
 // Seeded problems go into a throwaway copy of the toolchain, never the working tree, so a
 // killed run or a concurrent lint can't see them.
 function sandbox(files: Record<string, string>) {
-  const dir = mkdtempSync(join(tmpdir(), 'trevui-seeded-'))
+  const dir = mkdtempSync(join(tmpdir(), 'heart-ui-seeded-'))
   for (const file of toolchainFiles) {
     mkdirSync(dirname(join(dir, file)), { recursive: true })
     cpSync(join(root, file), join(dir, file))
@@ -155,7 +155,7 @@ describe('toolchain', () => {
     let status: number | null
 
     beforeAll(() => {
-      dir = mkdtempSync(join(tmpdir(), 'trevui-typecheck-'))
+      dir = mkdtempSync(join(tmpdir(), 'heart-ui-typecheck-'))
       writeFileSync(
         join(dir, 'tsconfig.json'),
         JSON.stringify({
@@ -225,16 +225,19 @@ describe('toolchain', () => {
   })
 
   it.each([
-    ['registry/ui/sample/sample.variants.ts', ['trevui/no-raw-values']],
-    ['registry/blocks/sample/sample.ts', ['trevui/no-raw-values', 'trevui/no-reka-outside-ui']],
-    ['registry/blocks/sample/sample.mts', ['trevui/no-raw-values', 'trevui/no-reka-outside-ui']],
+    ['registry/ui/sample/sample.variants.ts', ['heart-ui/no-raw-values']],
+    ['registry/blocks/sample/sample.ts', ['heart-ui/no-raw-values', 'heart-ui/no-reka-outside-ui']],
+    [
+      'registry/blocks/sample/sample.mts',
+      ['heart-ui/no-raw-values', 'heart-ui/no-reka-outside-ui'],
+    ],
     ['apps/playground-vite/src/sample.ts', []],
     ['packages/cli/src/sample.ts', []],
-  ])('root config applies the TrevUI rules to registry/ only: %s', async (file, expected) => {
+  ])('root config applies the Heart UI rules to registry/ only: %s', async (file, expected) => {
     const code = "export { Primitive } from 'reka-ui'\nexport const brand = '#0f172a'\n"
     const rules = (await lint(file, code))
       .map((message) => message.ruleId)
-      .filter((id) => id?.startsWith('trevui/'))
+      .filter((id) => id?.startsWith('heart-ui/'))
     expect([...new Set(rules)].sort()).toEqual(expected)
   })
 

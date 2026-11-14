@@ -2,7 +2,7 @@
   "name": "example",
   "version": "0.0.0",
   "private": true,
-  "description": "Example app built only on TrevUI. Stub until Phase 3.",
+  "description": "Example app built only on Heart UI. Stub until Phase 3.",
   "license": "MIT",
   "type": "module"
 }

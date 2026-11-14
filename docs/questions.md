@@ -35,10 +35,10 @@ Gaps and conflicts found while building. Format in
   steps (light 700/800, dark 300/200; muted-active neutral-300 light,
   neutral-600 dark).
 - 2026-11-13 P0-10: a component token's mapping lives in the shared
-  `theme.css` and the `utils` item's `cn()` config, which `trevui add`
+  `theme.css` and the `utils` item's `cn()` config, which `heart-ui add`
   won't update in a project that already has them. Answered 2026-11-13 by
   the maintainer: each item carries its mapping in `item.json`'s `css`
-  field (`@theme inline { --radius-button: … }`) and `trevui add` merges it
+  field (`@theme inline { --radius-button: … }`) and `heart-ui add` merges it
   into the user's `theme.css`; `cn()` recognises component utilities by
   pattern (any `rounded-<word>`) instead of a hand-kept list. Built in the
   CLI task.

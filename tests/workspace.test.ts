@@ -11,11 +11,11 @@ const packages: Record<string, string> = {
   'apps/playground-vite': 'playground-vite',
   'apps/playground-nuxt': 'playground-nuxt',
   'apps/example': 'example',
-  'packages/cli': 'trevui',
-  'packages/mcp': '@trevui/mcp',
-  'packages/theme': '@trevui/theme',
-  'packages/eslint-plugin': '@trevui/eslint-plugin',
-  'packages/chart-echarts': '@trevui/chart-echarts',
+  'packages/cli': 'heart-ui',
+  'packages/mcp': '@heart-ui/mcp',
+  'packages/theme': '@heart-ui/theme',
+  'packages/eslint-plugin': '@heart-ui/eslint-plugin',
+  'packages/chart-echarts': '@heart-ui/chart-echarts',
   benchmark: 'benchmark',
 }
 

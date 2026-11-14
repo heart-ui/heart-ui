@@ -1,4 +1,4 @@
-# TrevUI
+# Heart UI
 
 Open source Vue 3 UI library on Reka UI. A CLI copies components, blocks,
 layouts and themes into your project as source you own.

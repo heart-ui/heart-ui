@@ -110,9 +110,9 @@ try {
       stdio: 'inherit',
       env: {
         ...process.env,
-        TREVUI_VISUAL_WS: wsEndpoint,
-        TREVUI_VISUAL_HOST: previewHost,
-        TREVUI_VISUAL_PORT: String(await freePort()),
+        HEART_UI_VISUAL_WS: wsEndpoint,
+        HEART_UI_VISUAL_HOST: previewHost,
+        HEART_UI_VISUAL_PORT: String(await freePort()),
       },
     },
   )

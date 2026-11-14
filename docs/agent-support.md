@@ -15,7 +15,7 @@ over the same files, so they cannot drift apart.
 
 ## MCP server
 
-Package `@trevui/mcp`, stdio transport, built on the official TypeScript
+Package `@heart-ui/mcp`, stdio transport, built on the official TypeScript
 MCP SDK. It reads the hosted registry (or a local path with
 `--registry`). Tools are read-only except `audit_screen`, which reads
 local files.
@@ -25,36 +25,36 @@ local files.
 | `search_items` | `query`, optional `type`, `category` | Ranked items: name, type, description, `useWhen` |
 | `get_item` | `name` | Item Markdown, `item.json` metadata, file list |
 | `get_item_source` | `name` | File contents |
-| `get_install_command` | `names[]` | The `trevui add` command line |
+| `get_install_command` | `names[]` | The `heart-ui add` command line |
 | `get_layout_rules` | none | `layout-rules.md` |
 | `get_tokens` | none | Semantic token names and the utilities that map to them |
-| `audit_screen` | `paths[]` | Checklist results, same as `trevui audit --json` |
+| `audit_screen` | `paths[]` | Checklist results, same as `heart-ui audit --json` |
 
 Search is keyword scoring over name, description, categories, `useWhen`,
 and `avoidWhen`. No embeddings.
 
 ## Project rule files
 
-`trevui init` writes `AGENTS.md` (and appends a pointer to an existing
+`heart-ui init` writes `AGENTS.md` (and appends a pointer to an existing
 `CLAUDE.md`). Content, under 40 lines:
 
 - Where components, blocks, and layouts live in this project.
 - The screen workflow from [layout-rules.md](layout-rules.md#screen-workflow).
-- "Use `trevui list` or the MCP `search_items` tool before writing new UI."
+- "Use `heart-ui list` or the MCP `search_items` tool before writing new UI."
 - The hard rules: semantic token utilities only, no raw values, one
   primary action, all four states.
-- The command to verify: `trevui audit <files>`.
+- The command to verify: `heart-ui audit <files>`.
 
 ## Audit checklist
 
-`trevui audit` checks screen files statically. Each check has an id used
+`heart-ui audit` checks screen files statically. Each check has an id used
 in output and in benchmark scoring.
 
 | Id | Check |
 | --- | --- |
-| `A1` | Uses a TrevUI layout as the root, or sits in a route under one |
+| `A1` | Uses a Heart UI layout as the root, or sits in a route under one |
 | `A2` | No raw values (same rule as `no-raw-values`) |
-| `A3` | No UI element built from bare HTML where a TrevUI component exists (`button`, `input`, `select`, `dialog`, `table`) |
+| `A3` | No UI element built from bare HTML where a Heart UI component exists (`button`, `input`, `select`, `dialog`, `table`) |
 | `A4` | At most one `variant="primary"` button per view |
 | `A5` | Data regions handle `empty`, `loading`, and `error` |
 | `A6` | No `reka-ui` import in app code |
@@ -64,14 +64,14 @@ in output and in benchmark scoring.
 ## Benchmark
 
 `benchmark/specs/` holds 20 written screen specs. `benchmark/run.ts`
-creates a fresh project per spec, runs `trevui init`, starts Claude Code
+creates a fresh project per spec, runs `heart-ui init`, starts Claude Code
 headless with the spec and the MCP server, then scores the result.
 
 A spec passes when all of these hold:
 
 1. The project builds and the screen renders at 375, 768, and 1280 px
    without console errors.
-2. `trevui audit` reports no failures.
+2. `heart-ui audit` reports no failures.
 3. axe reports zero violations.
 4. The layout chosen is in the spec's `acceptedLayouts` list.
 5. Every element in the spec's `mustInclude` list is present, checked by

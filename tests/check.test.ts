@@ -68,10 +68,10 @@ describe('check:item', () => {
     )
     expect(planned['test:unit']).toBe('skipped: no unit test references registry/ui/placeholder')
     expect(planned['test:browser']).toBe(
-      'TREVUI_ITEM=placeholder pnpm run test:browser test/demos.browser.test.ts',
+      'HEART_UI_ITEM=placeholder pnpm run test:browser test/demos.browser.test.ts',
     )
     expect(planned['test:visual']).toBe('pnpm run test:visual --grep (^|\\s)ui/placeholder\\s')
-    expect(planned['test:ssr']).toBe('TREVUI_ITEM=placeholder pnpm run test:ssr')
+    expect(planned['test:ssr']).toBe('HEART_UI_ITEM=placeholder pnpm run test:ssr')
     expect(planned['registry:build']).toMatch(
       /pnpm run registry:build --out \S+ \(placeholder is a fixture: no item\.json\)/,
     )

@@ -1,8 +1,8 @@
 {
-  "name": "@trevui/eslint-plugin",
+  "name": "@heart-ui/eslint-plugin",
   "version": "0.0.0",
   "private": true,
-  "description": "TrevUI lint rules: no-raw-values and no-reka-outside-ui.",
+  "description": "Heart UI lint rules: no-raw-values and no-reka-outside-ui.",
   "license": "MIT",
   "type": "module",
   "exports": {

@@ -47,7 +47,7 @@ Extra acceptance for specific items:
   docs page on writing an adapter.
 - Accept: the `chart` demos render through either adapter with the same
   props; colors come from `chart-1` to `chart-6` in both.
-- Check: `pnpm --filter @trevui/chart-echarts test`
+- Check: `pnpm --filter @heart-ui/chart-echarts test`
 
 ## Upgrade path
 
@@ -132,9 +132,9 @@ Extra acceptance for specific items:
 - Depends on: P3-01 to P3-15, P3-18
 - Deliver: `apps/example`, a small admin app (sign in, dashboard,
   customers, orders, settings) on Nuxt. Every UI file comes from
-  `trevui add` or composes installed items; no bare HTML controls.
+  `heart-ui add` or composes installed items; no bare HTML controls.
   Deployed config for Cloudflare Pages.
-- Accept: `trevui audit` passes on every screen; axe passes on every
+- Accept: `heart-ui audit` passes on every screen; axe passes on every
   route; the app builds under SSR.
 - Check: `pnpm --filter example build && pnpm --filter example audit`
 

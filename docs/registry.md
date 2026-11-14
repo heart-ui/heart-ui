@@ -7,7 +7,7 @@ JSON file per item. Fetch the current schema
 (`https://ui.shadcn.com/schema/registry-item.json`) and validate against it
 in `registry:build`; the field list below is a summary, not the authority.
 
-| TrevUI kind | Schema `type` | Source folder |
+| Heart UI kind | Schema `type` | Source folder |
 | --- | --- | --- |
 | Component | `registry:ui` | `registry/ui/<name>/` |
 | Shared helper | `registry:lib` | `registry/lib/` |
@@ -34,7 +34,7 @@ build adds file contents and emits `dist/registry/r/<name>.json`.
 
 ## Item metadata
 
-Fields TrevUI adds go under `meta`, which the schema leaves free-form.
+Fields Heart UI adds go under `meta`, which the schema leaves free-form.
 
 | Field | Applies to | Content |
 | --- | --- | --- |
@@ -54,29 +54,29 @@ Fields TrevUI adds go under `meta`, which the schema leaves free-form.
 
 ## Project config
 
-`init` writes `trevui.json` in the project root.
+`init` writes `heart-ui.json` in the project root.
 
 ```json
 {
   "$schema": "https://<registry-host>/schema/config.json",
   "framework": "nuxt",
-  "css": "app/assets/css/trevui.css",
+  "css": "app/assets/css/heart-ui.css",
   "aliases": { "ui": "@/components/ui", "blocks": "@/components/blocks", "layouts": "@/layouts", "lib": "@/lib" },
   "iconSet": "fluent",
-  "registries": { "@trevui": "https://<registry-host>/r/{name}.json" }
+  "registries": { "@heart-ui": "https://<registry-host>/r/{name}.json" }
 }
 ```
 
 ## Lock file
 
-`trevui.lock.json` records what was installed. `add` and `update` write
+`heart-ui.lock.json` records what was installed. `add` and `update` write
 it; nothing else does.
 
 ```json
 {
   "items": {
     "button": {
-      "registry": "@trevui",
+      "registry": "@heart-ui",
       "version": "0.1.0",
       "files": { "components/ui/button/Button.vue": "sha256-..." }
     }
@@ -91,13 +91,13 @@ rewriting.
 
 | Command | Behavior |
 | --- | --- |
-| `trevui init` | Detect Nuxt or Vite. Check Tailwind v4 and minimum versions. Write `trevui.json`, `tokens.css`, `theme.css`, the `utils` and `icon` helpers, and agent rule files. Flags: `--theme <preset>`, `--yes`. |
-| `trevui add <item...>` | Resolve `registryDependencies` recursively. Rewrite import aliases. Write files. Install npm `dependencies` with the project's package manager. Update the lock file. Refuse to overwrite an existing file unless `--overwrite`. |
-| `trevui list` | Print items from the index. Flags: `--type`, `--category`, `--json`. |
-| `trevui diff [item]` | For each installed item, compare lock version with the registry. Print a unified diff of upstream changes per file. Exit 1 when updates exist. |
-| `trevui update [item]` | Per file: if the local hash equals the lock hash, replace the file. Otherwise run a three-way merge (base = locked version fetched from the registry, ours = local, theirs = latest). Write conflict markers on conflict and report the file. |
-| `trevui theme <path or URL>` | Read a knob file, run `generateTheme`, and replace `tokens.css`. |
-| `trevui audit <file...>` | Run the screen checklist in [agent-support.md](agent-support.md#audit-checklist). Exit 1 on any failure. `--json` for machine output. |
+| `heart-ui init` | Detect Nuxt or Vite. Check Tailwind v4 and minimum versions. Write `heart-ui.json`, `tokens.css`, `theme.css`, the `utils` and `icon` helpers, and agent rule files. Flags: `--theme <preset>`, `--yes`. |
+| `heart-ui add <item...>` | Resolve `registryDependencies` recursively. Rewrite import aliases. Write files. Install npm `dependencies` with the project's package manager. Update the lock file. Refuse to overwrite an existing file unless `--overwrite`. |
+| `heart-ui list` | Print items from the index. Flags: `--type`, `--category`, `--json`. |
+| `heart-ui diff [item]` | For each installed item, compare lock version with the registry. Print a unified diff of upstream changes per file. Exit 1 when updates exist. |
+| `heart-ui update [item]` | Per file: if the local hash equals the lock hash, replace the file. Otherwise run a three-way merge (base = locked version fetched from the registry, ours = local, theirs = latest). Write conflict markers on conflict and report the file. |
+| `heart-ui theme <path or URL>` | Read a knob file, run `generateTheme`, and replace `tokens.css`. |
+| `heart-ui audit <file...>` | Run the screen checklist in [agent-support.md](agent-support.md#audit-checklist). Exit 1 on any failure. `--json` for machine output. |
 
 All commands accept `--cwd`. All output is plain text without color codes
 when stdout is not a TTY.
@@ -108,4 +108,4 @@ version at `/r/<name>@<version>.json`.
 ## Third-party registries
 
 Any host serving the same schema works. Users add it under `registries`
-and install with `trevui add @scope/<item>`.
+and install with `heart-ui add @scope/<item>`.

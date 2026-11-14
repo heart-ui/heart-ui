@@ -2,7 +2,7 @@
 
 ## Product
 
-TrevUI is an open source (MIT) Vue 3 UI library built on Reka UI. Users copy
+Heart UI is an open source (MIT) Vue 3 UI library built on Reka UI. Users copy
 source into their project with a CLI and own it. Three properties set it
 apart from other Vue libraries:
 
@@ -12,7 +12,7 @@ apart from other Vue libraries:
   written layout rules, and a published benchmark.
 
 The name reads as *tre* (bamboo) + Vue + UI, and as *tre vui* (happy bamboo).
-Brand spelling is `TrevUI`; packages, CLI, and repo use `trevui`.
+Brand spelling is `Heart UI`; packages, CLI, and repo use `heart-ui`.
 
 ## Goals
 
@@ -81,5 +81,5 @@ Brand spelling is `TrevUI`; packages, CLI, and repo use `trevui`.
 
 ## Open items
 
-- Confirm the npm scope `@trevui`, the GitHub organization, and a domain.
-  Docs in this repo assume `@trevui`; rename in one commit if it is taken.
+- Confirm the npm scope `@heart-ui`, the GitHub organization, and a domain.
+  Docs in this repo assume `@heart-ui`; rename in one commit if it is taken.

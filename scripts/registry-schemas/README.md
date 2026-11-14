@@ -6,7 +6,7 @@
 | --- | --- |
 | `registry-item.json` | <https://ui.shadcn.com/schema/registry-item.json> |
 | `registry.json` | <https://ui.shadcn.com/schema/registry.json> |
-| `meta.schema.json` | TrevUI's own: the `meta` fields in [registry.md](../../docs/registry.md#item-metadata) |
+| `meta.schema.json` | Heart UI's own: the `meta` fields in [registry.md](../../docs/registry.md#item-metadata) |
 
 Fetched: 2026-11-12
 

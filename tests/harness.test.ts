@@ -31,7 +31,7 @@ const tracked = execFileSync('git', ['ls-files', '-co', '--exclude-standard', '-
   .filter((file) => file && existsSync(join(root, file)))
 
 function sandbox(files: Record<string, string>) {
-  const dir = mkdtempSync(join(tmpdir(), 'trevui-harness-'))
+  const dir = mkdtempSync(join(tmpdir(), 'heart-ui-harness-'))
   sandboxes.push(dir)
   for (const file of tracked) {
     mkdirSync(dirname(join(dir, file)), { recursive: true })

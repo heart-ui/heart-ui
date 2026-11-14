@@ -20,9 +20,9 @@ const repo = join(dirname(fileURLToPath(import.meta.url)), '..')
 const schemaDir = join(repo, 'scripts/registry-schemas')
 const itemSchemaId = 'https://ui.shadcn.com/schema/registry-item.json'
 const indexSchemaId = 'https://ui.shadcn.com/schema/registry.json'
-const scope = '@trevui'
+const scope = '@heart-ui'
 // Lists what the build wrote into --out, so a rebuild deletes exactly that and nothing else.
-const markerName = '.trevui-registry-build.json'
+const markerName = '.heart-ui-registry-build.json'
 
 /** A build failure whose message is meant for the person running the build. */
 export class RegistryError extends Error {}
@@ -278,7 +278,7 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
       const unknown = Object.keys(source).filter((field) => !knownFields.has(field))
       if (unknown.length > 0) {
         throw new RegistryError(
-          `${label}: unknown field ${unknown.map((field) => `"${field}"`).join(', ')} in item.json; TrevUI fields go under meta`,
+          `${label}: unknown field ${unknown.map((field) => `"${field}"`).join(', ')} in item.json; Heart UI fields go under meta`,
         )
       }
       const item: SourceItem = { ...(source as SourceItem) }
@@ -419,7 +419,7 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
 
   const index = {
     $schema: indexSchemaId,
-    name: 'trevui',
+    name: 'heart-ui',
     // Index entries carry no `$schema` and no file contents.
     items: items.map(({ files, ...entry }) => ({
       ...Object.fromEntries(Object.entries(entry).filter(([key]) => key !== '$schema')),

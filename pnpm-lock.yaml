@@ -74,7 +74,7 @@ importers:
 
   apps/playground-nuxt:
     dependencies:
-      '@trevui/theme':
+      '@heart-ui/theme':
         specifier: workspace:*
         version: link:../../packages/theme
       nuxt:
@@ -99,7 +99,7 @@ importers:
 
   apps/playground-vite:
     dependencies:
-      '@trevui/theme':
+      '@heart-ui/theme':
         specifier: workspace:*
         version: link:../../packages/theme
       vue:

@@ -9,13 +9,13 @@ Follow-ups:
 - CLAUDE.md "Working loop" step 5 ("set the task status to review and stop") is compatible with sdlc's
   Ship ending at a pull request; no change needed.
 -->
-# TrevUI Constitution
+# Heart UI Constitution
 
 ## Core Principles
 
 ### I. Reka underneath, source the user owns
 
-TrevUI MUST NOT ship its own headless primitives: focus, keyboard handling and ARIA come from Reka UI.
+Heart UI MUST NOT ship its own headless primitives: focus, keyboard handling and ARIA come from Reka UI.
 `reka-ui` MUST be imported only inside `registry/ui/`. Every item MUST be plain source that the CLI copies
 into the user's project and that still works after the user edits it, with no runtime package needed
 except the dependencies its `item.json` names. Components MUST follow the API rules in
@@ -32,7 +32,7 @@ no pixel or rem literals; no Tailwind palette or arbitrary-value classes; no `--
 no `dark:` variant. Control height, padding and radius MUST use token utilities. Layout MUST use logical
 properties only. A token's name or value MUST NOT change except in a task that says to change it.
 
-*Rationale:* six knobs can produce a complete theme only if every item reads tokens. `@trevui/eslint-plugin`
+*Rationale:* six knobs can produce a complete theme only if every item reads tokens. `@heart-ui/eslint-plugin`
 enforces this.
 
 ### III. Accessible and SSR-safe (NON-NEGOTIABLE)
@@ -84,7 +84,7 @@ and using items without guessing.
 Every change to a published package or registry item MUST include a changeset. Each item MUST carry its
 own semver in `meta.version`. Dependency versions MUST be pinned exactly. After 1.0 the public API is
 frozen: removing or renaming a prop, slot, event, token or item MUST be a major version. An unmodified
-item MUST update cleanly with `trevui update`.
+item MUST update cleanly with `heart-ui update`.
 
 *Rationale:* users own copied source, so a silent breaking change in an item would be pulled into their code.
 

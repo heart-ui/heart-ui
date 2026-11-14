@@ -49,7 +49,7 @@ setup, with root scripts `lint`, `format` and `typecheck`, following the
 
 ## Out of scope
 
-- `@trevui/eslint-plugin` rules for `registry/` (P0-06).
+- `@heart-ui/eslint-plugin` rules for `registry/` (P0-06).
 - `vue`, Tailwind and the playgrounds (P0-04); the CI workflow and `pnpm check` (P0-09).
 - Reformatting Markdown with Prettier.
 

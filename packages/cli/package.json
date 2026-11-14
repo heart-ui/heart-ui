@@ -1,8 +1,8 @@
 {
-  "name": "trevui",
+  "name": "heart-ui",
   "version": "0.0.0",
   "private": true,
-  "description": "TrevUI CLI. Stub until the CLI task.",
+  "description": "Heart UI CLI. Stub until the CLI task.",
   "license": "MIT",
   "type": "module"
 }

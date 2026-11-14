@@ -1,8 +1,8 @@
 {
-  "name": "@trevui/chart-echarts",
+  "name": "@heart-ui/chart-echarts",
   "version": "0.0.0",
   "private": true,
-  "description": "ECharts engine for TrevUI charts. Stub until Phase 3.",
+  "description": "ECharts engine for Heart UI charts. Stub until Phase 3.",
   "license": "MIT",
   "type": "module"
 }

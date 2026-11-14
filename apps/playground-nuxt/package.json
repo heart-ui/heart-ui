@@ -12,7 +12,7 @@
     "test:ssr": "nuxt prepare && vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@trevui/theme": "workspace:*",
+    "@heart-ui/theme": "workspace:*",
     "nuxt": "4.6.4",
     "vue": "3.5.45"
   },

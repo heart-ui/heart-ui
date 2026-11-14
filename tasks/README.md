@@ -70,7 +70,7 @@ Used by every row in a block or layout table.
   5. Add a changeset.
 - Accept: the definition of done, plus the item obeys every rule in
   [layout-rules.md](../docs/layout-rules.md#rules) and
-  `trevui audit` passes on its demo.
+  `heart-ui audit` passes on its demo.
 - Check: `pnpm check:item <name>`
 
 ## Questions
