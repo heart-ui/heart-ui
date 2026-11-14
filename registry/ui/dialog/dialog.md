@@ -2,7 +2,7 @@
 
 Modal window for a short, blocking decision or a small form. Use `drawer`
 to keep list context and a full page for long tasks
-([layout-rules.md](../layout-rules.md#detail-and-editing)).
+([layout-rules.md](../../../docs/layout-rules.md#detail-and-editing)).
 
 ## Usage
 
