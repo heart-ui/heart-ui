@@ -1,0 +1,10 @@
+{
+  "name": "badge",
+  "type": "registry:ui",
+  "title": "Badge",
+  "description": "A short status or category label in six colours and two sizes, with an optional leading icon.",
+  "dependencies": ["class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils"],
+  "files": ["Badge.vue", "badge.variants.ts", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

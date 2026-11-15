@@ -83,6 +83,7 @@ describe('docs pages', () => {
 
   it('demo pages: bare pages that mount the demo, only for items with Markdown', () => {
     expect(docsItems().map((item) => item.name)).toEqual([
+      'badge',
       'button',
       'card',
       'checkbox',
@@ -99,6 +100,7 @@ describe('docs pages', () => {
     ])
     expect(pages.map((entry) => entry.name)).not.toContain('placeholder')
     for (const [name, demo] of [
+      ['badge', 'Badge.demo.vue'],
       ['button', 'Button.demo.vue'],
       ['card', 'Card.demo.vue'],
       ['checkbox', 'Checkbox.demo.vue'],
@@ -492,7 +494,7 @@ describe('docs page generator edge cases', () => {
     const items = docsItems()
     const index = indexPage([...items, { ...(items[0] as (typeof items)[number]), title: 'A <b>' }])
     for (const item of items) expect(index).toContain(`- [${item.title}](./${item.name}): `)
-    expect(index).toContain('- [A &lt;b&gt;](./button): ')
+    expect(index).toContain(`- [A &lt;b&gt;](./${items[0]!.name}): `)
     expect(escapeHtml('<x> & "y"')).toBe('&lt;x&gt; &amp; &quot;y&quot;')
   })
 
@@ -545,6 +547,7 @@ describe('docs page generator edge cases', () => {
 
   it('takes the sidebar title from the Markdown heading', () => {
     expect(docsItems().map((entry) => entry.title)).toEqual([
+      'Badge',
       'Button',
       'Card',
       'Checkbox',

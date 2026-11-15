@@ -23,7 +23,7 @@ message.
 | Slot | Content |
 | --- | --- |
 | `default` | The label, one or two words |
-| `leading` | An icon before the label |
+| `leading` | An icon before the label; hidden from screen readers, so put words in the label |
 
 ## Events
 

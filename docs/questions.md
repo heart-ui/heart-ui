@@ -12,6 +12,10 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-11: calls in `badge`, decided by the agent. Each status
+  variant uses its `-subtle` pair (`primary` its `primary-subtle`, `neutral`
+  `muted`), not the solid fill: a badge is a label, and the subtle pairs are
+  checked text pairs. `size` is `sm | md`, as the catalog row names.
 - 2026-11-15 P1-10: calls in `card`, decided by the agent. (1) The card
   declares a component token, `--h-card-radius` (falling back to
   `--h-radius-lg`), mapped in `theme.css` as `rounded-card`, as `button`,
