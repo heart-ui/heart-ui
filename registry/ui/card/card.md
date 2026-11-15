@@ -22,8 +22,10 @@ needs no frame, and `dialog` for content that needs a decision.
 | Part | Prop | Type | Default | Notes |
 | --- | --- | --- | --- | --- |
 | `Card` | `variant` | `default \| outline` | `default` | `default` is a raised surface with a shadow; `outline` a border only |
-| `Card` | `as` | `string` | `div` | Element to render, such as `section` or `article` |
-| `CardTitle` | `as` | `string` | `h3` | Heading level that fits the page outline |
+| `Card` | `as` | `string \| Component` | `div` | Element to render, such as `section` or `article` |
+| `Card` | `asChild` | `boolean` | `false` | Merge onto the child, such as a link |
+| `CardTitle` | `as` | `string \| Component` | `h3` | Heading level that fits the page outline |
+| `CardTitle` | `asChild` | `boolean` | `false` | Merge onto the child |
 
 Every part takes `class`, merged last, and renders a `div` unless noted.
 
@@ -49,7 +51,11 @@ None.
 | `--h-card-radius` | `--h-radius-lg` | Corner radius |
 
 `default` is `surface-raised` with `shadow-sm` and a `border`; `outline` is
-`surface` with a `border`. Padding is `gap-lg`-based on every part.
+a `border` on no fill. The card spaces its parts with `gap-lg`, which
+follows the density knob, and each part pads only its sides. Keep the parts
+direct children of the card; a `form` that wraps some of them takes
+`class="contents"`. A part with its own border or fill (a footer band) adds
+its own vertical padding, such as `py-gap-md`.
 
 ## States
 

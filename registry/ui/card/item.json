@@ -1,0 +1,19 @@
+{
+  "name": "card",
+  "type": "registry:ui",
+  "title": "Card",
+  "description": "A surface that groups one subject: header, title, description, content and footer, raised or outlined.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils"],
+  "files": [
+    "Card.vue",
+    "CardHeader.vue",
+    "CardTitle.vue",
+    "CardDescription.vue",
+    "CardContent.vue",
+    "CardFooter.vue",
+    "card.variants.ts",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

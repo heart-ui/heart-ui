@@ -429,6 +429,7 @@ describe('theme.css', () => {
       '--radius-button: var(--h-button-radius, var(--h-radius-md));',
       '--radius-input: var(--h-input-radius, var(--h-radius-md));',
       '--radius-dialog: var(--h-dialog-radius, var(--h-radius-lg));',
+      '--radius-card: var(--h-card-radius, var(--h-radius-lg));',
       ...['fade-in', 'fade-out', 'pop-in', 'pop-out'].map(
         (name) => `--animate-${name}: heart-${name} var(--h-duration-normal) var(--h-ease) both;`,
       ),

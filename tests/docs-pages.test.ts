@@ -84,6 +84,7 @@ describe('docs pages', () => {
   it('demo pages: bare pages that mount the demo, only for items with Markdown', () => {
     expect(docsItems().map((item) => item.name)).toEqual([
       'button',
+      'card',
       'checkbox',
       'dialog',
       'dropdown-menu',
@@ -99,6 +100,7 @@ describe('docs pages', () => {
     expect(pages.map((entry) => entry.name)).not.toContain('placeholder')
     for (const [name, demo] of [
       ['button', 'Button.demo.vue'],
+      ['card', 'Card.demo.vue'],
       ['checkbox', 'Checkbox.demo.vue'],
       ['dialog', 'Dialog.demo.vue'],
       ['dropdown-menu', 'DropdownMenu.demo.vue'],
@@ -544,6 +546,7 @@ describe('docs page generator edge cases', () => {
   it('takes the sidebar title from the Markdown heading', () => {
     expect(docsItems().map((entry) => entry.title)).toEqual([
       'Button',
+      'Card',
       'Checkbox',
       'Dialog',
       'Dropdown Menu',

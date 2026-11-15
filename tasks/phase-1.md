@@ -18,7 +18,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 | P1-07 | `dropdown-menu` | P0-14 | review |
 | P1-08 | `tooltip` | P0-14 | review |
 | P1-09 | `tabs` | P0-14 | review |
-| P1-10 | `card` | P0-14 | todo |
+| P1-10 | `card` | P0-14 | review |
 | P1-11 | `badge` | P0-14 | todo |
 | P1-12 | `toast` | P0-14 | todo |
 

@@ -81,6 +81,7 @@ describe('registry:build', () => {
       const names = (index.items as { name: string }[]).map((entry) => entry.name).sort()
       expect(names).toEqual([
         'button',
+        'card',
         'checkbox',
         'dialog',
         'dropdown-menu',

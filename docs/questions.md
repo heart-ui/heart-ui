@@ -12,6 +12,18 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-10: calls in `card`, decided by the agent. (1) The card
+  declares a component token, `--h-card-radius` (falling back to
+  `--h-radius-lg`), mapped in `theme.css` as `rounded-card`, as `button`,
+  `input` and `dialog` did; it adds a token and changes none. (2) `Card` and
+  `CardTitle` take `as` (a `div` and an `h3` by default) so a card can be a
+  `section` or `article` and its title fit the page outline. (3) `outline`
+  is a border on no fill. Gap for a theme task: in light mode the page
+  `background`, `surface` and `surface-raised` are all the same white, so
+  with the `shadow: none` knob the two variants still look alike; only a
+  raised surface distinct from the page would separate them. (4) In dark mode `border` equals `surface-raised`, so the
+  default card's border disappears into its fill; the fill still stands
+  out from the page, so this is left for a theme task to weigh.
 - 2026-11-15 P1-09: calls in `tabs`, decided by the agent. (1) `variant`
   and `orientation` are `Tabs` props that reach the list and triggers by
   `provide`/`inject`. (2) The active tab is styled with Tailwind's
