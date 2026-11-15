@@ -12,7 +12,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 | P1-01 | `label` | P0-14 | review |
 | P1-02 | `textarea` | P0-14 | review |
 | P1-03 | `checkbox` | P1-01 | review |
-| P1-04 | `radio-group` | P1-01 | todo |
+| P1-04 | `radio-group` | P1-01 | review |
 | P1-05 | `switch` | P1-01 | todo |
 | P1-06 | `select` | P0-14 | todo |
 | P1-07 | `dropdown-menu` | P0-14 | todo |

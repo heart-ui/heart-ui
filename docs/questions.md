@@ -12,6 +12,18 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-04: two calls in `radio-group`, decided by the agent. (1)
+  `orientation` sets the layout only. The ARIA radio group pattern moves
+  with all four arrow keys, and Reka narrows them to one axis when given an
+  orientation, so Reka gets none; as a result the group has no
+  `aria-orientation` (optional for a radio group). (2) Each item renders a
+  native radio input under its radio for forms, instead of Reka's: Reka's
+  input submits the field with an empty value (`plan=`) when nothing is
+  chosen and sits at the corner of a far ancestor, where the browser's
+  validation bubble then points. `required` needs `name`, as it does for
+  Reka, and is only announced with one. The hidden inputs of `checkbox` and
+  `radio-group` hand focus to the visible control (form validation focuses
+  them) and fire `input` and `change` on the form, as native controls do.
 - 2026-11-15 P1-03: three calls in `checkbox`, decided by the agent. (1) A
   disabled checkbox dims only its box; the label text turns
   `muted-foreground` instead of half opacity, which failed axe contrast in

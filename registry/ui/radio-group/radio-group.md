@@ -19,10 +19,10 @@ seeing at once (up to about five). Use `select` for a longer list, and
 | --- | --- | --- | --- | --- |
 | `RadioGroup` | `modelValue` | `string` | none | `v-model`; the chosen item's `value` |
 | `RadioGroup` | `size` | `sm \| md \| lg` | `md` | Applies to every item |
-| `RadioGroup` | `orientation` | `vertical \| horizontal` | `vertical` | Layout and arrow keys |
+| `RadioGroup` | `orientation` | `vertical \| horizontal` | `vertical` | Layout only; all four arrow keys move either way |
 | `RadioGroup` | `disabled` | `boolean` | `false` | Disables every item |
 | `RadioGroup` | `name` | `string` | none | Form field name; submits the chosen `value` |
-| `RadioGroup` | `required` | `boolean` | `false` | |
+| `RadioGroup` | `required` | `boolean` | `false` | Blocks submit until one is chosen; needs `name` |
 | `RadioGroupItem` | `value` | `string` | none | Required |
 | `RadioGroupItem` | `disabled` | `boolean` | `false` | |
 

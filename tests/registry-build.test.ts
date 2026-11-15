@@ -86,6 +86,7 @@ describe('registry:build', () => {
         'icon',
         'input',
         'label',
+        'radio-group',
         'textarea',
         'utils',
       ])

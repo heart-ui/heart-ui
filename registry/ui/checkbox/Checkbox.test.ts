@@ -145,6 +145,80 @@ describe('Checkbox', () => {
       expect(new FormData(form).get('terms')).toBe('on')
     })
 
+    it('keeps the form in step with the shown state after a form reset', async () => {
+      const root = render(() =>
+        h('form', [h(Checkbox, { name: 'terms', modelValue: true, 'aria-label': 'Terms' })]),
+      )
+      const form = root.querySelector('form')!
+      form.reset()
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(new FormData(form).get('terms')).toBe('on')
+    })
+
+    it('puts the form input under the box, so a validation bubble points at it', () => {
+      // Pushed away from the page corner, where a misplaced input would also land.
+      const root = render(() =>
+        h('form', { class: 'ps-40 pt-40' }, [
+          h(Checkbox, { name: 'terms', required: true }, () => 'I accept the terms'),
+        ]),
+      )
+      const box = root.querySelector('[role="checkbox"]')!.getBoundingClientRect()
+      const input = root.querySelector('input[type="checkbox"]')!.getBoundingClientRect()
+      expect(Math.abs(input.left - box.left)).toBeLessThan(1)
+      expect(Math.abs(input.top - box.top)).toBeLessThan(box.height)
+    })
+
+    it('hands focus from the form input to the box, so Space never toggles a hidden input', async () => {
+      const value = ref<State>(false)
+      const root = render(() =>
+        h('form', [
+          h(Checkbox, {
+            name: 'terms',
+            required: true,
+            modelValue: value.value,
+            'onUpdate:modelValue': (next: State) => (value.value = next),
+            'aria-label': 'Terms',
+          }),
+        ]),
+      )
+      root.querySelector('form')!.reportValidity()
+      expect(document.activeElement).toBe(root.querySelector('[role="checkbox"]'))
+      await userEvent.keyboard(' ')
+      expect(value.value).toBe(true)
+      await nextTick()
+      expect(root.querySelector<HTMLInputElement>('input[type="checkbox"]')!.checked).toBe(true)
+    })
+
+    it('fires input and change when the user toggles, and not when code sets the value', async () => {
+      const value = ref<State>(false)
+      const root = render(() =>
+        h('form', [
+          h(
+            Checkbox,
+            {
+              name: 'terms',
+              modelValue: value.value,
+              'onUpdate:modelValue': (next: State) => (value.value = next),
+            },
+            () => 'I accept the terms',
+          ),
+        ]),
+      )
+      const form = root.querySelector('form')!
+      const events: string[] = []
+      form.addEventListener('input', () => events.push('input'))
+      form.addEventListener('change', () => events.push('change'))
+      value.value = 'indeterminate'
+      await nextTick()
+      value.value = true
+      await nextTick()
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(events).toEqual([])
+      await userEvent.click(page.getByText('I accept the terms'))
+      await nextTick()
+      expect(events).toEqual(['input', 'change'])
+    })
+
     it('leaves a disabled box out of the form, as a native checkbox would', async () => {
       const root = render(() =>
         h('form', [
