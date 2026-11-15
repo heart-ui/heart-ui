@@ -71,11 +71,11 @@ does. `DialogHeader` and `DialogFooter` take nothing else.
 
 | Token | Falls back to | Controls |
 | --- | --- | --- |
-| `--tre-dialog-radius` | `--tre-radius-lg` | Corner radius |
+| `--h-dialog-radius` | `--h-radius-lg` | Corner radius |
 
 Surface is `surface-raised`; overlay is `overlay`; stacking is `z-modal`. Enter and exit
 animations (`fade-*` on the overlay, `pop-*` on the content) last
-`--tre-duration-normal`, which is 0 ms under reduced motion.
+`--h-duration-normal`, which is 0 ms under reduced motion.
 
 ## States
 

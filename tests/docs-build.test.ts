@@ -38,7 +38,7 @@ describe('docs build', () => {
   it('guide pages: layout rules and tokens, linked from the nav, the sidebar and item pages', () => {
     for (const [name, heading, body] of [
       ['layout-rules', 'Layout rules', 'Screen workflow'],
-      ['tokens', 'Tokens', '--tre-'],
+      ['tokens', 'Tokens', '--h-'],
     ] as const) {
       const guide = html(`guide/${name}.html`)
       const content = guide.slice(guide.indexOf('class="vp-doc'))
@@ -138,7 +138,7 @@ describe('docs previews in a browser', () => {
     expect(before.inner).toBe(before.content)
     await page
       .frameLocator('iframe.demo-preview')
-      .locator('.tre-demo > *')
+      .locator('.heart-demo > *')
       .evaluate((demo: Element) => {
         ;[...demo.children].slice(1).forEach((child) => child.remove())
       })
@@ -175,7 +175,7 @@ describe('docs previews in a browser', () => {
       expect(fit.sideways, `${width}px`).toBe(0)
       expect(fit.minWidth).not.toBe('320px')
       expect(fit.lineHeight).not.toBe('24px')
-      // The theme's `--tre-font-sans`, not VitePress's `--vp-font-family-base`.
+      // The theme's `--h-font-sans`, not VitePress's `--vp-font-family-base`.
       expect(fit.font).toBe('Inter, system-ui, sans-serif')
       await page.close()
     }

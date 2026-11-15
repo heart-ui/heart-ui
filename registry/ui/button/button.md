@@ -43,7 +43,7 @@ An icon-only button puts the icon in `default` and must set `aria-label`.
 
 | Token | Falls back to | Controls |
 | --- | --- | --- |
-| `--tre-button-radius` | `--tre-radius-md` | Corner radius |
+| `--h-button-radius` | `--h-radius-md` | Corner radius |
 
 ## States
 

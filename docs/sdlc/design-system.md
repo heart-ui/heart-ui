@@ -21,7 +21,7 @@ at its specs. The specs win where this file and they differ.
   arrangement rules are in [layout-rules.md](../layout-rules.md).
 - Icons: Fluent through `registry/lib/icon` with internal names. Never
   import an icon package directly, and never use emoji as icons.
-- Fonts: the `font` knob (`--tre-font-sans`, `--tre-font-mono`).
+- Fonts: the `font` knob (`--h-font-sans`, `--h-font-mono`).
 - Themes: light and dark for every preset theme. Dark values live on
   `.dark, [data-theme="dark"]`.
 
@@ -67,7 +67,7 @@ On top of the AI-slop list in `.claude/rules/sdlc-ui.md`:
 
 - No raw values in `registry/`: no hex, `rgb()`, `hsl()`, `oklch()` or
   named colors, no px or rem literals, and no palette or arbitrary-value
-  classes. Don't reference `--tre-raw-*` or use the `dark:` variant.
+  classes. Don't reference `--h-raw-*` or use the `dark:` variant.
   (`@heart-ui/eslint-plugin` `no-raw-values`.)
 - Use logical properties only (`ps-*`, `me-*`, `start-*`), never left or
   right.

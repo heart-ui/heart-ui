@@ -28,7 +28,7 @@ breaks both.
 ### II. Tokens only
 
 Code under `registry/` MUST NOT contain raw values: no hex, `rgb()`, `hsl()`, `oklch()` or named colors;
-no pixel or rem literals; no Tailwind palette or arbitrary-value classes; no `--tre-raw-*` references;
+no pixel or rem literals; no Tailwind palette or arbitrary-value classes; no `--h-raw-*` references;
 no `dark:` variant. Control height, padding and radius MUST use token utilities. Layout MUST use logical
 properties only. A token's name or value MUST NOT change except in a task that says to change it.
 

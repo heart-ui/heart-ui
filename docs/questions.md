@@ -10,6 +10,7 @@ Gaps and conflicts found while building. Format in
   types exactly as the typecheck does. `apps/docs` also pins `vite` 5.4.21,
   the version VitePress 1.6.4 bundles, so `@tailwindcss/vite` binds to it
   and not to the playground's Vite 8.
+  **Answered (maintainer, 2026-11-15):** approved.
 - 2026-11-14 P0-13: an item's Markdown already has hand-written Props,
   Slots and Events tables, and the task asks for an API table generated
   from the types. Chose (delegated to the agent): the docs page keeps the
@@ -97,6 +98,9 @@ Gaps and conflicts found while building. Format in
   eslint-plugin-vue's `multi-word-component-names` rejects single-word
   names. Decided by the agent: keep the rule and give each component a
   `Trev`-prefixed name with `defineOptions` (`TrevButton`), as `Icon` does.
+  **Answered (maintainer, 2026-11-15):** the prefix is `H` (`HButton`), and
+  every `tre` name becomes Heart UI's: tokens `--h-*`, `data-heart-theme`,
+  keyframes `heart-*`.
 - 2026-11-13 P0-10: registry items aren't npm packages, but the definition
   of done asks for a changeset. Decided by the agent: an empty changeset
   (no package bump) whose summary describes the item.
@@ -107,6 +111,7 @@ Gaps and conflicts found while building. Format in
   the agent (maintainer delegated decisions): keep one theme's CSS until
   the first preset theme lands; that task scopes each theme under
   `[data-tre-theme="<name>"]` and loads them all in the playgrounds.
+  **Answered (maintainer, 2026-11-15):** ok.
 - 2026-11-12 P0-07: visual baselines need human approval, but the
   maintainer reviews only the final product. Decided by the agent: generate
   the baselines with `pnpm test:visual --update` and flag them in the
@@ -146,6 +151,7 @@ Gaps and conflicts found while building. Format in
   text. The first component that needs error or status text (input, P0-11)
   adds `<s>-text` tokens checked on `background` and `surface`, in a task
   that says to add tokens.
+  **Answered (maintainer, 2026-11-15):** ok.
 - 2026-11-12 P0-05: the playgrounds set `data-tre-theme` from `?theme=`,
   but `tokens.css` is scoped to `:root` and only the default theme exists.
   Chose: leave per-theme scoping to the first preset theme and the P0-07
@@ -170,6 +176,7 @@ Gaps and conflicts found while building. Format in
   field that doesn't apply to the kind fails. Why: no doc says `tier` or
   `useWhen` is mandatory; the first component and block tasks should
   decide, and the build then requires them per kind.
+  **Answered (maintainer, 2026-11-15):** ok.
 - 2026-11-12 P0-08: item files imported each other by relative path,
   which breaks once the CLI writes `ui` and `lib` under different aliases.
   Decided by the agent (P0-10 review): registry code imports shared code as
@@ -188,6 +195,7 @@ Gaps and conflicts found while building. Format in
   keep the online loader for now. Why: the task names Iconify only; P0-07
   should decide on bundled data (`@iconify-json/fluent` with
   `addCollection`) when it builds the SSR and visual tests.
+  **Answered (maintainer, 2026-11-15):** bundle the icon data.
 - 2026-11-12 P0-08: is a folder without `item.json` an error? Chose: a
   folder under `ui/`, `blocks/` or `layouts/` holding only demos
   (`*.demo.vue`), tests (`*.test.ts`), docs (`*.md`) and dotfiles is a
@@ -199,6 +207,7 @@ Gaps and conflicts found while building. Format in
   validator, which no doc names. Chose: `ajv` 8.20.0 (the schemas are
   draft-07). Why: the standard JSON Schema validator for Node. Proposed in
   the pull request.
+  **Answered (maintainer, 2026-11-15):** approved.
 
 - 2026-11-12 P0-03: conventions name ESLint with eslint-plugin-vue and
   Prettier, but not the packages that make them work together. Chose: add

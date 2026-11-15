@@ -126,7 +126,7 @@ export function generateTheme(knobs: Knobs): string {
     [
       `${indent}${selector} {`,
       ...(scheme ? [`${indent}  color-scheme: ${scheme};`] : []),
-      ...[...entries].map(([token, value]) => `${indent}  --tre-${token}: ${value};`),
+      ...[...entries].map(([token, value]) => `${indent}  --h-${token}: ${value};`),
       `${indent}}`,
     ].join('\n')
   const reduced = Object.keys(durations).map((d): [string, string] => [`duration-${d}`, '0ms'])

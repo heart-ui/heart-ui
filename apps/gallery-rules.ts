@@ -28,6 +28,6 @@ export function galleryAttrs(query: Record<string, unknown>) {
   return {
     class: first(query.mode) === 'dark' ? 'dark' : undefined,
     dir: first(query.dir) === 'rtl' ? 'rtl' : 'ltr',
-    'data-tre-theme': theme && /^[a-z0-9-]+$/.test(theme) ? theme : 'default',
+    'data-heart-theme': theme && /^[a-z0-9-]+$/.test(theme) ? theme : 'default',
   }
 }

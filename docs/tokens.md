@@ -5,9 +5,9 @@ semantic and component layers only, through Tailwind utilities.
 
 | Layer | Prefix | Written by | Read by |
 | --- | --- | --- | --- |
-| Raw | `--tre-raw-*` | Theme generator | Semantic layer only |
-| Semantic | `--tre-*` | Theme generator | Components, blocks, layouts |
-| Component | `--tre-<component>-*` | Component author | That component |
+| Raw | `--h-raw-*` | Theme generator | Semantic layer only |
+| Semantic | `--h-*` | Theme generator | Components, blocks, layouts |
+| Component | `--h-<component>-*` | Component author | That component |
 
 ## Knobs
 
@@ -38,7 +38,7 @@ A theme is fully described by one knob file. `@heart-ui/theme` exports
 ## Raw layer
 
 Six scales of 11 steps: `neutral`, `primary`, `success`, `warning`,
-`danger`, `info`. Variable form: `--tre-raw-<scale>-<step>`.
+`danger`, `info`. Variable form: `--h-raw-<scale>-<step>`.
 
 | Step | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -52,7 +52,7 @@ fixed hues (success 150, warning 75, danger 25, info 235) at chroma 0.17.
 
 ## Semantic layer
 
-Colors. Each row is `--tre-<name>`; values name a raw step.
+Colors. Each row is `--h-<name>`; values name a raw step.
 
 | Name | Light | Dark | Use |
 | --- | --- | --- | --- |
@@ -129,7 +129,7 @@ A component declares a token only when a theme has a reason to diverge
 from the semantic value, and it always falls back to a semantic token:
 
 ```css
-border-radius: var(--tre-button-radius, var(--tre-radius-md));
+border-radius: var(--h-button-radius, var(--h-radius-md));
 ```
 
 List every component token in the "Tokens" section of that component's
@@ -151,13 +151,13 @@ theme so utilities resolve to variables:
 @import "./tokens.css";
 
 @theme inline {
-  --color-background: var(--tre-background);
-  --color-primary: var(--tre-primary);
-  --color-primary-foreground: var(--tre-primary-foreground);
-  --radius-md: var(--tre-radius-md);
-  --shadow-md: var(--tre-shadow-md);
-  --font-sans: var(--tre-font-sans);
-  --spacing-control-md: var(--tre-control-md);
+  --color-background: var(--h-background);
+  --color-primary: var(--h-primary);
+  --color-primary-foreground: var(--h-primary-foreground);
+  --radius-md: var(--h-radius-md);
+  --shadow-md: var(--h-shadow-md);
+  --font-sans: var(--h-font-sans);
+  --spacing-control-md: var(--h-control-md);
   /* one line per semantic token */
 }
 ```
@@ -176,7 +176,7 @@ against the Tailwind CSS v4 docs before writing `theme.css`.
 - Hex, `rgb()`, `hsl()`, `oklch()`, or named colors.
 - Tailwind palette classes (`bg-blue-500`, `text-gray-700`).
 - Arbitrary-value classes (`w-[13px]`, `bg-[#fff]`).
-- `--tre-raw-*` references.
+- `--h-raw-*` references.
 - The `dark:` variant.
 
 Spacing utilities from Tailwind's numeric scale (`p-4`, `gap-2`) are

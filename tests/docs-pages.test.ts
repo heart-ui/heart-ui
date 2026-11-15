@@ -92,7 +92,7 @@ describe('docs pages', () => {
       const { demoPage } = page(name)
       expect(demoPage).toMatch(/^---\n(.*\n)*layout: false\n(.*\n)*---\n/)
       expect(demoPage).toContain(`import Demo from '@registry/ui/${name}/${demo}'`)
-      expect(demoPage).toContain('<div class="tre-demo"><Demo /></div>')
+      expect(demoPage).toContain('<div class="heart-demo"><Demo /></div>')
     }
   })
 })

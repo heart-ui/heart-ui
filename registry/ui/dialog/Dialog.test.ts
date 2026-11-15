@@ -79,7 +79,7 @@ async function opened() {
 
 const closed = () => vi.waitFor(() => expect(dialog()).toBeNull())
 
-// Longer than --tre-duration-normal, so any late animation or event has run.
+// Longer than --h-duration-normal, so any late animation or event has run.
 const settle = () => new Promise((resolve) => setTimeout(resolve, 400))
 
 async function clickOutside() {

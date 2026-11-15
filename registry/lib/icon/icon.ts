@@ -6,7 +6,7 @@ import { fluent, type IconName } from './sets/fluent'
 
 /** Renders an internal icon name. Decorative: the control holding it supplies the accessible name. */
 export const Icon = defineComponent({
-  name: 'TrevIcon',
+  name: 'HIcon',
   props: {
     name: { type: String as PropType<IconName>, required: true },
     // Any ClassValue, `false` included: cn() drops what it doesn't need.

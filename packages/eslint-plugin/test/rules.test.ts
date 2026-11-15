@@ -55,8 +55,8 @@ describe('no-raw-values', () => {
   describe('color functions', () => {
     tester.run('no-raw-values', noRawValues, {
       valid: [
-        template('<div style="color: var(--tre-primary)"></div>'),
-        script("export const fill = 'var(--tre-primary)'"),
+        template('<div style="color: var(--h-primary)"></div>'),
+        script("export const fill = 'var(--h-primary)'"),
         script("export const hint = 'Select color(s)'"),
       ],
       invalid: [
@@ -78,7 +78,7 @@ describe('no-raw-values', () => {
         template('<p title="red">Red</p>'),
         template('<svg fill="currentColor" stroke="none"></svg>'),
         script("export const label = 'red'"),
-        script("export const style = { color: 'var(--tre-foreground)' }"),
+        script("export const style = { color: 'var(--h-foreground)' }"),
         sfcScript("const props = withDefaults(defineProps(), { colorLabel: 'Color: red' })"),
       ],
       invalid: [
@@ -93,7 +93,7 @@ describe('no-raw-values', () => {
           'rawColor',
         ),
         invalid(template('<div style="color: var(--x, red)"></div>'), 'rawColor'),
-        invalid(template('<div style="--tre-x: white"></div>'), 'rawColor'),
+        invalid(template('<div style="--h-x: white"></div>'), 'rawColor'),
         invalid(template('<div style="text-decoration: underline red"></div>'), 'rawColor'),
         invalid(script("export const style = { color: 'white' }"), 'rawColor'),
         invalid(script('export const style = { color: `red` }'), 'rawColor'),
@@ -156,14 +156,14 @@ describe('no-raw-values', () => {
   describe('raw token references', () => {
     tester.run('no-raw-values', noRawValues, {
       valid: [
-        template('<div style="color: var(--tre-primary)"></div>'),
-        script("export const fill = 'var(--tre-primary-foreground)'"),
+        template('<div style="color: var(--h-primary)"></div>'),
+        script("export const fill = 'var(--h-primary-foreground)'"),
       ],
       invalid: [
-        invalid(template('<div style="color: var(--tre-raw-blue-500)"></div>'), 'rawToken'),
-        invalid(template('<div :style="{ color: \'var(--tre-raw-gray-50)\' }"></div>'), 'rawToken'),
-        invalid(script("export const fill = 'var(--tre-raw-gray-50)'"), 'rawToken'),
-        invalid(sfcScript("const name = '--tre-raw-red-600'"), 'rawToken'),
+        invalid(template('<div style="color: var(--h-raw-blue-500)"></div>'), 'rawToken'),
+        invalid(template('<div :style="{ color: \'var(--h-raw-gray-50)\' }"></div>'), 'rawToken'),
+        invalid(script("export const fill = 'var(--h-raw-gray-50)'"), 'rawToken'),
+        invalid(sfcScript("const name = '--h-raw-red-600'"), 'rawToken'),
       ],
     })
   })
@@ -377,7 +377,7 @@ describe('no-raw-values class maps and nearest names', () => {
         script('export const sizeLabel = (n) => `${n}px wide`'),
         script("export const widthLabel = (w) => w + 'px'"),
         script(
-          "export const style = { color: 'color-mix(in oklab, var(--tre-primary) 50%, transparent)' }",
+          "export const style = { color: 'color-mix(in oklab, var(--h-primary) 50%, transparent)' }",
         ),
         script("export const r = 'docs/[slug]'"),
         script("export const base = 'data-[variant=dark]:bg-foreground'"),
@@ -400,7 +400,7 @@ describe('no-raw-values class maps and nearest names', () => {
           'darkVariant',
         ),
         invalid(
-          script("export const mix = 'color-mix(in srgb, var(--tre-primary) 50%, red)'"),
+          script("export const mix = 'color-mix(in srgb, var(--h-primary) 50%, red)'"),
           'rawColor',
         ),
         invalid(script('export const w = (n) => n + `px`'), 'rawLength'),

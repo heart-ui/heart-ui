@@ -12,7 +12,7 @@ interface InputProps {
   class?: ClassValue
 }
 
-defineOptions({ name: 'TrevInput', inheritAttrs: false })
+defineOptions({ name: 'HInput', inheritAttrs: false })
 
 const props = withDefaults(defineProps<InputProps>(), { size: 'md', class: undefined })
 const model = defineModel<string>({ default: '' })

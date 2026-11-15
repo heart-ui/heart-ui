@@ -30,10 +30,10 @@ function cssIn(dir: string) {
 
 // Both playgrounds load @heart-ui/theme/theme.css, which maps tokens into Tailwind.
 function expectTokenUtilities(css: string) {
-  expect(css).toMatch(/\.bg-primary\{background-color:var\(--tre-primary\)\}/)
-  expect(css).toMatch(/\.h-control-md\{height:var\(--tre-control-md\)\}/)
-  expect(css).toMatch(/--tre-primary:/)
-  expect(css).toMatch(/--tre-raw-primary-600:/)
+  expect(css).toMatch(/\.bg-primary\{background-color:var\(--h-primary\)\}/)
+  expect(css).toMatch(/\.h-control-md\{height:var\(--h-control-md\)\}/)
+  expect(css).toMatch(/--h-primary:/)
+  expect(css).toMatch(/--h-raw-primary-600:/)
 }
 
 type ViteServer = {
@@ -99,7 +99,7 @@ describe('vite playground', () => {
       }
       const { classes, attributes } = load('?mode=dark&dir=rtl&theme=ocean')
       expect([...classes]).toEqual(['dark'])
-      expect(attributes).toEqual({ dir: 'rtl', 'data-tre-theme': 'ocean' })
+      expect(attributes).toEqual({ dir: 'rtl', 'data-heart-theme': 'ocean' })
     })
 
     it.each(['', '?mode=light&dir=up&theme=%22%3E%3Cscript%3E', '?mode=DARK&theme='])(
@@ -107,7 +107,7 @@ describe('vite playground', () => {
       (search) => {
         const { classes, attributes } = load(search)
         expect([...classes]).toEqual([])
-        expect(attributes).toEqual({ dir: 'ltr', 'data-tre-theme': 'default' })
+        expect(attributes).toEqual({ dir: 'ltr', 'data-heart-theme': 'default' })
       },
     )
   })
@@ -224,7 +224,7 @@ describe('nuxt playground', () => {
     const attributes = await htmlAttributes('/demo/placeholder?mode=dark&dir=rtl&theme=ocean')
     expect(attributes).toMatch(/\bclass="dark"/)
     expect(attributes).toMatch(/\bdir="rtl"/)
-    expect(attributes).toMatch(/\bdata-tre-theme="ocean"/)
+    expect(attributes).toMatch(/\bdata-heart-theme="ocean"/)
   })
 
   it.each([
@@ -235,7 +235,7 @@ describe('nuxt playground', () => {
     const attributes = await htmlAttributes(path)
     expect(attributes).not.toMatch(/\bdark\b/)
     expect(attributes).toMatch(/\bdir="ltr"/)
-    expect(attributes).toMatch(/\bdata-tre-theme="default"/)
+    expect(attributes).toMatch(/\bdata-heart-theme="default"/)
   })
 
   it.each(unknownNames)('nuxt playground answers 404 for an unknown demo: %s', async (name) => {

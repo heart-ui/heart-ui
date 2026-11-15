@@ -458,7 +458,7 @@ function demoPage(item: DocsItem) {
     `import Demo from '@registry/ui/${item.name}/${item.demo}'`,
     '</script>',
     '',
-    '<div class="tre-demo"><Demo /></div>',
+    '<div class="heart-demo"><Demo /></div>',
     '',
   ].join('\n')
 }

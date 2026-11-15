@@ -29,7 +29,7 @@ const hex = /(?<![\w&])#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})(?![\w-])/i
 const fragmentReference = /url\(\s*['"]?\s*#[^)]*\)/gi
 const colorFunction =
   /\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(|\bcolor\(\s*(?:srgb|srgb-linear|display-p3|a98-rgb|prophoto-rgb|rec2020|xyz|xyz-d50|xyz-d65|from|--)/i
-const rawToken = /--tre-raw-/
+const rawToken = /--h-raw-/
 const length = /(?<![\w.-])-?(?:\d+\.?\d*|\.\d+)(?:px|rem)(?![\w-])/i
 const declaration = /(?:^|[;{\s])(--[\w-]+|[a-z-]+)\s*:\s*([^;}]+)/gi
 

@@ -6,7 +6,7 @@ description: Unlayered VitePress CSS vs Tailwind, iframe previews, re-exported .
 
 # Docs site traps
 
-- **VitePress's base CSS is unlayered.** It beats Tailwind's layered preflight and utilities (`button { background: transparent }` strips every button fill). Demo pages reset with `all: revert-layer` on `body` and `body *`. The selector must out-rank `button:focus:not(:focus-visible)`, hence `:root:root:has(.tre-demo)`. Remember `body` itself too: it carries `min-height: 100vh`, `min-width: 320px` and VitePress's font.
+- **VitePress's base CSS is unlayered.** It beats Tailwind's layered preflight and utilities (`button { background: transparent }` strips every button fill). Demo pages reset with `all: revert-layer` on `body` and `body *`. The selector must out-rank `button:focus:not(:focus-visible)`, hence `:root:root:has(.heart-demo)`. Remember `body` itself too: it carries `min-height: 100vh`, `min-width: 320px` and VitePress's font.
 - **A frame sized from its own content loops.** If `body` has a `100vh` minimum, the content always equals the frame, so it never shrinks. Under Tailwind's `border-box` reset, setting the frame's height to the content height makes it 2px short on every pass. Size it as content plus `offsetHeight - clientHeight`.
 - **A demo that focuses itself on load pulls the parent page's focus into the iframe** (Reka's dialog autofocus). `DemoPreview.vue` hands focus back unless the reader clicked, typed in or tabbed into the frame.
 - **The iframe can finish loading before hydration**, so `@load` never fires on the component. Check `contentDocument.readyState` in `onMounted` too.

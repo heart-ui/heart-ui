@@ -9,19 +9,19 @@
   margin-block: 1rem;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
-  background-color: var(--tre-background);
+  background-color: var(--h-background);
 }
 
 /* Demo pages: VitePress's base styles are unlayered, so they beat Tailwind's layered styles. Reverting every
    property to the layered value leaves the demo styled as in a user's app: Tailwind's font and leading, no
    100vh or 320px minimum on body. The selectors out-rank VitePress's strongest base rule,
    `button:focus:not(:focus-visible)`. */
-:root:root:has(.tre-demo) body,
-:root:root:has(.tre-demo) body * {
+:root:root:has(.heart-demo) body,
+:root:root:has(.heart-demo) body * {
   all: revert-layer;
 }
 
-:root:root:has(.tre-demo) body {
-  background-color: var(--tre-background);
-  color: var(--tre-foreground);
+:root:root:has(.heart-demo) body {
+  background-color: var(--h-background);
+  color: var(--h-foreground);
 }

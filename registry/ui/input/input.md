@@ -43,7 +43,7 @@ Native `focus`, `blur`, and `keydown` pass through from the `input`.
 
 | Token | Falls back to | Controls |
 | --- | --- | --- |
-| `--tre-input-radius` | `--tre-radius-md` | Corner radius |
+| `--h-input-radius` | `--h-radius-md` | Corner radius |
 
 ## States
 

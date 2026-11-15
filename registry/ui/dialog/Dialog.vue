@@ -5,7 +5,7 @@ interface DialogProps {
   modal?: boolean
 }
 
-defineOptions({ name: 'TrevDialog' })
+defineOptions({ name: 'HDialog' })
 
 const { modal = true } = defineProps<DialogProps>()
 const open = defineModel<boolean>('open', { default: false })

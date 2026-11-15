@@ -71,13 +71,13 @@ const steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
 const lightness = [0.985, 0.968, 0.929, 0.869, 0.704, 0.554, 0.446, 0.372, 0.279, 0.208, 0.129]
 const factors = [0.08, 0.15, 0.3, 0.5, 0.8, 1, 1, 0.9, 0.75, 0.6, 0.45]
 
-// The `--tre-*` declarations directly inside the block that opens with `opening`.
+// The `--h-*` declarations directly inside the block that opens with `opening`.
 function declarations(css: string, opening: string) {
   const start = css.indexOf(opening)
   expect(start, `no block ${opening}`).not.toBe(-1)
   const body = css.slice(start + opening.length, css.indexOf('}', start))
   return new Map(
-    [...body.matchAll(/--tre-([\w-]+):\s*([^;]+);/g)].map((match) => [match[1]!, match[2]!.trim()]),
+    [...body.matchAll(/--h-([\w-]+):\s*([^;]+);/g)].map((match) => [match[1]!, match[2]!.trim()]),
   )
 }
 
@@ -112,7 +112,7 @@ describe('generateTheme', () => {
     expect(light.get('control-md')).toBe('2.25rem')
     expect(light.get('radius-lg')).toBe('0.75rem')
     expect(light.get('background')).toBe('oklch(1 0 0)')
-    expect(light.get('foreground')).toBe('var(--tre-raw-neutral-900)')
+    expect(light.get('foreground')).toBe('var(--h-raw-neutral-900)')
   })
 
   it('sets color-scheme for each mode', () => {
@@ -192,7 +192,7 @@ describe('checkContrast', () => {
   it('default theme needs no moves, so tokens.css is the tokens.md table', () => {
     expect(report.adjustments).toEqual([])
     const dark = declarations(generateTheme(defaults), '.dark,\n[data-theme="dark"] {')
-    const raw = (step: string) => `var(--tre-raw-${step})`
+    const raw = (step: string) => `var(--h-raw-${step})`
     expect(dark.get('primary')).toBe(raw('primary-400'))
     expect(dark.get('primary-hover')).toBe(raw('primary-300'))
     expect(dark.get('primary-active')).toBe(raw('primary-200'))
@@ -238,7 +238,7 @@ describe('contrast moves', () => {
       from: 'neutral-400',
       to: 'neutral-300',
     })
-    expect(values.dark.get('subtle-foreground')).toBe('var(--tre-raw-neutral-300)')
+    expect(values.dark.get('subtle-foreground')).toBe('var(--h-raw-neutral-300)')
   })
 
   it('moves the background, with its states and ring, when the foreground is at the end', () => {
@@ -418,23 +418,23 @@ describe('theme.css', () => {
 
   it('maps every semantic color and size token', () => {
     const lines = [
-      ...semanticColors.map((name) => `--color-${name}: var(--tre-${name});`),
-      ...[...sizes, 'full'].map((s) => `--radius-${s}: var(--tre-radius-${s});`),
-      ...sizes.map((s) => `--shadow-${s}: var(--tre-shadow-${s});`),
-      '--font-sans: var(--tre-font-sans);',
-      '--font-mono: var(--tre-font-mono);',
-      ...sizes.map((s) => `--spacing-control-${s}: var(--tre-control-${s});`),
-      ...sizes.map((s) => `--spacing-control-px-${s}: var(--tre-control-px-${s});`),
-      ...sizes.map((s) => `--spacing-gap-${s}: var(--tre-gap-${s});`),
-      '--radius-button: var(--tre-button-radius, var(--tre-radius-md));',
-      '--radius-input: var(--tre-input-radius, var(--tre-radius-md));',
-      '--radius-dialog: var(--tre-dialog-radius, var(--tre-radius-lg));',
+      ...semanticColors.map((name) => `--color-${name}: var(--h-${name});`),
+      ...[...sizes, 'full'].map((s) => `--radius-${s}: var(--h-radius-${s});`),
+      ...sizes.map((s) => `--shadow-${s}: var(--h-shadow-${s});`),
+      '--font-sans: var(--h-font-sans);',
+      '--font-mono: var(--h-font-mono);',
+      ...sizes.map((s) => `--spacing-control-${s}: var(--h-control-${s});`),
+      ...sizes.map((s) => `--spacing-control-px-${s}: var(--h-control-px-${s});`),
+      ...sizes.map((s) => `--spacing-gap-${s}: var(--h-gap-${s});`),
+      '--radius-button: var(--h-button-radius, var(--h-radius-md));',
+      '--radius-input: var(--h-input-radius, var(--h-radius-md));',
+      '--radius-dialog: var(--h-dialog-radius, var(--h-radius-lg));',
       ...['fade-in', 'fade-out', 'pop-in', 'pop-out'].map(
-        (name) => `--animate-${name}: tre-${name} var(--tre-duration-normal) var(--tre-ease) both;`,
+        (name) => `--animate-${name}: heart-${name} var(--h-duration-normal) var(--h-ease) both;`,
       ),
       "@custom-variant state-open (&[data-state='open']);",
       "@custom-variant state-closed (&[data-state='closed']);",
-      '--ring-offset-width-focus: var(--tre-ring-offset);',
+      '--ring-offset-width-focus: var(--h-ring-offset);',
     ]
     for (const line of lines) expect(theme, line).toContain(line)
   })

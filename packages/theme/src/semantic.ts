@@ -197,7 +197,7 @@ export function resolveSemantic(scales: Scales): { values: Resolved; report: Con
     values[mode] = new Map(
       [...refs].map(([token, value]) => [
         token,
-        value.at === 0 ? 'oklch(1 0 0)' : `var(--tre-raw-${value.scale}-${steps[value.at - 1]})`,
+        value.at === 0 ? 'oklch(1 0 0)' : `var(--h-raw-${value.scale}-${steps[value.at - 1]})`,
       ]),
     )
     values[mode].set('overlay', overlay[mode])

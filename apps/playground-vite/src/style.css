@@ -3,6 +3,6 @@
 
 /* The page itself reads the tokens, so dark mode, axe and screenshots see the theme's background. */
 body {
-  background-color: var(--tre-background);
-  color: var(--tre-foreground);
+  background-color: var(--h-background);
+  color: var(--h-foreground);
 }

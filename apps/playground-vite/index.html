@@ -11,7 +11,10 @@
         var theme = query.get('theme')
         if (query.get('mode') === 'dark') html.classList.add('dark')
         html.setAttribute('dir', query.get('dir') === 'rtl' ? 'rtl' : 'ltr')
-        html.setAttribute('data-tre-theme', theme && /^[a-z0-9-]+$/.test(theme) ? theme : 'default')
+        html.setAttribute(
+          'data-heart-theme',
+          theme && /^[a-z0-9-]+$/.test(theme) ? theme : 'default',
+        )
       })()
     </script>
     <title>Heart UI playground</title>

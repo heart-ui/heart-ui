@@ -17,7 +17,7 @@ interface ButtonProps extends PrimitiveProps {
 }
 
 // The caller's attributes are forwarded first, so the disabled and loading semantics below win.
-defineOptions({ name: 'TrevButton', inheritAttrs: false })
+defineOptions({ name: 'HButton', inheritAttrs: false })
 
 const props = withDefaults(defineProps<ButtonProps>(), {
   variant: 'secondary',

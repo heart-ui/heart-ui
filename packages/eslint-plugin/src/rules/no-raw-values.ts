@@ -179,7 +179,7 @@ const rule: Rule.RuleModule = {
       rawColor: 'Raw color: use a color token utility (docs/tokens.md).',
       paletteClass: 'Tailwind palette class: use a semantic color utility such as bg-primary.',
       arbitraryValue: 'Arbitrary-value class: use a token utility instead.',
-      rawToken: '--tre-raw-* is internal to the theme: use a semantic token.',
+      rawToken: '--h-raw-* is internal to the theme: use a semantic token.',
       darkVariant: 'dark: variant: tokens switch for dark mode, so style once.',
       rawLength: 'Pixel or rem literal: use a token or spacing utility.',
     },

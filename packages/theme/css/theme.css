@@ -4,117 +4,117 @@
 @import './tokens.css';
 
 @theme inline {
-  --color-background: var(--tre-background);
-  --color-surface: var(--tre-surface);
-  --color-surface-raised: var(--tre-surface-raised);
-  --color-surface-sunken: var(--tre-surface-sunken);
-  --color-muted: var(--tre-muted);
-  --color-muted-hover: var(--tre-muted-hover);
-  --color-muted-active: var(--tre-muted-active);
-  --color-foreground: var(--tre-foreground);
-  --color-muted-foreground: var(--tre-muted-foreground);
-  --color-subtle-foreground: var(--tre-subtle-foreground);
-  --color-disabled-foreground: var(--tre-disabled-foreground);
-  --color-border: var(--tre-border);
-  --color-border-control: var(--tre-border-control);
-  --color-ring: var(--tre-ring);
-  --color-overlay: var(--tre-overlay);
-  --color-primary: var(--tre-primary);
-  --color-primary-hover: var(--tre-primary-hover);
-  --color-primary-active: var(--tre-primary-active);
-  --color-primary-foreground: var(--tre-primary-foreground);
-  --color-primary-subtle: var(--tre-primary-subtle);
-  --color-primary-subtle-foreground: var(--tre-primary-subtle-foreground);
-  --color-link: var(--tre-link);
-  --color-success: var(--tre-success);
-  --color-success-foreground: var(--tre-success-foreground);
-  --color-success-subtle: var(--tre-success-subtle);
-  --color-success-subtle-foreground: var(--tre-success-subtle-foreground);
-  --color-warning: var(--tre-warning);
-  --color-warning-foreground: var(--tre-warning-foreground);
-  --color-warning-subtle: var(--tre-warning-subtle);
-  --color-warning-subtle-foreground: var(--tre-warning-subtle-foreground);
-  --color-danger: var(--tre-danger);
-  --color-danger-foreground: var(--tre-danger-foreground);
-  --color-danger-subtle: var(--tre-danger-subtle);
-  --color-danger-subtle-foreground: var(--tre-danger-subtle-foreground);
-  --color-danger-hover: var(--tre-danger-hover);
-  --color-danger-active: var(--tre-danger-active);
-  --color-info: var(--tre-info);
-  --color-info-foreground: var(--tre-info-foreground);
-  --color-info-subtle: var(--tre-info-subtle);
-  --color-info-subtle-foreground: var(--tre-info-subtle-foreground);
-  --color-chart-1: var(--tre-chart-1);
-  --color-chart-2: var(--tre-chart-2);
-  --color-chart-3: var(--tre-chart-3);
-  --color-chart-4: var(--tre-chart-4);
-  --color-chart-5: var(--tre-chart-5);
-  --color-chart-6: var(--tre-chart-6);
+  --color-background: var(--h-background);
+  --color-surface: var(--h-surface);
+  --color-surface-raised: var(--h-surface-raised);
+  --color-surface-sunken: var(--h-surface-sunken);
+  --color-muted: var(--h-muted);
+  --color-muted-hover: var(--h-muted-hover);
+  --color-muted-active: var(--h-muted-active);
+  --color-foreground: var(--h-foreground);
+  --color-muted-foreground: var(--h-muted-foreground);
+  --color-subtle-foreground: var(--h-subtle-foreground);
+  --color-disabled-foreground: var(--h-disabled-foreground);
+  --color-border: var(--h-border);
+  --color-border-control: var(--h-border-control);
+  --color-ring: var(--h-ring);
+  --color-overlay: var(--h-overlay);
+  --color-primary: var(--h-primary);
+  --color-primary-hover: var(--h-primary-hover);
+  --color-primary-active: var(--h-primary-active);
+  --color-primary-foreground: var(--h-primary-foreground);
+  --color-primary-subtle: var(--h-primary-subtle);
+  --color-primary-subtle-foreground: var(--h-primary-subtle-foreground);
+  --color-link: var(--h-link);
+  --color-success: var(--h-success);
+  --color-success-foreground: var(--h-success-foreground);
+  --color-success-subtle: var(--h-success-subtle);
+  --color-success-subtle-foreground: var(--h-success-subtle-foreground);
+  --color-warning: var(--h-warning);
+  --color-warning-foreground: var(--h-warning-foreground);
+  --color-warning-subtle: var(--h-warning-subtle);
+  --color-warning-subtle-foreground: var(--h-warning-subtle-foreground);
+  --color-danger: var(--h-danger);
+  --color-danger-foreground: var(--h-danger-foreground);
+  --color-danger-subtle: var(--h-danger-subtle);
+  --color-danger-subtle-foreground: var(--h-danger-subtle-foreground);
+  --color-danger-hover: var(--h-danger-hover);
+  --color-danger-active: var(--h-danger-active);
+  --color-info: var(--h-info);
+  --color-info-foreground: var(--h-info-foreground);
+  --color-info-subtle: var(--h-info-subtle);
+  --color-info-subtle-foreground: var(--h-info-subtle-foreground);
+  --color-chart-1: var(--h-chart-1);
+  --color-chart-2: var(--h-chart-2);
+  --color-chart-3: var(--h-chart-3);
+  --color-chart-4: var(--h-chart-4);
+  --color-chart-5: var(--h-chart-5);
+  --color-chart-6: var(--h-chart-6);
 
-  --radius-sm: var(--tre-radius-sm);
-  --radius-md: var(--tre-radius-md);
-  --radius-lg: var(--tre-radius-lg);
-  --radius-full: var(--tre-radius-full);
-  --shadow-sm: var(--tre-shadow-sm);
-  --shadow-md: var(--tre-shadow-md);
-  --shadow-lg: var(--tre-shadow-lg);
+  --radius-sm: var(--h-radius-sm);
+  --radius-md: var(--h-radius-md);
+  --radius-lg: var(--h-radius-lg);
+  --radius-full: var(--h-radius-full);
+  --shadow-sm: var(--h-shadow-sm);
+  --shadow-md: var(--h-shadow-md);
+  --shadow-lg: var(--h-shadow-lg);
   /* Component tokens fall back to their semantic token (tokens.md, Component layer). */
-  --radius-button: var(--tre-button-radius, var(--tre-radius-md));
-  --radius-input: var(--tre-input-radius, var(--tre-radius-md));
-  --radius-dialog: var(--tre-dialog-radius, var(--tre-radius-lg));
-  --font-sans: var(--tre-font-sans);
-  --font-mono: var(--tre-font-mono);
+  --radius-button: var(--h-button-radius, var(--h-radius-md));
+  --radius-input: var(--h-input-radius, var(--h-radius-md));
+  --radius-dialog: var(--h-dialog-radius, var(--h-radius-lg));
+  --font-sans: var(--h-font-sans);
+  --font-mono: var(--h-font-mono);
 
   /* h-control-md, px-control-px-md, gap-gap-md */
-  --spacing-control-sm: var(--tre-control-sm);
-  --spacing-control-md: var(--tre-control-md);
-  --spacing-control-lg: var(--tre-control-lg);
-  --spacing-control-px-sm: var(--tre-control-px-sm);
-  --spacing-control-px-md: var(--tre-control-px-md);
-  --spacing-control-px-lg: var(--tre-control-px-lg);
-  --spacing-gap-sm: var(--tre-gap-sm);
-  --spacing-gap-md: var(--tre-gap-md);
-  --spacing-gap-lg: var(--tre-gap-lg);
-  --spacing-sidebar-width: var(--tre-sidebar-width);
-  --spacing-sidebar-width-collapsed: var(--tre-sidebar-width-collapsed);
-  --spacing-topbar-height: var(--tre-topbar-height);
-  --spacing-page-px: var(--tre-page-px);
-  --spacing-section-gap: var(--tre-section-gap);
+  --spacing-control-sm: var(--h-control-sm);
+  --spacing-control-md: var(--h-control-md);
+  --spacing-control-lg: var(--h-control-lg);
+  --spacing-control-px-sm: var(--h-control-px-sm);
+  --spacing-control-px-md: var(--h-control-px-md);
+  --spacing-control-px-lg: var(--h-control-px-lg);
+  --spacing-gap-sm: var(--h-gap-sm);
+  --spacing-gap-md: var(--h-gap-md);
+  --spacing-gap-lg: var(--h-gap-lg);
+  --spacing-sidebar-width: var(--h-sidebar-width);
+  --spacing-sidebar-width-collapsed: var(--h-sidebar-width-collapsed);
+  --spacing-topbar-height: var(--h-topbar-height);
+  --spacing-page-px: var(--h-page-px);
+  --spacing-section-gap: var(--h-section-gap);
   /* max-w-content-max, max-w-content-narrow */
-  --container-content-max: var(--tre-content-max);
-  --container-content-narrow: var(--tre-content-narrow);
+  --container-content-max: var(--h-content-max);
+  --container-content-narrow: var(--h-content-narrow);
 
-  --ease-standard: var(--tre-ease);
-  --default-transition-timing-function: var(--tre-ease);
-  --default-transition-duration: var(--tre-duration-normal);
-  --default-ring-width: var(--tre-ring-width);
+  --ease-standard: var(--h-ease);
+  --default-transition-timing-function: var(--h-ease);
+  --default-transition-duration: var(--h-duration-normal);
+  --default-ring-width: var(--h-ring-width);
   /* ring-offset-focus: Tailwind reads ring-offset-<name> from --ring-offset-width-<name>. */
-  --ring-offset-width-focus: var(--tre-ring-offset);
+  --ring-offset-width-focus: var(--h-ring-offset);
 
-  /* Enter and exit animations for overlays; --tre-duration-normal is 0 ms under reduced motion.
-     Keyframes carry the tre- prefix so they don't collide with a project's own. */
-  --animate-fade-in: tre-fade-in var(--tre-duration-normal) var(--tre-ease) both;
-  --animate-fade-out: tre-fade-out var(--tre-duration-normal) var(--tre-ease) both;
-  --animate-pop-in: tre-pop-in var(--tre-duration-normal) var(--tre-ease) both;
-  --animate-pop-out: tre-pop-out var(--tre-duration-normal) var(--tre-ease) both;
+  /* Enter and exit animations for overlays; --h-duration-normal is 0 ms under reduced motion.
+     Keyframes carry the heart- prefix so they don't collide with a project's own. */
+  --animate-fade-in: heart-fade-in var(--h-duration-normal) var(--h-ease) both;
+  --animate-fade-out: heart-fade-out var(--h-duration-normal) var(--h-ease) both;
+  --animate-pop-in: heart-pop-in var(--h-duration-normal) var(--h-ease) both;
+  --animate-pop-out: heart-pop-out var(--h-duration-normal) var(--h-ease) both;
 
-  @keyframes tre-fade-in {
+  @keyframes heart-fade-in {
     from {
       opacity: 0;
     }
   }
-  @keyframes tre-fade-out {
+  @keyframes heart-fade-out {
     to {
       opacity: 0;
     }
   }
-  @keyframes tre-pop-in {
+  @keyframes heart-pop-in {
     from {
       opacity: 0;
       scale: 0.96;
     }
   }
-  @keyframes tre-pop-out {
+  @keyframes heart-pop-out {
     to {
       opacity: 0;
       scale: 0.96;
@@ -129,37 +129,37 @@
 /* Tailwind has no theme namespace for durations or z-index. */
 
 @utility duration-fast {
-  transition-duration: var(--tre-duration-fast);
+  transition-duration: var(--h-duration-fast);
 }
 
 @utility duration-normal {
-  transition-duration: var(--tre-duration-normal);
+  transition-duration: var(--h-duration-normal);
 }
 
 @utility duration-slow {
-  transition-duration: var(--tre-duration-slow);
+  transition-duration: var(--h-duration-slow);
 }
 
 @utility z-sticky {
-  z-index: var(--tre-z-sticky);
+  z-index: var(--h-z-sticky);
 }
 
 @utility z-overlay {
-  z-index: var(--tre-z-overlay);
+  z-index: var(--h-z-overlay);
 }
 
 @utility z-modal {
-  z-index: var(--tre-z-modal);
+  z-index: var(--h-z-modal);
 }
 
 @utility z-popover {
-  z-index: var(--tre-z-popover);
+  z-index: var(--h-z-popover);
 }
 
 @utility z-toast {
-  z-index: var(--tre-z-toast);
+  z-index: var(--h-z-toast);
 }
 
 @utility z-tooltip {
-  z-index: var(--tre-z-tooltip);
+  z-index: var(--h-z-tooltip);
 }
