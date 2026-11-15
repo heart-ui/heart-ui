@@ -12,6 +12,18 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-09: calls in `tabs`, decided by the agent. (1) `variant`
+  and `orientation` are `Tabs` props that reach the list and triggers by
+  `provide`/`inject`. (2) The active tab is styled with Tailwind's
+  `aria-selected:` (Reka marks it `aria-selected="true"`), so no theme
+  variant was added. (3) Not built: `TabsIndicator` and manual activation,
+  which the catalog row doesn't list. (4) Reka writes `dir="ltr"` on the tabs
+  root and on the list's focus group whenever no app direction is set (and
+  its `ConfigProvider` defaults to `ltr`), forcing an RTL page's tabs left to
+  right. `Tabs` and `TabsList` render their own elements (`as-child`) and
+  write no `dir` unless `Tabs` gets one, so layout and arrow keys follow the
+  page; an explicit `dir` on `Tabs` sets both. (5) Line tabs draw the rule on each tab (2px, `border`
+  token) rather than one rule under the list, so wrapped rows keep it.
 - 2026-11-15 P1-08: calls in `tooltip`, decided by the agent. (1) No
   tooltip token exists, so the tooltip inverts the page: `bg-foreground`
   with `text-background`, a checked text pair in both modes. (2) Its

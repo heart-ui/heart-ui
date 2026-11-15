@@ -22,14 +22,21 @@ activity and settings. Use page navigation for separate pages, and
 | Part | Prop | Type | Default | Notes |
 | --- | --- | --- | --- | --- |
 | `Tabs` | `modelValue` | `string` | none | `v-model`; the active tab's `value` |
+| `Tabs` | `defaultValue` | `string` | none | The tab active at first, without `v-model` |
 | `Tabs` | `variant` | `line \| pill` | `line` | Applies to the list and every trigger |
 | `Tabs` | `orientation` | `horizontal \| vertical` | `horizontal` | Layout and arrow keys |
+| `Tabs` | `dir` | `ltr \| rtl` | none | Layout and arrow keys together; by default both follow the page |
 | `TabsTrigger` | `value` | `string` | none | Required |
 | `TabsTrigger` | `disabled` | `boolean` | `false` | |
 | `TabsContent` | `value` | `string` | none | Required; the trigger it belongs to |
 
 Every part takes `class`, merged last. Name the list with `aria-label` (or
 `aria-labelledby`).
+
+Tabs follow the page's direction, in layout and arrow keys; `dir` sets
+another for one tab set. Vertical tabs stack above
+their panels below the `sm` breakpoint, and line tabs that wrap keep their
+rule on every row.
 
 ## Slots
 

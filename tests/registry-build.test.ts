@@ -91,6 +91,7 @@ describe('registry:build', () => {
         'radio-group',
         'select',
         'switch',
+        'tabs',
         'textarea',
         'tooltip',
         'utils',

@@ -92,6 +92,7 @@ describe('docs pages', () => {
       'radio-group',
       'select',
       'switch',
+      'tabs',
       'textarea',
       'tooltip',
     ])
@@ -106,6 +107,7 @@ describe('docs pages', () => {
       ['radio-group', 'RadioGroup.demo.vue'],
       ['select', 'Select.demo.vue'],
       ['switch', 'Switch.demo.vue'],
+      ['tabs', 'Tabs.demo.vue'],
       ['textarea', 'Textarea.demo.vue'],
       ['tooltip', 'Tooltip.demo.vue'],
     ] as const) {
@@ -550,6 +552,7 @@ describe('docs page generator edge cases', () => {
       'Radio Group',
       'Select',
       'Switch',
+      'Tabs',
       'Textarea',
       'Tooltip',
     ])

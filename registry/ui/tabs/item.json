@@ -1,0 +1,17 @@
+{
+  "name": "tabs",
+  "type": "registry:ui",
+  "title": "Tabs",
+  "description": "Switch between views in place: line or pill tabs, horizontal or vertical.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils"],
+  "files": [
+    "Tabs.vue",
+    "TabsList.vue",
+    "TabsTrigger.vue",
+    "TabsContent.vue",
+    "tabs.variants.ts",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}
