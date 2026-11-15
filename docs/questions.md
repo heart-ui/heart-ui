@@ -14,6 +14,9 @@ Gaps and conflicts found while building. Format in
   grows a little (compact `md`: 4px). `size` sets padding and text; the
   height comes from `rows` or the content. A `control-py-*` token would
   need a task that adds tokens.
+  **Decided (agent, delegated by the maintainer, 2026-11-15):** keep it; no
+  new token. Revisit only if a later multi-line control (a combobox list, a
+  tag input) needs to line up exactly with an `input`.
 - 2026-11-15 P1-01: the label's required marker needs a glyph, but the
   Fluent set has no asterisk icon, and user-facing text must enter by prop.
   Chose (delegated to the agent): an `aria-hidden` `*` after the text, in
@@ -26,6 +29,10 @@ Gaps and conflicts found while building. Format in
   required, edit text, required"). The catalog row asks for the hidden
   text, so it stays; the alternative is no hidden text, relying on the
   control's own `required`.
+  **Decided (agent, delegated by the maintainer, 2026-11-15):** keep the
+  hidden text and the `*`. The hidden text still tells a screen reader user
+  a field is required when the control lacks `required` (a custom control,
+  a form that validates in script); one extra word is the smaller cost.
 - 2026-11-14 P0-13: no doc names the tool that reads a component's types
   for the API table. Chose (delegated to the agent): `vue-component-meta`
   3.3.14, a dev dependency of `apps/docs`. Why: it is the Vue language
