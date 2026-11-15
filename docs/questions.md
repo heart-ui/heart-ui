@@ -148,7 +148,8 @@ Gaps and conflicts found while building. Format in
   summary. Answered 2026-11-13: the maintainer approved the placeholder and
   button baselines (light and dark) and marked P0-05 to P0-10 done.
   Answered 2026-11-15: the maintainer approved the input and dialog
-  baselines (light and dark) and marked P0-11 to P0-14 done.
+  baselines (light and dark) and marked P0-11 to P0-14 done. Later the same
+  day: approved the label and textarea baselines (light and dark).
 - 2026-11-12 P0-05: tokens.md says `primary` is "any CSS color", but no doc
   names a color library. Answered by the maintainer: add `culori` (4.0.2)
   and parse with it; translucent colors are rejected. `@types/culori`
