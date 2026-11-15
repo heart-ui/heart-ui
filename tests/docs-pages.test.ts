@@ -89,6 +89,7 @@ describe('docs pages', () => {
       'input',
       'label',
       'radio-group',
+      'switch',
       'textarea',
     ])
     expect(pages.map((entry) => entry.name)).not.toContain('placeholder')
@@ -99,6 +100,7 @@ describe('docs pages', () => {
       ['input', 'Input.demo.vue'],
       ['label', 'Label.demo.vue'],
       ['radio-group', 'RadioGroup.demo.vue'],
+      ['switch', 'Switch.demo.vue'],
       ['textarea', 'Textarea.demo.vue'],
     ] as const) {
       const { demoPage } = page(name)
@@ -539,6 +541,7 @@ describe('docs page generator edge cases', () => {
       'Input',
       'Label',
       'Radio Group',
+      'Switch',
       'Textarea',
     ])
   })

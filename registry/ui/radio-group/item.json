@@ -4,7 +4,7 @@
   "title": "Radio Group",
   "description": "One choice from a short list: v-model, three sizes, vertical or horizontal layout, and labels in each item's slot.",
   "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
-  "registryDependencies": ["utils"],
+  "registryDependencies": ["utils", "form-control"],
   "files": ["RadioGroup.vue", "RadioGroupItem.vue", "radio-group.variants.ts", "index.ts"],
   "meta": { "version": "0.1.0", "tier": 1 }
 }

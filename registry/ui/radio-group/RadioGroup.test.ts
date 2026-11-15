@@ -263,6 +263,10 @@ describe('RadioGroup', () => {
       await userEvent.click(page.getByText('Team'))
       await nextTick()
       expect(events).toEqual(['input', 'change'])
+      // A click on the radio already chosen changes nothing, as with native radios.
+      await userEvent.click(page.getByText('Team'))
+      await nextTick()
+      expect(events).toEqual(['input', 'change'])
     })
 
     it('marks the group required only when it has a name to enforce it with', () => {
@@ -277,6 +281,41 @@ describe('RadioGroup', () => {
       expect(
         inForm().root.querySelector('[role="radiogroup"]')!.getAttribute('aria-required'),
       ).toBe('true')
+    })
+  })
+
+  describe('layout and attributes', () => {
+    it('takes any item id, quotes included, without a selector built from it', async () => {
+      const root = render(() =>
+        h(RadioGroup, { 'aria-label': 'Plan' }, () => [
+          h(RadioGroupItem, { value: 'pro', id: 'plan"pro' }, () => 'Pro'),
+        ]),
+      )
+      await nextTick()
+      expect(root.querySelector('[role="radio"]')!.id).toBe('plan"pro')
+    })
+
+    it('keeps its own name when an outside label points at an item id', async () => {
+      const root = render(() =>
+        h('div', [
+          h('label', { for: 'team' }, ['Team plan ', h('span', { 'aria-hidden': 'true' }, '*')]),
+          h(RadioGroup, { 'aria-label': 'Plan' }, () => [
+            h(RadioGroupItem, { value: 'team', id: 'team' }, () => 'Team'),
+          ]),
+        ]),
+      )
+      await nextTick()
+      const radio = root.querySelector<HTMLElement>('[role="radio"]')!
+      expect(radio.id).toBe('team')
+      expect(radio.hasAttribute('aria-label')).toBe(false)
+    })
+  })
+
+  describe('states', () => {
+    it('draws the chosen dot with a border, which stays visible when colours are forced', () => {
+      const { root } = plans({ modelValue: 'team' })
+      const dot = root.querySelector('[role="radio"][aria-checked="true"] span')!
+      expect(parseFloat(getComputedStyle(dot).borderTopWidth)).toBeGreaterThan(0)
     })
   })
 

@@ -1,0 +1,10 @@
+{
+  "name": "switch",
+  "type": "registry:ui",
+  "title": "Switch",
+  "description": "On/off setting that applies at once: v-model, three sizes, and its label in the default slot.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils", "form-control"],
+  "files": ["Switch.vue", "switch.variants.ts", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

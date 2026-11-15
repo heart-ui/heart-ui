@@ -20,7 +20,8 @@ when the choice takes effect on submit, or for one item in a list.
 | `value` | `string` | `on` | Submitted while on |
 | `class` | `string` | none | Applied to the wrapping label |
 
-`id`, `required` and `aria-*` attributes go to the switch control, not the
+`id`, `required` (it needs `name`) and `aria-*` attributes go to the switch
+control, not the
 wrapper.
 
 ## Slots

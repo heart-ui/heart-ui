@@ -67,6 +67,16 @@ describe('vite playground', () => {
     expectTokenUtilities(cssIn(join(app, 'dist')))
   })
 
+  // The build (Lightning CSS) rewrites `:dir(rtl)` into `:lang(ar, he, …)`, which checks the
+  // page's language, not its direction. Items follow direction with logical properties instead.
+  it('ships CSS that follows each element’s direction, never the page language', () => {
+    const css = cssIn(join(app, 'dist'))
+    expect(css).not.toMatch(/:lang\(/)
+    expect(css).toMatch(
+      /\.state-checked\\:ms-4\[data-state=['"]?checked['"]?\]\{margin-inline-start:/,
+    )
+  })
+
   describe('first paint', () => {
     function headScript() {
       const html = readFileSync(join(app, 'dist/index.html'), 'utf8')

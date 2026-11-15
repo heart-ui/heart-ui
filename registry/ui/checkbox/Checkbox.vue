@@ -2,6 +2,7 @@
 import type { ClassValue } from 'clsx'
 import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
 import { computed, nextTick, ref, useAttrs } from 'vue'
+import { fireFormEvents, handFocus } from '@/lib/form-control'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils/utils'
 import { checkboxVariants, type CheckboxVariants } from './checkbox.variants'
@@ -28,23 +29,23 @@ const model = defineModel<boolean | 'indeterminate'>({ default: false })
 const attrs = useAttrs()
 
 const icon = computed(() => (model.value === 'indeterminate' ? 'minus-sm' : 'check-sm'))
-const required = computed(() => attrs.required != null && attrs.required !== false)
-
-// Form validation focuses the first invalid control, which is the hidden input. Hand focus to
-// the visible box, so keys act on the model and screen readers announce the checkbox.
-function handFocus(event: FocusEvent) {
-  const input = event.target as HTMLElement
-  input.parentElement?.querySelector<HTMLElement>('[role="checkbox"]')?.focus()
+// Only a named checkbox has a form input to enforce `required`, so only it announces it.
+const required = computed(() => !!props.name && attrs.required != null && attrs.required !== false)
+// `id` and `required` are set below; read in the render, since a computed doesn't track a spread.
+const controlId = () => attrs.id as string | undefined
+function forwarded() {
+  return Object.fromEntries(
+    Object.entries(attrs).filter(([key]) => key !== 'id' && key !== 'required'),
+  )
 }
 
-// A user's toggle fires input and change on the form, as a click on a native checkbox does, so
-// form-level listeners (dirty state, autosave) see it. A value set in code fires nothing.
+// A user's toggle fires input and change on the form, unless the parent rejected it.
 const input = ref<HTMLInputElement>()
 async function toggle(next: boolean | 'indeterminate') {
+  const before = input.value?.checked
   model.value = next
   await nextTick()
-  input.value?.dispatchEvent(new Event('input', { bubbles: true }))
-  input.value?.dispatchEvent(new Event('change', { bubbles: true }))
+  if (input.value && input.value.checked !== before) fireFormEvents(input.value)
 }
 
 const text = { sm: 'text-sm', md: 'text-sm', lg: 'text-base' } as const
@@ -67,16 +68,23 @@ const iconSize = { sm: 'size-2.5', md: 'size-3', lg: 'size-3.5' } as const
   >
     <!-- One line tall, so the box sits centred on the label's first line at every size. -->
     <span class="relative flex h-lh shrink-0 items-center">
+      <!-- Given an `id`, Reka copies the text of any `[for=id]` label (hidden marks included) into
+           a stale aria-label that outranks the caller's attributes. So Reka never gets the `id`:
+           the button is ours (as-child) and carries it, and the labels name it natively. -->
       <CheckboxRoot
-        v-bind="$attrs"
+        v-bind="forwarded()"
+        as-child
         :model-value="model"
         :disabled="props.disabled"
+        :required="required"
         :class="checkboxVariants({ size: props.size })"
         @update:model-value="toggle"
       >
-        <CheckboxIndicator class="flex items-center justify-center">
-          <Icon :name="icon" :class="iconSize[props.size]" />
-        </CheckboxIndicator>
+        <button :id="controlId()" type="button">
+          <CheckboxIndicator class="flex items-center justify-center">
+            <Icon :name="icon" :class="iconSize[props.size]" />
+          </CheckboxIndicator>
+        </button>
       </CheckboxRoot>
       <!-- The form sees a native checkbox: indeterminate counts as unchecked for submit and
            `required`, which Reka's own hidden input doesn't do. It lies under the box, so a
@@ -94,7 +102,7 @@ const iconSize = { sm: 'size-2.5', md: 'size-3', lg: 'size-3.5' } as const
         :checked="model === true"
         :required="required"
         :disabled="props.disabled"
-        @focus="handFocus"
+        @focus="handFocus($event, 'checkbox')"
       />
     </span>
     <slot />

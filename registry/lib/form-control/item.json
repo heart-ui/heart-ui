@@ -1,0 +1,8 @@
+{
+  "name": "form-control",
+  "type": "registry:lib",
+  "title": "Form control",
+  "description": "Helpers for the hidden native input of a checkbox, radio or switch: focus hand-off and form events.",
+  "files": ["form-control.ts", "index.ts"],
+  "meta": { "version": "0.1.0" }
+}

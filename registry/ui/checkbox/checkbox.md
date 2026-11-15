@@ -21,7 +21,8 @@ independent choices. Use `switch` for a setting that applies at once, and
 | `value` | `string` | `on` | Submitted while checked |
 | `class` | `string` | none | Applied to the wrapping label |
 
-`id`, `required` and `aria-*` attributes go to the checkbox control, not
+`id`, `required` (it needs `name`) and `aria-*` attributes go to the
+checkbox control, not
 the wrapper. With a `name`, the checkbox submits `value` (default `on`) in
 its form while checked; indeterminate counts as unchecked, for submit and
 for `required`.

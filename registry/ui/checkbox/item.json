@@ -4,7 +4,7 @@
   "title": "Checkbox",
   "description": "Checkbox with v-model, an indeterminate state, three sizes, and its label in the default slot.",
   "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
-  "registryDependencies": ["utils", "icon"],
+  "registryDependencies": ["utils", "icon", "form-control"],
   "files": ["Checkbox.vue", "checkbox.variants.ts", "index.ts"],
   "meta": { "version": "0.1.0", "tier": 1 }
 }

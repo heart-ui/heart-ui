@@ -318,6 +318,53 @@ describe('Checkbox', () => {
     })
   })
 
+  describe('label and attributes', () => {
+    it('keeps its own name when an outside label points at its id', async () => {
+      const root = render(() =>
+        h('div', [
+          h('label', { for: 'terms' }, ['Terms ', h('span', { 'aria-hidden': 'true' }, '*')]),
+          h(Checkbox, { id: 'terms' }),
+        ]),
+      )
+      await nextTick()
+      const box = root.querySelector<HTMLElement>('[role="checkbox"]')!
+      expect(box.id).toBe('terms')
+      expect(box.hasAttribute('aria-label')).toBe(false)
+    })
+  })
+
+  describe('forms', () => {
+    it('announces required only when a name lets the form enforce it', () => {
+      const root = render(() =>
+        h('div', [
+          h(Checkbox, { required: true, 'aria-label': 'A' }),
+          h('form', [h(Checkbox, { required: true, name: 'b', 'aria-label': 'B' })]),
+        ]),
+      )
+      const [unnamed, named] = [...root.querySelectorAll('[role="checkbox"]')]
+      expect(unnamed!.getAttribute('aria-required')).not.toBe('true')
+      expect(named!.getAttribute('aria-required')).toBe('true')
+    })
+
+    it('fires no form events when the parent rejects the change', async () => {
+      const root = render(() =>
+        h('form', [
+          h(Checkbox, {
+            name: 'terms',
+            modelValue: false,
+            'onUpdate:modelValue': () => {},
+            'aria-label': 'Terms',
+          }),
+        ]),
+      )
+      const events: string[] = []
+      root.querySelector('form')!.addEventListener('change', () => events.push('change'))
+      await userEvent.click(root.querySelector('[role="checkbox"]')!)
+      await nextTick()
+      expect(events).toEqual([])
+    })
+  })
+
   describe('axe', () => {
     it.each(['light', 'dark'] as const)('reports no violations in the %s demo', async (mode) => {
       await mountDemo('checkbox', { mode })

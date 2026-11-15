@@ -12,6 +12,25 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-05: calls in `switch`, decided by the agent. (1) A new lib
+  item `form-control` holds what `checkbox`, `radio-group` and `switch`
+  share: handing focus from the hidden form input to the control and firing
+  `input`/`change` on user changes. Reka, given an `id`, copies the text of
+  any `[for=id]` label (hidden marks included) into a stale `aria-label`;
+  `switch` passes the caller's `aria-label` to override it,
+  and `checkbox` and `radio-group` (Reka builds an unescaped selector)
+  renders its own button with `as-child`, so Reka never gets the `id`. (2)
+  The switch thumb slides with `margin-inline-start`, so it follows the
+  element's own direction. Tailwind's `rtl:` also matches an LTR switch
+  inside an RTL page, and a `:dir(rtl)` variant is rewritten by the
+  production build into `:lang(…)` (a test checks the built CSS). (3) The
+  switch thumb carries a transparent border and the radio dot is drawn by a
+  border in its own colour: when Windows forces colours, backgrounds drop
+  and borders take the system text colour, so both stay visible. (4) Hover uses
+  `muted-foreground` (off) and `primary-hover` (on), and the thumb
+  `shadow-sm`, as other controls do. (5) Items stay at 0.1.0 while they
+  change before the first registry publish (P1-18); versions start moving
+  from that publish on. The exception was `icon`, already part of P0.
 - 2026-11-15 P1-04: two calls in `radio-group`, decided by the agent. (1)
   `orientation` sets the layout only. The ARIA radio group pattern moves
   with all four arrow keys, and Reka narrows them to one axis when given an

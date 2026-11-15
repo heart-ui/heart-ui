@@ -5,7 +5,8 @@ import {
   RadioGroupIndicator,
   RadioGroupItem as RekaRadioGroupItem,
 } from 'reka-ui'
-import { computed, inject, nextTick, ref } from 'vue'
+import { computed, inject, nextTick, ref, useAttrs } from 'vue'
+import { fireFormEvents, handFocus } from '@/lib/form-control'
 import { cn } from '@/lib/utils/utils'
 import { radioGroupKey } from './RadioGroup.vue'
 import { radioGroupItemVariants } from './radio-group.variants'
@@ -27,27 +28,27 @@ const group = inject(radioGroupKey, {
 })
 const root = injectRadioGroupRootContext()
 const disabled = computed(() => props.disabled || root.disabled.value)
+
+const attrs = useAttrs()
+// `id` goes on our own button below; read in the render, since a computed doesn't track a spread.
+const controlId = () => attrs.id as string | undefined
+function forwarded() {
+  return Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'id'))
+}
 const checked = computed(() => root.modelValue?.value === props.value)
 
-// Form validation focuses the first invalid control, which is a hidden input. Hand focus to the
-// visible radio, so arrow keys act on the model and screen readers announce the radio.
-function handFocus(event: FocusEvent) {
-  const input = event.target as HTMLElement
-  input.parentElement?.querySelector<HTMLElement>('[role="radio"]')?.focus()
-}
-
-// A user's choice (Reka's `select`) fires input and change on the form, as choosing a native radio
-// does, so form-level listeners (dirty state, autosave) see it. A value set in code fires nothing.
+// A user's choice (Reka's `select`, which also fires on the item already chosen) fires input and
+// change on the form when it changed something; a value set in code fires nothing.
 const input = ref<HTMLInputElement>()
 async function chosen() {
+  const was = checked.value
   await nextTick()
-  if (!checked.value) return
-  input.value?.dispatchEvent(new Event('input', { bubbles: true }))
-  input.value?.dispatchEvent(new Event('change', { bubbles: true }))
+  if (!was && checked.value) fireFormEvents(input.value)
 }
 
 const text = { sm: 'text-sm', md: 'text-sm', lg: 'text-base' } as const
-const dot = { sm: 'size-1.5', md: 'size-1.5', lg: 'size-2' } as const
+// Drawn by its border, which stays visible when colours are forced and backgrounds vanish.
+const dot = { sm: 'size-1.5 border-3', md: 'size-1.5 border-3', lg: 'size-2 border-4' } as const
 </script>
 
 <template>
@@ -66,16 +67,27 @@ const dot = { sm: 'size-1.5', md: 'size-1.5', lg: 'size-2' } as const
   >
     <!-- One line tall, so the radio sits centred on the label's first line at every size. -->
     <span class="relative flex h-lh shrink-0 items-center">
+      <!-- Given an `id`, Reka builds an unescaped `[for=id]` selector from it and copies that
+           label's text (hidden marks included) into a stale aria-label. So Reka never gets the
+           `id`: the button is ours (as-child) and carries it, and the labels name it natively. -->
       <RekaRadioGroupItem
-        v-bind="$attrs"
+        v-bind="forwarded()"
+        as-child
         :value="props.value"
         :disabled="props.disabled"
         :class="radioGroupItemVariants({ size: group.size.value })"
         @select="chosen"
       >
-        <RadioGroupIndicator
-          :class="cn('rounded-full bg-primary-foreground', dot[group.size.value])"
-        />
+        <button :id="controlId()" type="button">
+          <RadioGroupIndicator
+            :class="
+              cn(
+                'rounded-full border-primary-foreground bg-primary-foreground',
+                dot[group.size.value],
+              )
+            "
+          />
+        </button>
       </RekaRadioGroupItem>
       <!-- The form's view of this item, under the radio so a validation bubble points at it.
            It comes after the button, so the label still names the button. -->
@@ -91,7 +103,7 @@ const dot = { sm: 'size-1.5', md: 'size-1.5', lg: 'size-2' } as const
         :checked="checked"
         :required="group.required.value"
         :disabled="disabled"
-        @focus="handFocus"
+        @focus="handFocus($event, 'radio')"
       />
     </span>
     <slot />
