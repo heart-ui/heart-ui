@@ -82,12 +82,13 @@ describe('docs pages', () => {
   })
 
   it('demo pages: bare pages that mount the demo, only for items with Markdown', () => {
-    expect(docsItems().map((item) => item.name)).toEqual(['button', 'dialog', 'input'])
+    expect(docsItems().map((item) => item.name)).toEqual(['button', 'dialog', 'input', 'label'])
     expect(pages.map((entry) => entry.name)).not.toContain('placeholder')
     for (const [name, demo] of [
       ['button', 'Button.demo.vue'],
       ['dialog', 'Dialog.demo.vue'],
       ['input', 'Input.demo.vue'],
+      ['label', 'Label.demo.vue'],
     ] as const) {
       const { demoPage } = page(name)
       expect(demoPage).toMatch(/^---\n(.*\n)*layout: false\n(.*\n)*---\n/)
@@ -520,6 +521,6 @@ describe('docs page generator edge cases', () => {
   })
 
   it('takes the sidebar title from the Markdown heading', () => {
-    expect(docsItems().map((entry) => entry.title)).toEqual(['Button', 'Dialog', 'Input'])
+    expect(docsItems().map((entry) => entry.title)).toEqual(['Button', 'Dialog', 'Input', 'Label'])
   })
 })

@@ -125,6 +125,7 @@ pull request.
 | Single-element component with variants | `button` |
 | Form control with `v-model`, `invalid`, and slots | `input` |
 | Multi-part component over a Reka primitive, with a portal | `dialog` |
+| Text only screen readers hear, from a `*Label` prop (`sr-only`) | `label` |
 
 ## Checks
 

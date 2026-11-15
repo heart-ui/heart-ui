@@ -9,7 +9,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 | ID | Item | Depends on | Status |
 | --- | --- | --- | --- |
-| P1-01 | `label` | P0-14 | todo |
+| P1-01 | `label` | P0-14 | review |
 | P1-02 | `textarea` | P0-14 | todo |
 | P1-03 | `checkbox` | P1-01 | todo |
 | P1-04 | `radio-group` | P1-01 | todo |

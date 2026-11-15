@@ -3,6 +3,18 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-15 P1-01: the label's required marker needs a glyph, but the
+  Fluent set has no asterisk icon, and user-facing text must enter by prop.
+  Chose (delegated to the agent): an `aria-hidden` `*` after the text, in
+  `muted-foreground`; screen readers hear the `requiredLabel` prop (default
+  `required`) instead. Why: the `*` is a symbol no one reads, and the
+  words a screen reader speaks still enter by a `*Label` prop. Not
+  `text-danger`: status fills aren't used as text (P0-05 below).
+  Open for the maintainer (review r1): with `required` on the control too,
+  as the spec advises, screen readers say "required" twice ("Email
+  required, edit text, required"). The catalog row asks for the hidden
+  text, so it stays; the alternative is no hidden text, relying on the
+  control's own `required`.
 - 2026-11-14 P0-13: no doc names the tool that reads a component's types
   for the API table. Chose (delegated to the agent): `vue-component-meta`
   3.3.14, a dev dependency of `apps/docs`. Why: it is the Vue language
