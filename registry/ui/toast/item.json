@@ -1,0 +1,10 @@
+{
+  "name": "toast",
+  "type": "registry:ui",
+  "title": "Toast",
+  "description": "Short message about something that just happened, shown in a corner and closed on its own, from an imperative toast() call.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils", "icon", "button"],
+  "files": ["Toaster.vue", "ToastList.vue", "toast.ts", "toast.variants.ts", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

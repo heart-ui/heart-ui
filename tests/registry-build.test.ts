@@ -95,6 +95,7 @@ describe('registry:build', () => {
         'switch',
         'tabs',
         'textarea',
+        'toast',
         'tooltip',
         'utils',
       ])

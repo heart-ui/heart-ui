@@ -36,7 +36,9 @@ during server rendering is dropped.
 | `regionLabel` | `string` | `'Notifications ({hotkey})'` | Name of the toast region; `{hotkey}` becomes the key that focuses it |
 | `announceLabel` | `string` | `'Notification'` | Read before each toast's text by screen readers |
 
-`Toaster` takes `class`, merged last on the toast list.
+`Toaster` takes `class`, merged last, and other attributes on the toast
+list. Toasts stack in the bottom-end corner, the newest at the bottom;
+once they fill the screen, the list scrolls.
 
 ## Slots
 
@@ -80,12 +82,13 @@ at once; paused while hovered or focused.
 | --- | --- |
 | `F8` | Focuses the toast region |
 | `Tab` | Moves through the toasts and their buttons |
-| `Escape` | Closes the focused toast |
+| `Escape` | With focus in a toast, closes it and moves focus to the toast list; with focus on the list, does nothing. Pressed elsewhere on the page, it closes every toast (Reka's behaviour) and still reaches the page |
 
 ## Accessibility
 
 - Each toast is announced through a live region, so its title and
-  description are read without moving focus.
+  description are read without moving focus: `warning` and `danger`
+  at once, the others politely, after what is being read.
 - Toasts pause their timer while hovered, focused or while the window
   is in the background.
 - Colour is never the only cue: the title says what happened

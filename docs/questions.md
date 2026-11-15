@@ -12,6 +12,27 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-12: calls in `toast`, decided by the agent. (1) One
+  module-level Reka `createToastManager()` sits behind `toast()`; `Toaster`
+  passes it to `ToastProvider`. A toast added before `Toaster` mounts waits;
+  one added during server rendering is dropped (Reka queues only in the
+  browser). (2) Swipe to dismiss is off, and toasts sit in a plain column in
+  the bottom-end corner, the newest at the bottom, scrolling once they fill
+  the screen: Reka's swipe and stacked pile move toasts through its CSS
+  variables, which only arbitrary-value classes can read, and those are
+  banned. Reka's `limit` is not used: it hides the newest of toasts added in
+  one tick, and hidden toasts time out unseen. (3) Reka closes every open
+  toast on an Escape pressed anywhere on the page (one meant for a dialog,
+  say). With focus in the toast list, `Toaster` cancels the key and closes
+  only the focused toast and moves focus to the list; elsewhere it leaves Reka's behaviour, because cancelling the
+  key would keep a native dialog or popover open. (4) `Toaster` times toasts itself: Reka's pause bookkeeping loses track
+  (its keyboard close marks timers running while other toasts are paused,
+  and it stops listening once the list empties), so Reka gets no timeout
+  and each toast counts down in `ToastList`, paused while the list holds
+  focus or the pointer or the window is in the background. A ticket for
+  Reka upstream. (5) Warning and danger
+  toasts announce at once, the rest politely. (6) Not built: `toast.promise`
+  and toasts anchored to an element, which the catalog doesn't ask for.
 - 2026-11-15 P1-11: calls in `badge`, decided by the agent. Each status
   variant uses its `-subtle` pair (`primary` its `primary-subtle`, `neutral`
   `muted`), not the solid fill: a badge is a label, and the subtle pairs are

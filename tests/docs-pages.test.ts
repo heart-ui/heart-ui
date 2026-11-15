@@ -96,6 +96,7 @@ describe('docs pages', () => {
       'switch',
       'tabs',
       'textarea',
+      'toast',
       'tooltip',
     ])
     expect(pages.map((entry) => entry.name)).not.toContain('placeholder')
@@ -113,6 +114,7 @@ describe('docs pages', () => {
       ['switch', 'Switch.demo.vue'],
       ['tabs', 'Tabs.demo.vue'],
       ['textarea', 'Textarea.demo.vue'],
+      ['toast', 'Toast.demo.vue'],
       ['tooltip', 'Tooltip.demo.vue'],
     ] as const) {
       const { demoPage } = page(name)
@@ -560,6 +562,7 @@ describe('docs page generator edge cases', () => {
       'Switch',
       'Tabs',
       'Textarea',
+      'Toast',
       'Tooltip',
     ])
   })
