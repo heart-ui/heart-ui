@@ -434,6 +434,9 @@ describe('theme.css', () => {
       ),
       "@custom-variant state-open (&[data-state='open']);",
       "@custom-variant state-closed (&[data-state='closed']);",
+      "@custom-variant state-checked (&[data-state='checked']);",
+      "@custom-variant state-unchecked (&[data-state='unchecked']);",
+      "@custom-variant state-indeterminate (&[data-state='indeterminate']);",
       '--ring-offset-width-focus: var(--h-ring-offset);',
     ]
     for (const line of lines) expect(theme, line).toContain(line)

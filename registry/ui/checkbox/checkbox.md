@@ -17,11 +17,14 @@ independent choices. Use `switch` for a setting that applies at once, and
 | `modelValue` | `boolean \| 'indeterminate'` | `false` | `v-model`; `'indeterminate'` shows a dash |
 | `size` | `sm \| md \| lg` | `md` | Box and text size |
 | `disabled` | `boolean` | `false` | |
+| `name` | `string` | none | Form field name; without it the box is not part of the form |
+| `value` | `string` | `on` | Submitted while checked |
 | `class` | `string` | none | Applied to the wrapping label |
 
-`id`, `name`, `value`, `required` and `aria-*` attributes go to the
-checkbox control, not the wrapper. With a `name`, the checkbox submits
-`value` (default `on`) in its form while checked.
+`id`, `required` and `aria-*` attributes go to the checkbox control, not
+the wrapper. With a `name`, the checkbox submits `value` (default `on`) in
+its form while checked; indeterminate counts as unchecked, for submit and
+for `required`.
 
 ## Slots
 
@@ -33,7 +36,7 @@ checkbox control, not the wrapper. With a `name`, the checkbox submits
 
 | Event | Payload | When |
 | --- | --- | --- |
-| `update:modelValue` | `boolean` | On toggle; an indeterminate box becomes `true` |
+| `update:modelValue` | `boolean \| 'indeterminate'` | On toggle: always `true` or `false`; an indeterminate box becomes `true` |
 
 ## Tokens
 
@@ -61,6 +64,8 @@ unchecked, checked, indeterminate; hover, focus-visible, disabled
 - The default slot sits inside a `label` around the control, so it names
   the checkbox. Without a slot, pass `aria-label`.
 - The check and dash icons are `aria-hidden`.
+- A disabled checkbox dims its box; its label text turns `muted-foreground`
+  rather than translucent, so it still meets contrast.
 
 ## Do
 

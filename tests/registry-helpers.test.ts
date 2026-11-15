@@ -43,7 +43,9 @@ describe('cn with Heart UI token utilities', () => {
 
 describe('Icon', () => {
   it.each([
+    ['check-sm', 'fluent:checkmark-12-filled'],
     ['check', 'fluent:checkmark-20-regular'],
+    ['minus-sm', 'fluent:subtract-12-filled'],
     ['chevron-down', 'fluent:chevron-down-20-regular'],
     ['close', 'fluent:dismiss-20-regular'],
     ['search', 'fluent:search-20-regular'],

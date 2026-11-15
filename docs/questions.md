@@ -12,6 +12,23 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-03: three calls in `checkbox`, decided by the agent. (1) A
+  disabled checkbox dims only its box; the label text turns
+  `muted-foreground` instead of half opacity, which failed axe contrast in
+  light mode. Disabled text is exempt from WCAG 1.4.3, but readable is
+  better and keeps axe at zero. (2) `theme.css` gains `state-checked`,
+  `state-unchecked` and `state-indeterminate` variants, like `state-open`
+  (P0-12), for Reka's `data-state` without arbitrary variants. (3) The
+  `icon` item gains `check-sm` and `minus-sm` (12px filled Fluent glyphs; a
+  20px regular stroke is too thin drawn at 10–14px in a 14–20px box) and
+  moves to 0.2.0, so projects that installed 0.1.0 see the change. Like
+  `state-open`, the new variants live in the shared `theme.css`, which
+  `heart-ui add` won't update in an existing project: `checkbox` depends on
+  the per-item `css` field the CLI task builds (P0-10 answer). (4) The
+  checkbox renders its own hidden native input for forms, so indeterminate
+  submits nothing and fails `required`, as a native checkbox does. Reka also
+  reads a name from a Reka `Field` wrapper; `form` (P2-19) must pass the
+  name through `Checkbox`, not a Reka `Field`.
 - 2026-11-15 P1-02: tokens.md has horizontal control padding
   (`control-px-*`) but no vertical one, and control padding must use
   tokens. Chose (delegated to the agent): the textarea uses

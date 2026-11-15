@@ -8,11 +8,23 @@ export const fluent = {
     height: 20,
     body: '<path fill="currentColor" d="M10 2.5a.5.5 0 0 1 .5.5v6.5H17a.5.5 0 0 1 0 1h-6.5V17a.5.5 0 0 1-1 0v-6.5H3a.5.5 0 0 1 0-1h6.5V3a.5.5 0 0 1 .5-.5"/>',
   },
+  'check-sm': {
+    id: 'fluent:checkmark-12-filled',
+    width: 12,
+    height: 12,
+    body: '<path fill="currentColor" d="M9.765 3.205a.75.75 0 0 1 .03 1.06l-4.25 4.5a.75.75 0 0 1-1.075.015L2.22 6.53a.75.75 0 0 1 1.06-1.06l1.705 1.704l3.72-3.939a.75.75 0 0 1 1.06-.03"/>',
+  },
   check: {
     id: 'fluent:checkmark-20-regular',
     width: 20,
     height: 20,
     body: '<path fill="currentColor" d="M3.374 10.168a.5.5 0 0 0-.748.664l4 4.5a.5.5 0 0 0 .728.022l10.5-10.5a.5.5 0 0 0-.707-.708L7.02 14.271z"/>',
+  },
+  'minus-sm': {
+    id: 'fluent:subtract-12-filled',
+    width: 12,
+    height: 12,
+    body: '<path fill="currentColor" d="M2 6a.75.75 0 0 1 .75-.75h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 2 6"/>',
   },
   'chevron-down': {
     id: 'fluent:chevron-down-20-regular',

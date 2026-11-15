@@ -126,6 +126,7 @@ pull request.
 | Form control with `v-model`, `invalid`, and slots | `input` |
 | Multi-part component over a Reka primitive, with a portal | `dialog` |
 | Text only screen readers hear, from a `*Label` prop (`sr-only`) | `label` |
+| Reka control inside a `label` that wraps it and its text slot; `state-*` variants for `data-state` | `checkbox` |
 
 ## Checks
 

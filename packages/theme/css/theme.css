@@ -122,9 +122,12 @@
   }
 }
 
-/* Reka marks open and closed parts with data-state. */
+/* Reka marks open, closed, checked and indeterminate parts with data-state. */
 @custom-variant state-open (&[data-state='open']);
 @custom-variant state-closed (&[data-state='closed']);
+@custom-variant state-checked (&[data-state='checked']);
+@custom-variant state-unchecked (&[data-state='unchecked']);
+@custom-variant state-indeterminate (&[data-state='indeterminate']);
 
 /* Tailwind has no theme namespace for durations or z-index. */
 
