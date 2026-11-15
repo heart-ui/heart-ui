@@ -1,0 +1,20 @@
+{
+  "name": "select",
+  "type": "registry:ui",
+  "title": "Select",
+  "description": "Pick one option from a list: a trigger like an input with three sizes and an invalid state, groups, labels and separators.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils", "icon", "form-control"],
+  "files": [
+    "Select.vue",
+    "SelectTrigger.vue",
+    "SelectContent.vue",
+    "SelectItem.vue",
+    "SelectGroup.vue",
+    "SelectLabel.vue",
+    "SelectSeparator.vue",
+    "select.variants.ts",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

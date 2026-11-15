@@ -12,6 +12,24 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-06: calls in `select`, decided by the agent. (1) `size`,
+  `invalid` and `placeholder` are `SelectTrigger` props (what they style);
+  the root holds `v-model`, `v-model:open`, `disabled`, `name`, `required`.
+  (2) The list uses Reka's `item-aligned` position: `popper` needs Reka's
+  `--reka-select-*` variables in arbitrary-value classes, which `registry/`
+  bans. (3) The trigger renders its own hidden native `select` for forms,
+  as the other controls do: Reka's can't take focus when validation fails.
+  It lists every registered option (so autofill works) and lies over the
+  trigger in a positioned box, which is `display: contents` when the select
+  has no `name`, so unnamed selects keep their layout. Reka always gets
+  `null` rather than `undefined`, or it keeps its own value and shows a
+  choice the parent rejected. (4) An open list hides the page
+  (the modal listbox pattern, so axe on the whole page flags the hidden,
+  focusable triggers), so the demo starts closed: the every-demo axe check
+  sees the page, and the select's own test opens the list and checks it on
+  its own, after its fade-in. Gap: the visual baseline shows no open list,
+  since the runner can't click (as for the dialog, P0-12); a runner hook
+  that opens a demo's list before the screenshot would close it.
 - 2026-11-15 P1-05: calls in `switch`, decided by the agent. (1) A new lib
   item `form-control` holds what `checkbox`, `radio-group` and `switch`
   share: handing focus from the hidden form input to the control and firing

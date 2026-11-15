@@ -32,6 +32,11 @@ filtering.
 | `SelectItem` | `value` | `string` | none | Required |
 | `SelectItem` | `disabled` | `boolean` | `false` | |
 
+With a `name`, the select takes part in its form like a native select: a
+choice fires `input` and `change`, `autocomplete` on `Select` lets browser
+autofill pick an option, and a form reset keeps the shown choice (the
+`v-model` value). Without a `name` it isn't part of the form.
+
 Every part except `Select` takes `class`, merged last. `Select` renders no
 element of its own. Attributes on `SelectTrigger` (`id`, `aria-*`) go to the
 trigger button, so a `label` with `for` names it.

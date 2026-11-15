@@ -89,6 +89,7 @@ describe('docs pages', () => {
       'input',
       'label',
       'radio-group',
+      'select',
       'switch',
       'textarea',
     ])
@@ -100,6 +101,7 @@ describe('docs pages', () => {
       ['input', 'Input.demo.vue'],
       ['label', 'Label.demo.vue'],
       ['radio-group', 'RadioGroup.demo.vue'],
+      ['select', 'Select.demo.vue'],
       ['switch', 'Switch.demo.vue'],
       ['textarea', 'Textarea.demo.vue'],
     ] as const) {
@@ -541,6 +543,7 @@ describe('docs page generator edge cases', () => {
       'Input',
       'Label',
       'Radio Group',
+      'Select',
       'Switch',
       'Textarea',
     ])

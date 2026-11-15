@@ -1,5 +1,6 @@
-// Helpers for Reka controls (checkbox, radio, switch) wrapped in a label, with a hidden native input
-// so the form sees a native control: submit, `required`, reset.
+// Helpers for Reka controls that render a hidden native input or select, so the form sees a native
+// control: submit, `required`, reset. `handFocus` serves the label-wrapped controls (checkbox,
+// radio, switch); `select` hands focus to its own trigger, since a group may hold several selects.
 
 export type ControlRole = 'checkbox' | 'radio' | 'switch'
 
@@ -16,7 +17,7 @@ export function handFocus(event: FocusEvent, role: ControlRole) {
  * Fires `input` and `change` from the hidden input, as a user's change to a native control does,
  * so form-level listeners (dirty state, autosave) see it. Call it for user changes only.
  */
-export function fireFormEvents(input: HTMLInputElement | undefined) {
-  input?.dispatchEvent(new Event('input', { bubbles: true }))
-  input?.dispatchEvent(new Event('change', { bubbles: true }))
+export function fireFormEvents(control: HTMLElement | undefined) {
+  control?.dispatchEvent(new Event('input', { bubbles: true }))
+  control?.dispatchEvent(new Event('change', { bubbles: true }))
 }

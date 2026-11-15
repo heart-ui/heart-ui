@@ -127,7 +127,7 @@ pull request.
 | Multi-part component over a Reka primitive, with a portal | `dialog` |
 | Text only screen readers hear, from a `*Label` prop (`sr-only`) | `label` |
 | Reka control inside a `label` that wraps it and its text slot; `state-*` variants for `data-state` | `checkbox` |
-| Hidden native input for forms under a Reka control (`registry/lib/form-control`: focus hand-off, form events on user changes, `id` on the control) | `checkbox`, `radio-group`, `switch` |
+| Hidden native input for forms under a Reka control (`registry/lib/form-control`: focus hand-off, form events on user changes, `id` on the control) | `checkbox`, `radio-group`, `switch`, `select` |
 
 ## Checks
 
