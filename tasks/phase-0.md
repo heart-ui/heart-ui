@@ -128,12 +128,12 @@ Recipe C. For these three, step 1 moves the existing spec from
 | ID | Item | Depends on | Status |
 | --- | --- | --- | --- |
 | P0-10 | `button` | P0-09 | done |
-| P0-11 | `input` | P0-10 | review |
-| P0-12 | `dialog` | P0-10 | review |
+| P0-11 | `input` | P0-10 | done |
+| P0-12 | `dialog` | P0-10 | done |
 
 ### P0-13 Docs site skeleton
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P0-10
 - Read: [conventions.md](../docs/conventions.md#docs-site)
@@ -146,7 +146,7 @@ Recipe C. For these three, step 1 moves the existing spec from
 
 ### P0-14 Gate: pilots approved
 
-- Status: todo
+- Status: done
 - Owner: human
 - Depends on: P0-10 to P0-13
 - Deliver: reviewed pilots; approved baselines; lessons written into
