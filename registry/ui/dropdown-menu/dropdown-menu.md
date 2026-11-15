@@ -25,6 +25,7 @@ account menu, view settings. Use `select` to pick a form value, and
 | `DropdownMenu` | `modal` | `boolean` | `true` | `false` keeps the page usable while open |
 | `DropdownMenuTrigger` | `asChild` | `boolean` | `false` | Merge onto the child, such as a `Button` |
 | `DropdownMenuTrigger` | `as` | `string \| Component` | none | Element to render; Reka renders a `button` |
+| `DropdownMenuTrigger` | `disabled` | `boolean` | `false` | |
 | `DropdownMenuContent` | `align` | `start \| center \| end` | `start` | Against the trigger |
 | `DropdownMenuItem` | `variant` | `default \| danger` | `default` | `danger` for destructive actions |
 | `DropdownMenuItem` | `disabled` | `boolean` | `false` | |
@@ -38,6 +39,13 @@ account menu, view settings. Use `select` to pick a form value, and
 
 Every part that renders an element takes `class`, merged last.
 `DropdownMenu` and `DropdownMenuSub` render no element of their own.
+
+Name a `DropdownMenuRadioGroup` with one `DropdownMenuLabel` inside it, or
+with `aria-label`. The menu takes its direction from Reka's
+`ConfigProvider` (`dir="rtl"`), which also sets which arrow key opens a
+submenu; set it once at the app root of an RTL app. A long menu is capped
+at the room beside its trigger and scrolls; to cap it lower, pass a
+`style` with `max-height` (a `max-h-*` class can't beat the inline cap).
 
 ## Slots
 

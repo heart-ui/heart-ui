@@ -83,6 +83,7 @@ describe('registry:build', () => {
         'button',
         'checkbox',
         'dialog',
+        'dropdown-menu',
         'form-control',
         'icon',
         'input',

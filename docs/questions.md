@@ -12,6 +12,24 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-07: calls in `dropdown-menu`, decided by the agent. (1) A
+  danger item reads `danger-subtle-foreground` (and `danger-subtle` when
+  highlighted), not `text-danger`: status fills aren't text (P0-05). (2) The
+  sub trigger's chevron follows Reka's menu direction (its root context),
+  which also drives the arrow keys; Reka defaults to LTR, so an RTL app sets
+  `dir` on Reka's `ConfigProvider`. (3) The demo starts closed and the
+  menu's own test opens it (and a submenu) for axe, as for `select`. (4) Not
+  built: `DropdownMenuGroup`, `Arrow` and `Filter`, which the catalog row
+  doesn't list. (5) The spec gained a `DropdownMenuTrigger` `disabled` row
+  during the build: Reka's trigger has the prop, and the docs check requires
+  every typed prop in the spec. (6) Gap for a theme task: the resting danger
+  item puts `danger-subtle-foreground` on `surface-raised`, a pair the theme
+  generator doesn't check (it checks it on `danger-subtle`); axe passes it in
+  the default theme. (7) A long menu is capped with Reka's
+  `--reka-dropdown-menu-content-available-height` in a style binding (an
+  arbitrary-value class is banned) and scrolls. (8) The 4 between trigger and
+  menu is Reka's `side-offset`, a number in pixels its API takes; no spacing
+  token maps to it, and a caller's value wins.
 - 2026-11-15 P1-06: calls in `select`, decided by the agent. (1) `size`,
   `invalid` and `placeholder` are `SelectTrigger` props (what they style);
   the root holds `v-model`, `v-model:open`, `disabled`, `name`, `required`.

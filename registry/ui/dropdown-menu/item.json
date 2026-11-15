@@ -1,0 +1,28 @@
+{
+  "name": "dropdown-menu",
+  "type": "registry:ui",
+  "title": "Dropdown Menu",
+  "description": "A menu of actions opened from a button: items with danger variant and leading/trailing slots, checkbox and radio items, labels, separators and submenus.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils", "icon"],
+  "files": [
+    "DropdownMenu.vue",
+    "DropdownMenuTrigger.vue",
+    "DropdownMenuContent.vue",
+    "DropdownMenuItem.vue",
+    "DropdownMenuCheckboxItem.vue",
+    "DropdownMenuRadioGroup.vue",
+    "DropdownMenuRadioItem.vue",
+    "DropdownMenuLabel.vue",
+    "DropdownMenuSeparator.vue",
+    "DropdownMenuSub.vue",
+    "DropdownMenuSubTrigger.vue",
+    "DropdownMenuSubContent.vue",
+    "dropdown-menu.variants.ts",
+    "index.ts"
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tier": 1
+  }
+}
