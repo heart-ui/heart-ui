@@ -3,6 +3,15 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-15 Working mode for phases 1–4. The maintainer (2026-11-15):
+  "you build all planned tasks by yourself, when done i will do only 1
+  review round with you." So, until that review: a task whose dependencies
+  are in `review` is ready (the rule asks for `done`); the phase gates
+  (P1-21, P2-56, P3-28) and the human sign-offs inside tasks (baseline
+  approval, "human decides", "human reviews each fix") wait for that one
+  round; tasks with `Owner: human` (releases, credentials, the accessibility
+  audit) are skipped and listed for it. The agent still never marks a task
+  `done`, and still records each call it makes here.
 - 2026-11-15 P1-02: tokens.md has horizontal control padding
   (`control-px-*`) but no vertical one, and control padding must use
   tokens. Chose (delegated to the agent): the textarea uses
