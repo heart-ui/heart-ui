@@ -86,6 +86,10 @@ named `<Component><Part>.vue`. Blocks and layouts use the same anatomy with
 - Text enters by prop or slot. Accessible names the component must supply
   itself are props named `*Label` with an English default (`closeLabel`).
 - Icons render through `registry/lib/icon`, never an icon package import.
+  Its set file bundles each icon's SVG data, so nothing loads from the
+  Iconify API. To add one, add `name: { id: 'fluent:<icon>' }` to
+  `sets/fluent.ts` and run `pnpm icons`; the unit tests fail when the file is
+  stale.
 - Styles are Tailwind utilities mapped to tokens
   ([tokens.md](tokens.md#tailwind-mapping)). No `<style>` blocks except
   for keyframes that utilities cannot express.

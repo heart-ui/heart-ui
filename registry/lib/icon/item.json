@@ -2,7 +2,7 @@
   "name": "icon",
   "type": "registry:lib",
   "title": "Icon",
-  "description": "Icon component: renders an internal icon name from the Fluent set through Iconify.",
+  "description": "Icon component: renders an internal icon name from the Fluent set through Iconify, from bundled SVG data.",
   "dependencies": ["@iconify/vue@5.0.5"],
   "registryDependencies": ["utils"],
   "files": ["icon.ts", "index.ts", "sets/fluent.ts"],

@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { describe, expect, it, vi } from 'vitest'
@@ -48,9 +49,21 @@ describe('Icon', () => {
     ['search', 'fluent:search-20-regular'],
     ['spinner', 'fluent:spinner-ios-20-regular'],
   ] as const)('maps %s to %s', (name, id) => {
-    expect(fluent[name]).toBe(id)
+    expect(fluent[name].id).toBe(id)
   })
 
+  it('renders the SVG on the server from bundled data, with no network', async () => {
+    const fetch = vi.spyOn(globalThis, 'fetch')
+    const html = await renderToString(createSSRApp({ render: () => h(Icon, { name: 'close' }) }))
+    expect(html).toMatch(/<svg[^>]*viewBox="0 0 20 20"[^>]*>.*<path/)
+    expect(fetch).not.toHaveBeenCalled()
+    fetch.mockRestore()
+  })
+  it('bundles exactly what @iconify-json/fluent has for each id', () => {
+    expect(() =>
+      execFileSync('node', ['scripts/icons.ts', '--check'], { stdio: 'pipe' }),
+    ).not.toThrow()
+  })
   it('renders hidden from assistive tech with class merged last', async () => {
     const html = await renderToString(
       createSSRApp({ render: () => h(Icon, { name: 'check', class: 'text-primary' }) }),

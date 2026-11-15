@@ -13,11 +13,15 @@ export const Icon = defineComponent({
     class: { type: null as unknown as PropType<ClassValue>, default: undefined },
   },
   setup(props) {
-    return () =>
-      h(IconifyIcon, {
-        icon: fluent[props.name],
+    return () => {
+      const { body, width, height } = fluent[props.name]
+      return h(IconifyIcon, {
+        icon: { body, width, height },
+        // The data is bundled, so render on the server too instead of waiting for mount.
+        ssr: true,
         'aria-hidden': 'true',
         class: cn('shrink-0', props.class),
       })
+    }
   },
 })
