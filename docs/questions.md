@@ -3,6 +3,17 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-15 P1-02: tokens.md has horizontal control padding
+  (`control-px-*`) but no vertical one, and control padding must use
+  tokens. Chose (delegated to the agent): the textarea uses
+  `py-control-px-sm` (0.5rem) at every size, and shares `input`'s radius
+  (`rounded-input`) instead of a new token. Why: at default density, 0.5rem
+  is within a pixel of `input`'s text inset at `md` and `lg`, and one empty
+  line is 2px taller than an input (its border); at `sm` it is 6px taller.
+  Other densities scale padding and control heights differently, so the gap
+  grows a little (compact `md`: 4px). `size` sets padding and text; the
+  height comes from `rows` or the content. A `control-py-*` token would
+  need a task that adds tokens.
 - 2026-11-15 P1-01: the label's required marker needs a glyph, but the
   Fluent set has no asterisk icon, and user-facing text must enter by prop.
   Chose (delegated to the agent): an `aria-hidden` `*` after the text, in

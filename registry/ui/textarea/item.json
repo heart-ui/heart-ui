@@ -1,0 +1,10 @@
+{
+  "name": "textarea",
+  "type": "registry:ui",
+  "title": "Textarea",
+  "description": "Multi-line text field with v-model, three sizes, an invalid state, and optional growth with its content.",
+  "dependencies": ["class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils"],
+  "files": ["Textarea.vue", "textarea.variants.ts", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

@@ -25,9 +25,15 @@ Native attributes (`rows`, `placeholder`, `readonly`, `maxlength`,
 `required`, `name`, `id`) fall through to the `textarea`.
 
 Without `autoresize`, `rows` sets the height and the reader can drag it
-taller. With `autoresize`, the field starts one control height tall and
-grows line by line, where the browser supports `field-sizing`; elsewhere it
-keeps a fixed height and scrolls.
+taller. With `autoresize`, the field starts one line tall (or as tall as a
+placeholder that wraps) and grows line by line, where the browser supports
+`field-sizing`; `rows` is then ignored, so
+set a starting height with a `min-h-*` class. Where `field-sizing` isn't
+supported, the field keeps its `rows` height, scrolls, and stays
+resizable.
+
+`size` sets the padding and text size; the height comes from `rows` or the
+content, so an empty `sm` field is not shorter than `md`.
 
 ## Slots
 
