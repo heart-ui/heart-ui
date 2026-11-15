@@ -243,6 +243,26 @@ describe('Input', () => {
       expect(readonly).not.toBe(editable)
     })
 
+    it('fills only when the field is actually read-only, however readonly is passed', () => {
+      const root = render(() =>
+        h('div', [
+          h(Input, { 'aria-label': 'Plain' }),
+          h(Input, { 'aria-label': 'Off', readonly: false }),
+          h(Input, { 'aria-label': 'Null', readonly: null }),
+          h(Input, { 'aria-label': 'Camel', readOnly: true }),
+        ]),
+      )
+      const inputs = [...root.querySelectorAll('input')]
+      const fills = [...root.querySelectorAll('[data-slot="input"]')].map(
+        (wrapper) => getComputedStyle(wrapper).backgroundColor,
+      )
+      const [plain] = fills
+      expect([inputs[1]!.readOnly, fills[1]]).toEqual([false, plain])
+      expect([inputs[2]!.readOnly, fills[2]]).toEqual([false, plain])
+      expect(inputs[3]!.readOnly).toBe(true)
+      expect(fills[3]).not.toBe(plain)
+    })
+
     it('renders no slot wrapper for an empty slot', () => {
       const root = render(() => h(Input, { 'aria-label': 'Email' }, { trailing: () => [] }))
       expect(root.querySelector('[data-slot="input"]')!.children).toHaveLength(1)

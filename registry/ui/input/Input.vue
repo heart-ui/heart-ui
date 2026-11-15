@@ -20,7 +20,10 @@ const attrs = useAttrs()
 const slots = useSlots()
 const field = ref<HTMLInputElement>()
 const focused = ref(false)
-const readonly = computed(() => attrs.readonly !== undefined && attrs.readonly !== false)
+// Mirrors how Vue applies the attribute: null and false leave the field editable.
+const readonly = computed(() =>
+  [attrs.readonly, attrs.readOnly].some((value) => value != null && value !== false),
+)
 // `invalid` wins; otherwise a form library's own aria-invalid is kept.
 const ariaInvalid = computed(() =>
   props.invalid ? 'true' : (attrs['aria-invalid'] as 'true' | 'false' | undefined),
