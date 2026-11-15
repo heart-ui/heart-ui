@@ -93,6 +93,7 @@ describe('docs pages', () => {
       'select',
       'switch',
       'textarea',
+      'tooltip',
     ])
     expect(pages.map((entry) => entry.name)).not.toContain('placeholder')
     for (const [name, demo] of [
@@ -106,6 +107,7 @@ describe('docs pages', () => {
       ['select', 'Select.demo.vue'],
       ['switch', 'Switch.demo.vue'],
       ['textarea', 'Textarea.demo.vue'],
+      ['tooltip', 'Tooltip.demo.vue'],
     ] as const) {
       const { demoPage } = page(name)
       expect(demoPage).toMatch(/^---\n(.*\n)*layout: false\n(.*\n)*---\n/)
@@ -549,6 +551,7 @@ describe('docs page generator edge cases', () => {
       'Select',
       'Switch',
       'Textarea',
+      'Tooltip',
     ])
   })
 })

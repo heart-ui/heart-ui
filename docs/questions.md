@@ -12,6 +12,16 @@ Gaps and conflicts found while building. Format in
   round; tasks with `Owner: human` (releases, credentials, the accessibility
   audit) are skipped and listed for it. The agent still never marks a task
   `done`, and still records each call it makes here.
+- 2026-11-15 P1-08: calls in `tooltip`, decided by the agent. (1) No
+  tooltip token exists, so the tooltip inverts the page: `bg-foreground`
+  with `text-background`, a checked text pair in both modes. (2) Its
+  open-state axe check runs on the tooltip itself: like every portalled
+  overlay it sits outside the page's landmarks, which axe's `region` rule
+  flags on the whole page. (3) The provider sets Reka's
+  `ignoreNonKeyboardFocus`: otherwise a menu or dialog returning focus to
+  the trigger after a click opens the tooltip. (4) Gap: the visual baseline
+  shows no open tooltip, since an open one on load trips the every-demo axe
+  check (the runner limit noted at P1-06).
 - 2026-11-15 P1-07: calls in `dropdown-menu`, decided by the agent. (1) A
   danger item reads `danger-subtle-foreground` (and `danger-subtle` when
   highlighted), not `text-danger`: status fills aren't text (P0-05). (2) The

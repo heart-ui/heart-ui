@@ -92,6 +92,7 @@ describe('registry:build', () => {
         'select',
         'switch',
         'textarea',
+        'tooltip',
         'utils',
       ])
 

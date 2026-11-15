@@ -26,6 +26,7 @@ interact with, and visible text for anything they must read.
 | --- | --- | --- | --- | --- |
 | `TooltipProvider` | `delayDuration` | `number` | `700` | Milliseconds of hover before a tooltip opens |
 | `TooltipProvider` | `skipDelayDuration` | `number` | `300` | Moving to another trigger within this time opens it at once |
+| `TooltipProvider` | `ignoreNonKeyboardFocus` | `boolean` | `true` | Only keyboard focus opens a tooltip; `false` lets any focus open it |
 | `Tooltip` | `open` | `boolean` | none | `v-model:open` |
 | `Tooltip` | `delayDuration` | `number` | none | Overrides the provider's for this tooltip |
 | `TooltipTrigger` | `asChild` | `boolean` | `false` | Merge onto the child, such as a `Button` |
@@ -74,6 +75,12 @@ text that wraps at the maximum width.
 - A tooltip only describes. Give an icon-only trigger its own accessible
   name (`aria-label`); the tooltip doesn't name it.
 - Never put links, buttons or other interactive content in a tooltip.
+- Only keyboard focus opens a tooltip. Focus moved by script after a
+  mouse action (a menu closing on a click) doesn't, so tooltips don't pop
+  up unasked.
+- A `TooltipTrigger` that renders its own button is `type="button"`, so it
+  never submits a form. With `as-child`, give a plain `<button>` child
+  `type="button"` yourself (the `Button` component already does).
 
 ## Do
 

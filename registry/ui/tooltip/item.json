@@ -1,0 +1,16 @@
+{
+  "name": "tooltip",
+  "type": "registry:ui",
+  "title": "Tooltip",
+  "description": "A short text hint on hover and keyboard focus, with one provider at the app root.",
+  "dependencies": ["reka-ui@2.11.0"],
+  "registryDependencies": ["utils"],
+  "files": [
+    "TooltipProvider.vue",
+    "Tooltip.vue",
+    "TooltipTrigger.vue",
+    "TooltipContent.vue",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 1 }
+}

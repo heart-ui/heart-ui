@@ -42,8 +42,12 @@ export function unmountAll() {
 }
 
 /** Fails with each axe rule id, its help text and the elements that break it. */
-export async function expectNoAxeViolations(root: Element = document.body) {
-  const { violations } = await axe.run(root, { resultTypes: ['violations'] })
+export async function expectNoAxeViolations(
+  root: Element = document.body,
+  { skip = [] }: { skip?: string[] } = {},
+) {
+  const rules = Object.fromEntries(skip.map((id) => [id, { enabled: false }]))
+  const { violations } = await axe.run(root, { resultTypes: ['violations'], rules })
   if (violations.length === 0) return
   const lines = violations.map(
     (violation) =>
