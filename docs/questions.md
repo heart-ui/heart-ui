@@ -3,6 +3,16 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-19 P1-15: calls in `add`, decided by the agent (delegated). (1)
+  Which registry holds an unscoped `registryDependencies` name in a
+  third-party item? Chose: the default registry, `@heart-ui`, as the shadcn
+  CLI reads a bare name; a third-party item names its own helpers in full
+  (`@acme/x`). Why: the shadcn namespace docs leave it open and advise full
+  names; matching the CLI keeps shadcn-style items working. (2) What does `add` do with
+  a dependency the user edited? Chose: keep it, leave it unlocked, and say
+  so. Why: editing copied source is the point, and `update` brings changes
+  in. (3) The lock hash is base64 SHA-256 with the `sha256-` prefix, as in
+  Subresource Integrity, matching registry.md's example.
 - 2026-11-18 P1-14: calls in `init`, decided by the agent (delegated). (1)
   registry.md's config example names `heart-ui.css`, the command table
   `theme.css` and `tokens.css`. Chose: `theme.css` and `tokens.css` side by

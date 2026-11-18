@@ -87,6 +87,15 @@ it; nothing else does.
 The hash is of the file content as written by the CLI, after alias
 rewriting.
 
+`add` writes the items you name; a file you have with other content is
+refused unless `--overwrite`. An item pulled in as a dependency is written
+only when its files are missing or unchanged: when you have edited it, your
+files are kept, it stays out of the lock, and `add` says so. An unscoped
+registry dependency means `@heart-ui`, as in the shadcn CLI; a third-party
+item names its own dependencies in full (`@acme/x`). A
+file under `registry/ui/`, `lib/`, `blocks/` or `layouts/` goes under the
+matching alias; a file with `target` goes under the project root (`~/`).
+
 ## Commands
 
 | Command | Behavior |

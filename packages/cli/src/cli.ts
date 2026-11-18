@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import manifest from '../package.json' with { type: 'json' }
+import { createAdd } from './commands/add.ts'
 import { createInit } from './commands/init.ts'
 import { CliError, isControl } from './errors.ts'
 import { isDirectory } from './fs.ts'
@@ -31,7 +32,7 @@ export type Command = {
 }
 
 /** The commands `heart-ui` runs, by name. */
-export const commands: Record<string, Command> = { init: createInit() }
+export const commands: Record<string, Command> = { init: createInit(), add: createAdd() }
 
 const globalOptions: Record<string, OptionSpec> = {
   cwd: { type: 'string', description: 'Run in this folder instead of the current one.' },

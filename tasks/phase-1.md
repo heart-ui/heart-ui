@@ -51,7 +51,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-15 `add` and the lock file
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P1-14
 - Deliver: `add` with recursive dependency resolution, file writes, npm

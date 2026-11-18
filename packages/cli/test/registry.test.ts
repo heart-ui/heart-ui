@@ -317,7 +317,7 @@ describe('AC-010 cache fallbacks', () => {
   })
 })
 
-describe('AC-009 round 2 untrusted items', () => {
+describe('AC-009 sensitive targets and fetch errors', () => {
   it.each([
     ['the project root itself', '~/'],
     ['a git hook', '~/.git/hooks/post-checkout'],

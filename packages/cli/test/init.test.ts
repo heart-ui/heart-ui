@@ -13,7 +13,8 @@ import { dirname, join } from 'node:path'
 import { generateTheme, type Knobs } from '@heart-ui/theme'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { run } from '../src/cli.ts'
-import { createInit, installCommand, type Installer } from '../src/commands/init.ts'
+import { createInit } from '../src/commands/init.ts'
+import { installCommand, type Installer } from '../src/install.ts'
 import { CliError } from '../src/errors.ts'
 import {
   buildRegistry,
@@ -637,7 +638,7 @@ describe('AC-011 strict dependency specs', () => {
   })
 })
 
-describe('AC-006 round 2: rollback', () => {
+describe('AC-006 rollback', () => {
   const dirs = (root: string) =>
     readdirSync(root, { recursive: true, encoding: 'utf8', withFileTypes: false })
       .filter((path) => !path.startsWith('.git'))
@@ -700,7 +701,7 @@ describe('AC-006 round 2: rollback', () => {
   })
 })
 
-describe('AC-004 round 2: ranges', () => {
+describe('AC-004 ranges without a fixed minor', () => {
   it.each(['3.x', '~3', '3', '>= 3.5.0'])('accepts Vue %s', async (range) => {
     const root = project('init-vite', (r) =>
       editJson(r, 'package.json', (p) => (p.dependencies.vue = range)),
@@ -711,7 +712,7 @@ describe('AC-004 round 2: ranges', () => {
   })
 })
 
-describe('AC-007 round 2: no network before the usage check', () => {
+describe('AC-007 no network before the usage check', () => {
   it('asks for --yes before fetching anything', async () => {
     const root = project('init-vite')
     const { table, calls } = setup()
@@ -721,7 +722,7 @@ describe('AC-007 round 2: no network before the usage check', () => {
   })
 })
 
-describe('AC-009 round 2: comments', () => {
+describe('AC-009 comments', () => {
   it('ignores a commented-out Tailwind import', async () => {
     const root = project('init-vite', (r) =>
       writeFileSync(
@@ -737,7 +738,7 @@ describe('AC-009 round 2: comments', () => {
   })
 })
 
-describe('AC-011 round 2', () => {
+describe('AC-011 workspaces, catalogs and C1 characters', () => {
   it('counts a catalog or workspace range as declared', async () => {
     const root = project('init-vite', (r) =>
       editJson(r, 'package.json', (p) => {

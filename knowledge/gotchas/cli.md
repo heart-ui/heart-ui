@@ -15,3 +15,6 @@ description: parseArgs, fetch redirects, tsconfig paths, symlink-safe edits, wri
 - **A file that marks "set up" goes last.** `init` writes `heart-ui.json` after every other file and edit, and rolls back on failure. Written first, a failed run blocks every re-run.
 - **Prettier rewrites fixture CSS and JSON.** `@import "tailwindcss";` becomes single-quoted, so assert against the fixture as formatted.
 - **Give each test its own registry cache.** A shared cache lets one test's item stand in for another's when the client falls back to the cache on an invalid answer.
+- **"Did the user edit it?" is a question for the lock, not the registry.** Compare the file with the hash `heart-ui.lock.json` recorded (LF-normalised); comparing with the latest registry copy calls every untouched but outdated file "yours".
+- **A bare `registryDependencies` name means the default registry.** The shadcn CLI reads it that way, and its docs advise full names (`@acme/x`) for anything else.
+- **Run the install inside the write's rollback.** Writes then install, with the install as `writeSteps`'s `after` step: a failed install undoes the files and the lock, and the message must then say so rather than offer a command that finishes half the job.

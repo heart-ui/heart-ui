@@ -1,4 +1,6 @@
+import { join } from 'node:path'
 import type { Config } from './config.ts'
+import { CliError } from './errors.ts'
 
 // The prefixes registry source imports with, as the repo's own build resolves them.
 const prefixes: Record<string, keyof Config['aliases']> = {
@@ -26,4 +28,20 @@ export function rewriteImports(source: string, aliases: Config['aliases']): stri
       // The pattern matches only the keys of `prefixes`.
       `${lead}${quote}${aliases[prefixes[prefix] as keyof Config['aliases']]}`,
   )
+}
+
+/**
+ * The folder an import alias (`@/components/ui`) points to, from the project's own aliases
+ * (`@` → `src`), longest match first.
+ */
+export function aliasPath(alias: string, projectAliases: Record<string, string>): string {
+  const key = Object.keys(projectAliases)
+    .sort((a, b) => b.length - a.length)
+    .find((name) => alias === name || alias.startsWith(`${name}/`))
+  if (key === undefined) {
+    throw new CliError(
+      `The alias ${alias} in heart-ui.json points nowhere. Add it to compilerOptions.paths in tsconfig.json.`,
+    )
+  }
+  return join(projectAliases[key] as string, alias.slice(key.length).replace(/^\//, ''))
 }

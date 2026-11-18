@@ -207,9 +207,23 @@ const optional = (value: unknown, check: (value: unknown) => boolean) =>
 const isString = (value: unknown) => typeof value === 'string'
 
 // Registries are untrusted and `add` writes these paths: each must stay inside the folder it is
-// written to (relative, or `~/` for the project root), with no `..`, and never touch git's or the
-// package manager's folders, whose files run code.
-const forbiddenSegments = ['..', '.git', 'node_modules']
+// written to (relative, or `~/` for the project root), with no `..`, no dot folder or file (`.git`,
+// `.husky`, `.github`, `.npmrc`, whose contents run code) and no `node_modules`. Case-insensitive
+// disks read `.Git` and `Node_Modules` as the same names, Windows drops trailing dots and spaces,
+// `GIT~1` is a Windows short name, and NTFS reads `x:stream` as a stream, so all of those count
+// too. An empty segment (`a//b`, a trailing `/`) hides which file is meant.
+function isSafeSegment(segment: string): boolean {
+  const name = segment.replace(/[. ]+$/, '').toLowerCase()
+  return (
+    segment !== '' &&
+    !segment.startsWith('.') &&
+    name !== 'node_modules' &&
+    !/~\d/.test(segment) &&
+    // `:` names an NTFS stream (`node_modules::$INDEX_ALLOCATION` opens the folder).
+    !segment.includes(':')
+  )
+}
+
 // Terminal control characters in a path would reach the screen and the file system.
 const hasControl = (text: string) => [...text].some(isControl)
 
@@ -217,7 +231,7 @@ function isContainedPath(value: unknown): boolean {
   if (typeof value !== 'string' || hasControl(value)) return false
   const path = value.startsWith('~/') ? value.slice(2) : value
   if (path === '' || /^([/\\]|[A-Za-z]:)/.test(path)) return false
-  return !path.split(/[/\\]/).some((segment) => forbiddenSegments.includes(segment))
+  return path.split(/[/\\]/).every(isSafeSegment)
 }
 
 function isItem(value: unknown, name: string): value is RegistryItem {

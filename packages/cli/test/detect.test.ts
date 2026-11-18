@@ -256,7 +256,7 @@ describe('AC-008 boundaries and tsconfig inheritance', () => {
   })
 })
 
-describe('AC-008 round 2 edge projects', () => {
+describe('AC-008 git files, wildcard paths and configDir', () => {
   let tmp: string
   beforeEach(() => {
     tmp = realpathSync(mkdtempSync(join(tmpdir(), 'heart-ui-detect-')))

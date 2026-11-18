@@ -9,3 +9,5 @@ One line per defect: what it looks like, then the severity.
 - A command printed for the user to paste, or passed to a shell, that holds text from a registry or other untrusted source: high.
 - A file edit through temp-and-rename that replaces a symlink, or follows one out of the project: high.
 - A setup step that writes its "already set up" marker before the rest, so a failed run blocks every re-run: high.
+- Deciding whether the user changed a copied file by comparing it with the latest upstream content instead of the hash recorded at install: high.
+- A step promised to leave nothing behind ("a failed add leaves files and the lock as they were") whose later step (an install) runs outside the rollback: high.

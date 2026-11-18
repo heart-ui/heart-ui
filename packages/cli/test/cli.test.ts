@@ -238,7 +238,7 @@ describe('AC-004 command errors without system text', () => {
   })
 })
 
-describe('AC-003 round 2 option values', () => {
+describe('AC-003 option values', () => {
   it.each([
     [['greet', '--theme', '--loud'], /^heart-ui: Option --theme needs a value\.\n$/],
     [['greet', '--theme', '--cwd', 'x'], /^heart-ui: Option --theme needs a value\.\n$/],
