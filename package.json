@@ -23,6 +23,7 @@
     "dev:vite": "pnpm --filter playground-vite dev",
     "dev:nuxt": "pnpm --filter playground-nuxt dev",
     "registry:build": "node scripts/registry-build.ts",
+    "registry:publish": "node scripts/registry-publish.ts",
     "check": "node scripts/check.ts",
     "check:item": "node scripts/check.ts --item",
     "icons": "node scripts/icons.ts"

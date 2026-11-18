@@ -12,3 +12,5 @@ One line per defect: what it looks like, then the severity.
 - Deciding whether the user changed a copied file by comparing it with the latest upstream content instead of the hash recorded at install: high.
 - A step promised to leave nothing behind ("a failed add leaves files and the lock as they were") whose later step (an install) runs outside the rollback: high.
 - Untrusted text (a registry's index, item fields) printed to the terminal with only some fields cleaned of control characters: high.
+- A signature or checksum computed over a re-encoded string instead of the exact bytes sent: high.
+- An entry-point guard (`argv[1] === import.meta.url`) that silently does nothing when run through a symlink: medium.

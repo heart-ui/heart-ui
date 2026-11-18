@@ -3,6 +3,19 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-19 P1-18: how does the publish reach R2 without a new dependency?
+  Chose: R2's S3 API with SigV4 signing on `node:crypto`, conditional
+  `If-None-Match: *` writes for versions. The release workflow is drafted in
+  docs/sdlc/changes/2026-11-19-m-p1-18-registry-publish.md, not committed:
+  CI changes need the maintainer's go-ahead. Needs the maintainer: create the
+  bucket and the `release` environment's secrets, approve the workflow, and
+  run the first real publish. At that publish, check: R2 accepts the
+  signature (AWS's published test vector can't be committed: the secret
+  guard refuses its example keys); a second run prints `skip` for every
+  version; a PUT of changed bytes to a versioned key with
+  `If-None-Match: *` answers 412.
+  Also for the workflow: publish only from the newest release tag (a tag
+  pushed later for an older line would put older items back as the latest).
 - 2026-11-19 P1-17: how does the end-to-end test install packages without
   a published registry? Chose: real `pnpm install` and `pnpm add` with
   `prefer-offline`, so packages come from the pnpm store and only missing

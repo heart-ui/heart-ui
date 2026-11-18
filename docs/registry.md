@@ -114,6 +114,15 @@ when stdout is not a TTY.
 `update` needs old versions. The registry keeps every published item
 version at `/r/<name>@<version>.json`.
 
+`pnpm registry:publish` builds the registry and uploads it to R2 through its
+S3 API (credentials in `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`,
+`R2_SECRET_ACCESS_KEY`, `R2_BUCKET`): each version first, written only if
+absent, then the latest items, then `registry.json`. A version already
+published with other content fails the publish; `--dry-run` lists the
+objects without credentials. A version is its built JSON byte for byte: any
+change to an item's output, a dependency pin bumped at the root included,
+needs a new `meta.version`.
+
 `init` writes `theme.css` and `tokens.css` to `assets/css/` under the
 folder `@` points to (`app/` in Nuxt, `src/` in Vite); `heart-ui.json`
 `css` holds the `theme.css` path. When exactly one CSS file there has
