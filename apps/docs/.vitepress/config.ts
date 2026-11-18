@@ -11,8 +11,21 @@ const items = docsItems()
 const guideTitle = (name: string) =>
   markdownTitle(readFileSync(`${repo}docs/${name}.md`, 'utf8')) ?? name
 
+// The pages a new user reads first, in order; written for the site, in start/.
+const start: DefaultTheme.SidebarItem = {
+  text: 'Get started',
+  items: [
+    { text: 'Getting started', link: '/start/getting-started' },
+    { text: 'Installation with Vite', link: '/start/installation-vite' },
+    { text: 'Installation with Nuxt', link: '/start/installation-nuxt' },
+    { text: 'Theming', link: '/start/theming' },
+    { text: 'Dark mode', link: '/start/dark-mode' },
+  ],
+}
+
 // VitePress renders sidebar text as HTML.
 const sidebar: DefaultTheme.SidebarItem[] = [
+  start,
   {
     text: 'Guides',
     items: guides.map((name) => ({
@@ -36,10 +49,11 @@ export default defineConfig({
   cleanUrls: true,
   themeConfig: {
     nav: [
+      { text: 'Get started', link: '/start/getting-started', activeMatch: '^/start/' },
       { text: 'Guides', link: `/guide/${guides[0]}`, activeMatch: '^/guide/' },
       { text: 'Components', link: '/components/', activeMatch: '^/components/' },
     ],
-    sidebar: { '/components/': sidebar, '/guide/': sidebar },
+    sidebar: { '/start/': sidebar, '/components/': sidebar, '/guide/': sidebar },
   },
   markdown: { config: (md) => md.use(siteLinks, { pages: sitePages(items) }) },
   vite: {

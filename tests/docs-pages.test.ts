@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { docsItems, escapeHtml, markdownTitle } from '../apps/docs/scripts/items.ts'
 import {
@@ -565,5 +567,39 @@ describe('docs page generator edge cases', () => {
       'Toast',
       'Tooltip',
     ])
+  })
+})
+
+describe('the get started pages', () => {
+  const docs = join(import.meta.dirname, '../apps/docs')
+  const start = [
+    ['getting-started', 'Getting started'],
+    ['installation-vite', 'Installation with Vite'],
+    ['installation-nuxt', 'Installation with Nuxt'],
+    ['theming', 'Theming'],
+    ['dark-mode', 'Dark mode'],
+  ] as const
+
+  it.each(start)('start/%s.md exists and is in the sidebar as %s', (name, title) => {
+    expect(markdownTitle(readFileSync(join(docs, 'start', `${name}.md`), 'utf8'))).toBe(title)
+    const config = readFileSync(join(docs, '.vitepress/config.ts'), 'utf8')
+    expect(config).toContain(`{ text: '${title}', link: '/start/${name}' }`)
+  })
+
+  it('has a component page for every Tier 1 item', () => {
+    const ui = join(import.meta.dirname, '../registry/ui')
+    const tier1 = readdirSync(ui).filter((name) => {
+      try {
+        const item = JSON.parse(readFileSync(join(ui, name, 'item.json'), 'utf8')) as {
+          meta?: { tier?: number }
+        }
+        return item.meta?.tier === 1
+      } catch {
+        return false
+      }
+    })
+    expect(tier1.length).toBeGreaterThan(0)
+    const documented = docsItems().map((item) => item.name)
+    for (const name of tier1) expect(documented, name).toContain(name)
   })
 })

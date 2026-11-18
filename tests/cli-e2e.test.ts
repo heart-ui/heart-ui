@@ -224,6 +224,18 @@ async function setUp(expect: ExpectStatic, template: string) {
   return root
 }
 
+// The docs' getting started page, run as written: its `npx heart-ui` commands in order (with --yes,
+// since no one is at the prompt, and --registry for the local build) and its first Vue block as
+// the app's page.
+function gettingStarted() {
+  const page = readFileSync(join(repo, 'apps/docs/start/getting-started.md'), 'utf8')
+  const commands = [...page.matchAll(/^npx heart-ui (.+)$/gm)].map((match) =>
+    (match[1] ?? '').split(' '),
+  )
+  const vue = /```vue\n([\s\S]*?)```/.exec(page)?.[1]
+  return { commands, vue }
+}
+
 // The two apps share only the read-only registry server and the browser, so they run together.
 describe.concurrent('the templates', () => {
   it(
@@ -236,6 +248,50 @@ describe.concurrent('the templates', () => {
       try {
         await renders(expect, `${preview.base}/`, tier1)
       } finally {
+        preview.stop()
+      }
+    },
+    timeout,
+  )
+
+  it(
+    'the getting started page works as written on the Vite template',
+    async ({ expect }) => {
+      const { commands, vue } = gettingStarted()
+      expect(commands.map((args) => args[0])).toEqual(['init', 'add'])
+      expect(vue).toBeDefined()
+      const root = join(work, 'getting-started')
+      cpSync(join(templates, 'vite'), root, { recursive: true })
+      writeFileSync(join(root, '.npmrc'), 'prefer-offline=true\n')
+      await run('pnpm', ['install', '--frozen-lockfile'], root)
+      for (const args of commands) {
+        const extra =
+          args[0] === 'init' ? ['--yes', '--registry', `${registry.base}/r/{name}.json`] : []
+        await run(process.execPath, [cli, ...args, ...extra], root, { XDG_CACHE_HOME: cliCache })
+      }
+      writeFileSync(join(root, 'src/App.vue'), vue ?? '')
+      await run('pnpm', ['exec', 'vite', 'build'], root)
+      const preview = await startPreview(root)
+      const page = await browser.newPage()
+      try {
+        const errors: string[] = []
+        page.on('pageerror', (error) => errors.push(error.message))
+        await page.goto(`${preview.base}/`, { waitUntil: 'networkidle' })
+        const button = page.getByRole('button', { name: 'Save' })
+        expect(await button.count()).toBe(1)
+        const background = await button.evaluate(
+          (element) => getComputedStyle(element).backgroundColor,
+        )
+        const primary = await page.evaluate(() => {
+          const probe = document.createElement('div')
+          probe.className = 'bg-primary'
+          document.body.append(probe)
+          return getComputedStyle(probe).backgroundColor
+        })
+        expect(background).toBe(primary)
+        expect(errors).toEqual([])
+      } finally {
+        await page.close()
         preview.stop()
       }
     },
