@@ -1,10 +1,17 @@
 import { resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import manifest from '../package.json' with { type: 'json' }
-import { CliError } from './errors.ts'
+import { createInit } from './commands/init.ts'
+import { CliError, isControl } from './errors.ts'
 import { isDirectory } from './fs.ts'
 
-export type Io = { cwd: string; stdout: (text: string) => void; stderr: (text: string) => void }
+export type Io = {
+  cwd: string
+  stdout: (text: string) => void
+  stderr: (text: string) => void
+  /** Asks a yes-or-no question; absent when stdin is not a terminal. */
+  confirm?: (question: string) => Promise<boolean>
+}
 
 type OptionSpec = { type: 'string' | 'boolean'; description: string; short?: string }
 
@@ -24,7 +31,7 @@ export type Command = {
 }
 
 /** The commands `heart-ui` runs, by name. */
-export const commands: Record<string, Command> = {}
+export const commands: Record<string, Command> = { init: createInit() }
 
 const globalOptions: Record<string, OptionSpec> = {
   cwd: { type: 'string', description: 'Run in this folder instead of the current one.' },
@@ -37,12 +44,7 @@ const USAGE_ERROR = 2
 // Terminal control characters in echoed input (argv, a registry's JSON, a cloned repo's config)
 // could rewrite the user's terminal.
 function printable(text: string): string {
-  return [...text]
-    .filter((char) => {
-      const code = char.charCodeAt(0)
-      return code > 0x1f && (code < 0x7f || code > 0x9f)
-    })
-    .join('')
+  return [...text].filter((char) => !isControl(char)).join('')
 }
 
 /** Runs the CLI with `argv` (no node or script path) and returns the exit code. */

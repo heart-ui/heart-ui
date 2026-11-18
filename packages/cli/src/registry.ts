@@ -3,7 +3,7 @@ import { mkdir, readFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { isAbsolute, join } from 'node:path'
 import { isSecureUrl, registryName } from './config.ts'
-import { CliError } from './errors.ts'
+import { CliError, isControl } from './errors.ts'
 import { isObject, writeFileAtomic } from './fs.ts'
 
 export type RegistryFile = { path: string; type: string; content: string; target?: string }
@@ -210,9 +210,11 @@ const isString = (value: unknown) => typeof value === 'string'
 // written to (relative, or `~/` for the project root), with no `..`, and never touch git's or the
 // package manager's folders, whose files run code.
 const forbiddenSegments = ['..', '.git', 'node_modules']
+// Terminal control characters in a path would reach the screen and the file system.
+const hasControl = (text: string) => [...text].some(isControl)
 
 function isContainedPath(value: unknown): boolean {
-  if (typeof value !== 'string') return false
+  if (typeof value !== 'string' || hasControl(value)) return false
   const path = value.startsWith('~/') ? value.slice(2) : value
   if (path === '' || /^([/\\]|[A-Za-z]:)/.test(path)) return false
   return !path.split(/[/\\]/).some((segment) => forbiddenSegments.includes(segment))

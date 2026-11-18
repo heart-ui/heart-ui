@@ -3,6 +3,26 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-18 P1-14: calls in `init`, decided by the agent (delegated). (1)
+  registry.md's config example names `heart-ui.css`, the command table
+  `theme.css` and `tokens.css`. Chose: `theme.css` and `tokens.css` side by
+  side under `<@ folder>/assets/css/`, with `css` holding the `theme.css`
+  path. Why: the table is the command's contract, and `theme.css` imports
+  `./tokens.css`. (2) The registry's host is not settled. Chose: one
+  constant, `https://registry.heart-ui.dev/r/{name}.json`, for P1-18 to
+  confirm or change. (3) Where do `theme.css` and `tokens.css` come from?
+  Chose: the CLI depends on `@heart-ui/theme` (its `theme.css` and
+  `generateTheme`), and bundles the preset knob files. Why: the registry
+  build skips `registry/themes`, and the `theme` command needs
+  `generateTheme` anyway. Proposed in the pull request. (4) The build test
+  needs `vite`, `@tailwindcss/vite` and `tailwindcss` as CLI
+  devDependencies, pinned as in the Vite playground. (5) `init` does not
+  add a missing `@` alias; it stops and names the `tsconfig.json` entry.
+  (6) For the publish tasks (P1-18, P1-20): `heart-ui` now depends on
+  `@heart-ui/theme`, which is still `private`. The theme package has to be
+  published first, from an `@heart-ui` npm scope the project owns, or the
+  CLI must bundle it. Otherwise installing the CLI fails, or anyone holding
+  the scope could publish that package (security review S5).
 - 2026-11-18 P1-13: calls in the CLI core, decided by the agent
   (delegated). (1) Where does a namespace's index live? Upstream shadcn
   defines no index URL for a namespace. Chose: leave index fetching to

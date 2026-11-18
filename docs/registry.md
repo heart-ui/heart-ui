@@ -60,7 +60,7 @@ Fields Heart UI adds go under `meta`, which the schema leaves free-form.
 {
   "$schema": "https://<registry-host>/schema/config.json",
   "framework": "nuxt",
-  "css": "app/assets/css/heart-ui.css",
+  "css": "app/assets/css/theme.css",
   "aliases": { "ui": "@/components/ui", "blocks": "@/components/blocks", "layouts": "@/layouts", "lib": "@/lib" },
   "iconSet": "fluent",
   "registries": { "@heart-ui": "https://<registry-host>/r/{name}.json" }
@@ -104,6 +104,13 @@ when stdout is not a TTY.
 
 `update` needs old versions. The registry keeps every published item
 version at `/r/<name>@<version>.json`.
+
+`init` writes `theme.css` and `tokens.css` to `assets/css/` under the
+folder `@` points to (`app/` in Nuxt, `src/` in Vite); `heart-ui.json`
+`css` holds the `theme.css` path. When exactly one CSS file there has
+`@import "tailwindcss";`, that line becomes an import of `theme.css`,
+which imports Tailwind itself. It refuses to run when `heart-ui.json` or a
+file it would write exists, and asks before writing unless `--yes`.
 
 Exit codes: 0 on success, 1 when a command fails (or, for `diff` and
 `audit`, finds something), 2 for a usage mistake (an unknown command or

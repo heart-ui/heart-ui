@@ -1,0 +1,463 @@
+import { spawnSync } from 'node:child_process'
+import { mkdir, readdir, readFile, realpath, rm, rmdir } from 'node:fs/promises'
+import { createRequire } from 'node:module'
+import { dirname, join, relative, sep } from 'node:path'
+import type { Knobs } from '@heart-ui/theme'
+import defaultPreset from '../../../../registry/themes/default.json' with { type: 'json' }
+import { agentsBlock, AGENTS_MARKER } from '../agents.ts'
+import { rewriteImports } from '../aliases.ts'
+import type { Command, Io } from '../cli.ts'
+import { CONFIG_FILE, formatConfig, type Config } from '../config.ts'
+import {
+  detectProject,
+  findVersion,
+  parseVersion,
+  type PackageManager,
+  type Project,
+} from '../detect.ts'
+import { CliError, quoted } from '../errors.ts'
+import { editFile, exists, isFile, isObject, readJsonFile, writeNewFile } from '../fs.ts'
+import { createRegistryClient, type RegistryItem } from '../registry.ts'
+
+export type Installer = (manager: PackageManager, deps: string[], cwd: string) => Promise<void>
+
+export type InitDeps = {
+  fetch?: typeof globalThis.fetch
+  install?: Installer
+  nodeVersion?: string
+  cacheDir?: string
+  registryUrl?: string
+}
+
+/** The `@heart-ui` item URL until the registry's host is settled (docs/questions.md). */
+export const DEFAULT_REGISTRY_URL = 'https://registry.heart-ui.dev/r/{name}.json'
+
+const presets: Record<string, Knobs> = { default: defaultPreset as Knobs }
+const helpers = ['utils', 'icon']
+const defaultAliases: Config['aliases'] = {
+  ui: '@/components/ui',
+  blocks: '@/components/blocks',
+  layouts: '@/layouts',
+  lib: '@/lib',
+}
+const tailwindImport = /^([ \t]*)@import\s+(["'])tailwindcss\2[ \t]*;?[ \t]*$/m
+// An npm registry package pinned to an exact version, as registry items pin them. Nothing here
+// has a meaning to a shell (including cmd.exe on Windows) or starts with `-` like a flag.
+const packageSpec =
+  /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*@\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/
+
+/** The package manager's command that adds `deps`, pinned exactly. */
+export function installCommand(
+  manager: PackageManager,
+  deps: string[],
+  workspaceRoot = false,
+): { command: string; args: string[] } {
+  const verb = manager === 'npm' ? 'install' : 'add'
+  const exact = manager === 'npm' || manager === 'pnpm' ? '--save-exact' : '--exact'
+  // pnpm refuses to add to a workspace root unless told it is meant.
+  const root = manager === 'pnpm' && workspaceRoot ? ['-w'] : []
+  return { command: manager, args: [verb, ...root, exact, ...deps] }
+}
+
+const isPnpmWorkspaceRoot = (dir: string) => isFile(join(dir, 'pnpm-workspace.yaml'))
+
+const spawnInstaller: Installer = async (manager, deps, cwd) => {
+  const { command, args } = installCommand(manager, deps, isPnpmWorkspaceRoot(cwd))
+  // Windows runs package managers through .cmd shims, which Node starts only with a shell. The
+  // arguments are safe there: packageSpec admits no character cmd.exe interprets.
+  const result = spawnSync(command, args, {
+    cwd,
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+  })
+  if (result.error) throw new CliError(`${command} could not start`)
+  if (result.status !== 0) throw new CliError(`${command} exited with ${result.status}`)
+}
+
+/** The `init` command; `deps` replaces the network, the installer and the Node version in tests. */
+export function createInit(deps: InitDeps = {}): Command {
+  return {
+    summary: 'Set up Heart UI in a Nuxt or Vite project.',
+    usage: 'heart-ui init [--theme <preset>] [--yes]',
+    options: {
+      theme: { type: 'string', description: `Theme preset: ${Object.keys(presets).join(', ')}.` },
+      yes: { type: 'boolean', description: 'Write without asking.' },
+    },
+    run: (ctx) => init(ctx.cwd, ctx.options, ctx.io, deps),
+  }
+}
+
+type Write = { path: string; content: string }
+type Edit = Write & { original: string }
+
+async function init(
+  cwd: string,
+  options: Record<string, string | boolean>,
+  io: Io,
+  deps: InitDeps,
+): Promise<number> {
+  if (options.yes !== true && !io.confirm) {
+    throw new CliError('stdin is not a terminal, so init cannot ask. Run heart-ui init --yes.', 2)
+  }
+  const project = await detectProject(cwd)
+  const { root } = project
+  const show = (path: string) => relative(root, path).split(sep).join('/')
+  const configPath = join(root, CONFIG_FILE)
+  if (exists(configPath)) {
+    throw new CliError(`${CONFIG_FILE} already exists in ${root}; Heart UI is already set up here.`)
+  }
+  await checkVersions(project, deps.nodeVersion ?? process.versions.node)
+
+  const themeName = typeof options.theme === 'string' ? options.theme : 'default'
+  const knobs = Object.hasOwn(presets, themeName) ? presets[themeName] : undefined
+  if (!knobs) {
+    throw new CliError(
+      `No theme preset "${themeName}". Presets: ${Object.keys(presets).join(', ')}.`,
+    )
+  }
+
+  const src = project.aliases['@']
+  if (src === undefined) {
+    throw new CliError(
+      'The import alias "@" points nowhere. Add "@/*": ["./src/*"] to compilerOptions.paths in tsconfig.json, and the same alias to your Vite config.',
+    )
+  }
+  const aliasDir = (alias: string) => join(src, alias.replace(/^@\/?/, ''))
+  const cssDir = join(src, 'assets', 'css')
+  const themePath = join(cssDir, 'theme.css')
+  const config: Config = {
+    framework: project.framework === 'nuxt' ? 'nuxt' : 'vite',
+    css: show(themePath),
+    aliases: defaultAliases,
+    iconSet: 'fluent',
+    registries: { '@heart-ui': deps.registryUrl ?? DEFAULT_REGISTRY_URL },
+  }
+
+  const client = createRegistryClient({
+    registries: config.registries,
+    cacheDir: deps.cacheDir,
+    fetch: deps.fetch,
+    onWarn: (message) => io.stderr(`heart-ui: ${message}\n`),
+  })
+  const items = await Promise.all(helpers.map((name) => client.fetchItem(name)))
+  for (const item of items) {
+    for (const dep of item.dependencies ?? []) {
+      if (!packageSpec.test(dep)) {
+        throw new CliError(
+          `@heart-ui lists ${quoted(dep)} as a dependency of ${item.name}, which is not an npm package.`,
+        )
+      }
+    }
+  }
+
+  // Loaded here, not at startup, so other commands don't pay for the colour library.
+  const { generateTheme } = await import('@heart-ui/theme')
+  const theme = await readFile(
+    createRequire(import.meta.url).resolve('@heart-ui/theme/theme.css'),
+    'utf8',
+  )
+  const creates: Write[] = [
+    { path: themePath, content: theme },
+    { path: join(cssDir, 'tokens.css'), content: generateTheme(knobs) },
+  ]
+  for (const item of items) {
+    for (const file of item.files) {
+      const prefix = 'registry/lib/'
+      if (!file.path.startsWith(prefix) || file.path === prefix) {
+        throw new CliError(
+          `@heart-ui sent ${item.name} with a file outside registry/lib/: ${quoted(file.path)}.`,
+        )
+      }
+      creates.push({
+        path: join(aliasDir(config.aliases.lib), file.path.slice(prefix.length)),
+        content: rewriteImports(file.content, config.aliases),
+      })
+    }
+  }
+  for (const { path } of creates) {
+    if (exists(path)) {
+      throw new CliError(`${show(path)} already exists. Move it away and run heart-ui init again.`)
+    }
+  }
+
+  const agents = await agentFiles(root, config, aliasDir, show)
+  for (const { path } of agents.edits) await refuseOutside(root, path, show)
+  creates.push(...agents.creates)
+  const entry = await cssEntry(src, themePath)
+  const edits = [...agents.edits, ...(entry ? [entry] : [])]
+  const installs = await missingDependencies(root, items)
+
+  const plan = [
+    ...creates.map(({ path }) => show(path)),
+    ...edits.map(({ path }) => show(path)),
+    CONFIG_FILE,
+  ]
+  const installLine = installs.length ? `and install:\n  ${installs.join('\n  ')}\n` : ''
+  if (options.yes !== true) {
+    io.stdout(
+      `heart-ui init will write or edit:\n${plan.map((path) => `  ${path}\n`).join('')}${installLine}`,
+    )
+    if (!(await io.confirm?.('Continue?'))) throw new CliError('Cancelled; nothing was written.')
+  }
+
+  // heart-ui.json goes last: until it exists, init can run again after a failure.
+  await writeAll(
+    creates,
+    edits,
+    { path: configPath, content: formatConfig(config, configPath) },
+    show,
+  )
+
+  if (installs.length) {
+    const manager = project.packageManager
+    try {
+      await (deps.install ?? spawnInstaller)(manager, installs, root)
+    } catch (error) {
+      const { command, args } = installCommand(manager, installs, isPnpmWorkspaceRoot(root))
+      const reason = error instanceof CliError ? error.message : 'see the output above'
+      throw new CliError(
+        `Installing dependencies failed (${reason}). Run this in ${root}: ${command} ${args.join(' ')}`,
+      )
+    }
+  }
+
+  io.stdout(`Wrote:\n${plan.map((path) => `  ${path}\n`).join('')}`)
+  if (installs.length) io.stdout(`Installed:\n  ${installs.join('\n  ')}\n`)
+  if (!entry) {
+    io.stdout(
+      `Import ${show(themePath)} from your app's CSS entry in place of tailwindcss (it imports Tailwind itself).\n`,
+    )
+  }
+  return 0
+}
+
+// Creates new files without replacing anything, then edits, then heart-ui.json: until it exists,
+// init can run again. On any failure every step is undone (created files and folders removed,
+// edits restored), and whatever could not be undone is named.
+async function writeAll(
+  creates: Write[],
+  edits: Edit[],
+  config: Write,
+  show: (path: string) => string,
+): Promise<void> {
+  const created: string[] = []
+  const createdDirs: string[] = []
+  const edited: Edit[] = []
+  let failure = ''
+  try {
+    for (const { path, content } of creates) {
+      failure = `Could not write ${show(path)}`
+      const first = await mkdir(dirname(path), { recursive: true })
+      if (first) createdDirs.push(...newDirs(first, dirname(path)))
+      await writeNewFile(path, content)
+      created.push(path)
+    }
+    for (const edit of edits) {
+      failure = `Could not write ${show(edit.path)}`
+      // The prompt may have waited a long time; never replace a change made meanwhile.
+      if ((await readFile(edit.path, 'utf8')) !== edit.original) {
+        failure = `${show(edit.path)} changed while init was waiting`
+        throw new Error(failure)
+      }
+      await editFile(edit.path, edit.content)
+      edited.push(edit)
+    }
+    failure = `Could not write ${show(config.path)}`
+    await writeNewFile(config.path, config.content)
+  } catch {
+    const left: string[] = []
+    for (const edit of edited.reverse()) {
+      await editFile(edit.path, edit.original).catch(() => left.push(show(edit.path)))
+    }
+    for (const path of created.reverse()) {
+      await rm(path, { force: true }).catch(() => left.push(show(path)))
+    }
+    for (const dir of createdDirs.reverse()) await rmdir(dir).catch(() => {})
+    if (left.length) {
+      throw new CliError(
+        `${failure}, and could not undo ${left.join(', ')}. Restore them and run heart-ui init again.`,
+      )
+    }
+    throw new CliError(`${failure}; nothing was set up.`)
+  }
+}
+
+// The folders from `first` (the outermost one mkdir created) down to `last`, outermost first.
+function newDirs(first: string, last: string): string[] {
+  const dirs: string[] = []
+  for (let dir = last; ; dir = dirname(dir)) {
+    dirs.unshift(dir)
+    if (dir === first || dirname(dir) === dir) return dirs
+  }
+}
+
+// A cloned repo's AGENTS.md may link anywhere, such as ~/.bashrc; init edits only files inside it.
+async function refuseOutside(root: string, path: string, show: (path: string) => string) {
+  const [target, base] = await Promise.all([realpath(path), realpath(root)])
+  const inside = relative(base, target)
+  if (inside.startsWith('..') || inside === '' || /^[/\\]|^[A-Za-z]:/.test(inside)) {
+    throw new CliError(
+      `${show(path)} links outside the project, so init will not edit it. Replace the link with a file and run heart-ui init again.`,
+    )
+  }
+}
+
+async function checkVersions(project: Project, nodeVersion: string): Promise<void> {
+  const nodeMajor = Number(nodeVersion.split('.')[0])
+  if (!(nodeMajor >= 22)) {
+    throw new CliError(`Node ${nodeVersion} found; Heart UI needs Node 22 or later.`)
+  }
+  if (project.framework === null) {
+    throw new CliError(`No Nuxt or Vite project in ${project.root}; Heart UI works with either.`)
+  }
+  type Need = readonly [string, string, number, number, 'required' | 'optional']
+  const needs: Need[] = [
+    // Nuxt brings its own Vue, so Vue is only required in a Vite project.
+    ['vue', 'Vue', 3, 5, project.framework === 'vite' ? 'required' : 'optional'],
+    ...(project.framework === 'nuxt' ? [['nuxt', 'Nuxt', 4, 0, 'required'] as const] : []),
+    ['tailwindcss', 'Tailwind CSS', 4, 0, 'required'],
+  ]
+  for (const [pkg, label, major, minor, mode] of needs) {
+    const wanted = minor ? `${major}.${minor}` : `${major}`
+    const found = await findVersion(project.root, pkg)
+    if (found === null) {
+      if (mode === 'optional') continue
+      const hint =
+        pkg === 'tailwindcss' ? ' Set it up first: https://tailwindcss.com/docs/installation' : ''
+      throw new CliError(`${label} not found; Heart UI needs ${label} ${wanted} or later.${hint}`)
+    }
+    // A range like `latest` names no version; the package manager's install decides.
+    if (found === 'unknown') continue
+    // `^3.4` or `>=3.4` lets the install pick 3.5 or later, so only the major has to fit.
+    const tooOld = found.open
+      ? found.major < major
+      : found.major < major || (found.major === major && found.minor < minor)
+    if (tooOld) {
+      throw new CliError(
+        `${label} ${found.major}.${found.minor} found; Heart UI needs ${label} ${wanted} or later.`,
+      )
+    }
+  }
+}
+
+// AGENTS.md gets the Heart UI block unless it holds one; CLAUDE.md, when present and not the same
+// file, a pointer to it. Edits go to a link's target, so a CLAUDE.md -> AGENTS.md link survives.
+async function agentFiles(
+  root: string,
+  config: Config,
+  aliasDir: (alias: string) => string,
+  show: (path: string) => string,
+): Promise<{ creates: Write[]; edits: Edit[] }> {
+  const creates: Write[] = []
+  const edits: Edit[] = []
+  const block = agentsBlock(config, (alias) => show(aliasDir(alias)))
+  const agentsPath = join(root, 'AGENTS.md')
+  const agents = await readText(agentsPath)
+  if (agents === undefined) {
+    if (exists(agentsPath)) {
+      throw new CliError(
+        'AGENTS.md is not a readable file. Move it away and run heart-ui init again.',
+      )
+    }
+    creates.push({ path: agentsPath, content: block })
+  } else if (!agents.includes(AGENTS_MARKER)) {
+    edits.push({ path: agentsPath, content: `${withNewline(agents)}\n${block}`, original: agents })
+  }
+  const claudePath = join(root, 'CLAUDE.md')
+  const claude = await readText(claudePath)
+  const sameFile =
+    claude !== undefined &&
+    agents !== undefined &&
+    (await realpath(claudePath)) === (await realpath(agentsPath))
+  if (claude !== undefined && !sameFile && !claude.includes('AGENTS.md')) {
+    edits.push({
+      path: claudePath,
+      content: `${withNewline(claude)}\nFor UI work, follow the Heart UI rules in AGENTS.md.\n`,
+      original: claude,
+    })
+  }
+  return { creates, edits }
+}
+
+const withNewline = (text: string) => (text.endsWith('\n') || text === '' ? text : `${text}\n`)
+
+async function readText(path: string): Promise<string | undefined> {
+  if (!isFile(path)) return undefined
+  try {
+    return await readFile(path, 'utf8')
+  } catch {
+    throw new CliError(`Could not read ${path}.`)
+  }
+}
+
+// The one CSS file under the source folder that imports Tailwind, rewritten to import the theme
+// (which imports Tailwind itself). None or several: the user decides, so nothing is edited.
+async function cssEntry(src: string, themePath: string): Promise<Edit | undefined> {
+  const found: Edit[] = []
+  for (const path of await cssFiles(src)) {
+    const text = await readText(path)
+    // Block comments are blanked out, keeping offsets, so a commented-out import never counts.
+    const masked = text?.replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\r\n]/g, ' '))
+    const match = masked === undefined ? null : tailwindImport.exec(masked)
+    if (text === undefined || !match) continue
+    let target = relative(dirname(path), themePath).split(sep).join('/')
+    if (!target.startsWith('.')) target = `./${target}`
+    found.push({
+      path,
+      // A function, so `$` in a folder name is not read as a replacement pattern.
+      content: `${text.slice(0, match.index)}${match[1]}@import ${match[2]}${target}${match[2]};${text.slice(match.index + match[0].length)}`,
+      original: text,
+    })
+  }
+  return found.length === 1 ? found[0] : undefined
+}
+
+async function cssFiles(dir: string): Promise<string[]> {
+  let entries
+  try {
+    entries = await readdir(dir, { withFileTypes: true })
+  } catch {
+    return []
+  }
+  const files: string[] = []
+  for (const entry of entries) {
+    if (entry.name.startsWith('.') || entry.name === 'node_modules') continue
+    const path = join(dir, entry.name)
+    if (entry.isDirectory()) files.push(...(await cssFiles(path)))
+    else if (entry.isFile() && entry.name.endsWith('.css')) files.push(path)
+  }
+  return files
+}
+
+const splitSpec = (spec: string) => {
+  const at = spec.indexOf('@', 1)
+  return { name: spec.slice(0, at), version: spec.slice(at + 1) }
+}
+
+// A helper's dependency is skipped only when the project declares it at the same major; another
+// major (tailwind-merge 2 for a helper built on 3) would leave the helper broken.
+async function missingDependencies(root: string, items: RegistryItem[]): Promise<string[]> {
+  const manifest = await readJsonFile(join(root, 'package.json'))
+  const declared = new Map<string, unknown>()
+  if (isObject(manifest)) {
+    for (const field of ['devDependencies', 'dependencies']) {
+      const deps = manifest[field]
+      if (isObject(deps))
+        for (const [name, range] of Object.entries(deps)) declared.set(name, range)
+    }
+  }
+  const missing: string[] = []
+  const seen = new Set<string>()
+  for (const dep of items.flatMap((item) => item.dependencies ?? [])) {
+    const { name, version } = splitSpec(dep)
+    if (seen.has(name)) continue
+    seen.add(name)
+    if (declared.has(name)) {
+      // A range that names no version (`catalog:`, `workspace:*`, `latest`) is the user's to keep.
+      const range = parseVersion(declared.get(name))
+      if (range === null || range.major === parseVersion(version)?.major) continue
+    }
+    missing.push(dep)
+  }
+  return missing
+}

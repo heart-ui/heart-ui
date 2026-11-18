@@ -19,5 +19,6 @@
     "packages/cli/src/**/*.ts",
     "packages/cli/test/**/*.ts",
     "scripts/**/*.ts"
-  ]
+  ],
+  "exclude": ["packages/cli/test/fixtures/**"]
 }

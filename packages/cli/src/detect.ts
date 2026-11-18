@@ -43,10 +43,7 @@ export async function detectProject(cwd: string): Promise<Project> {
     root,
     framework,
     packageManager: managerFromField(manifest.packageManager) ?? managerFromLockFile(dirs) ?? 'npm',
-    tailwindMajor:
-      (await installedMajor(root)) ??
-      rangeMajor(deps.tailwindcss) ??
-      (await firstInstalledMajor(dirs.slice(1))),
+    tailwindMajor: await tailwindMajor(root),
     aliases: framework === 'nuxt' ? nuxtAliases(root) : await tsconfigAliases(root),
   }
 }
@@ -88,28 +85,61 @@ function managerFromLockFile(dirs: string[]): PackageManager | undefined {
   return undefined
 }
 
-async function installedMajor(dir: string): Promise<number | null> {
-  const path = join(dir, 'node_modules', 'tailwindcss', 'package.json')
+async function tailwindMajor(root: string): Promise<number | null> {
+  const version = await findVersion(root, 'tailwindcss')
+  return version === null || version === 'unknown' ? null : version.major
+}
+
+/** `open` when a declared range lets the install pick a later minor (`^1.2`, `>=1.2`). */
+export type Version = { major: number; minor: number; open?: boolean }
+
+/**
+ * The version of `name` in the project at `root`: installed in its own node_modules, else the
+ * lowest the declared range allows, else hoisted in its workspace. `'unknown'` when declared with a
+ * range that names no version (`latest`) and not installed; `null` when absent.
+ */
+export async function findVersion(root: string, name: string): Promise<Version | 'unknown' | null> {
+  const installed = await installedVersion(root, name)
+  if (installed) return installed
+  const manifest = await readJsonFile(join(root, 'package.json')).catch(() => undefined)
+  const declared = isObject(manifest) ? declaredRange(manifest, name) : undefined
+  const fromRange = parseVersion(declared)
+  if (fromRange) return fromRange
+  for (const dir of (await projectDirs(root)).slice(1)) {
+    const hoisted = await installedVersion(dir, name)
+    if (hoisted) return hoisted
+  }
+  return declared === undefined ? null : 'unknown'
+}
+
+function declaredRange(manifest: Record<string, unknown>, name: string): unknown {
+  for (const field of ['dependencies', 'devDependencies']) {
+    const deps = manifest[field]
+    if (isObject(deps) && name in deps) return deps[name]
+  }
+  return undefined
+}
+
+async function installedVersion(dir: string, name: string): Promise<Version | null> {
+  const path = join(dir, 'node_modules', name, 'package.json')
   if (!isFile(path)) return null
   // A broken install says nothing reliable; fall back to the declared range.
   const manifest = await readJsonFile(path).catch(() => undefined)
-  return isObject(manifest) ? rangeMajor(manifest.version) : null
+  return isObject(manifest) ? parseVersion(manifest.version) : null
 }
 
-// A workspace root's hoisted install, for a project that declares no Tailwind itself.
-async function firstInstalledMajor(dirs: string[]): Promise<number | null> {
-  for (const dir of dirs) {
-    const major = await installedMajor(dir)
-    if (major !== null) return major
-  }
-  return null
-}
-
-// The lowest major a semver range allows, for the ranges people write (`^4.1.0`, `~3.4`, `>=4`).
-function rangeMajor(range: unknown): number | null {
+/**
+ * The lowest version a semver range allows, for the ranges people write (`^4.1.0`, `~3.4`, `>=4`,
+ * `3.x`). `open` when the install may pick a later minor: `^` and `>=`, or no fixed minor (`3`).
+ */
+export function parseVersion(range: unknown): Version | null {
   if (typeof range !== 'string') return null
-  const match = /^(?:\^|~|>=|=)?v?(\d+)(?:[.-]|$)/.exec(range.trim())
-  return match ? Number(match[1]) : null
+  const match = /^\s*(\^|~|>=|=)?\s*v?(\d+)(?:\.(\d+|x|X|\*))?(?=$|[.\-\s])/.exec(range)
+  if (!match) return null
+  const [, operator, major, minor] = match
+  const fixedMinor = minor !== undefined && /^\d+$/.test(minor)
+  const version: Version = { major: Number(major), minor: fixedMinor ? Number(minor) : 0 }
+  return operator === '^' || operator === '>=' || !fixedMinor ? { ...version, open: true } : version
 }
 
 // Nuxt 4's default aliases; `app/` is its source folder, the root in a Nuxt 3 layout.

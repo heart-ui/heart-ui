@@ -1,7 +1,7 @@
 ---
 type: gotcha
 title: CLI gotchas
-description: parseArgs value swallowing, fetch redirects and credentials, tsconfig paths semantics.
+description: parseArgs, fetch redirects, tsconfig paths, symlink-safe edits, write order, test caches.
 ---
 
 # CLI gotchas
@@ -11,3 +11,7 @@ description: parseArgs value swallowing, fetch redirects and credentials, tsconf
 - **`fetch` refuses a URL with `user:pass@`.** It throws a `TypeError`, the same type as a network failure, so it looks like "check your connection". Refuse credentials when the URL is configured, not when it's fetched.
 - **tsconfig `paths` follows tsc, not a key merge.** A child's `paths` replaces the inherited one whole. Inherited patterns resolve against the final `baseUrl` (else the folder of the config that set `paths`), and `${configDir}` is the folder of the config being read. Only `prefix/*` patterns name a folder.
 - **`.git` can be a file.** In a worktree or submodule it is a file pointing to the git dir, so a "repo root" check must accept both.
+- **`rename` over a path replaces a symlink; `realpath` and write beside the target to keep it.** Then check the target is inside the project, or a cloned repo's `AGENTS.md -> ~/.bashrc` gets edited. `packages/cli/src/fs.ts` has `editFile` (keeps the link and mode) and `writeNewFile` (`link` refuses an existing path, unlike `rename`).
+- **A file that marks "set up" goes last.** `init` writes `heart-ui.json` after every other file and edit, and rolls back on failure. Written first, a failed run blocks every re-run.
+- **Prettier rewrites fixture CSS and JSON.** `@import "tailwindcss";` becomes single-quoted, so assert against the fixture as formatted.
+- **Give each test its own registry cache.** A shared cache lets one test's item stand in for another's when the client falls back to the cache on an invalid answer.

@@ -28,12 +28,18 @@ export async function readConfig(cwd: string): Promise<Config | null> {
   return value === undefined ? null : parseConfig(value, path)
 }
 
+/** Validates `config` and returns the text of its `heart-ui.json`. */
+export function formatConfig(config: Config, path = CONFIG_FILE): string {
+  parseConfig(config, path)
+  return `${JSON.stringify(config, null, 2)}\n`
+}
+
 /** Validates `config` and writes it to `heart-ui.json` in `cwd`. */
 export async function writeConfig(cwd: string, config: Config): Promise<void> {
   const path = join(cwd, CONFIG_FILE)
-  parseConfig(config, path)
+  const text = formatConfig(config, path)
   try {
-    await writeFileAtomic(path, `${JSON.stringify(config, null, 2)}\n`)
+    await writeFileAtomic(path, text)
   } catch {
     throw new CliError(`Could not write ${path}.`)
   }
