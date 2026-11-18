@@ -11,7 +11,7 @@ import { detectProject, findVersion, type Project } from '../detect.ts'
 import { CliError, quoted } from '../errors.ts'
 import { exists, isFile } from '../fs.ts'
 import { checkSpecs, install, missingDependencies, type Installer } from '../install.ts'
-import { createRegistryClient } from '../registry.ts'
+import { createRegistryClient, DEFAULT_REGISTRY_URL } from '../registry.ts'
 import { refuseOutside, writeSteps, type Step } from '../write.ts'
 
 export type InitDeps = {
@@ -21,9 +21,6 @@ export type InitDeps = {
   cacheDir?: string
   registryUrl?: string
 }
-
-/** The `@heart-ui` item URL until the registry's host is settled (docs/questions.md). */
-export const DEFAULT_REGISTRY_URL = 'https://registry.heart-ui.dev/r/{name}.json'
 
 const presets: Record<string, Knobs> = { default: defaultPreset as Knobs }
 const helpers = ['utils', 'icon']

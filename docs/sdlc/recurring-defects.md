@@ -11,3 +11,4 @@ One line per defect: what it looks like, then the severity.
 - A setup step that writes its "already set up" marker before the rest, so a failed run blocks every re-run: high.
 - Deciding whether the user changed a copied file by comparing it with the latest upstream content instead of the hash recorded at install: high.
 - A step promised to leave nothing behind ("a failed add leaves files and the lock as they were") whose later step (an install) runs outside the rollback: high.
+- Untrusted text (a registry's index, item fields) printed to the terminal with only some fields cleaned of control characters: high.

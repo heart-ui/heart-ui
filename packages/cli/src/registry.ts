@@ -20,6 +20,17 @@ export type RegistryItem = {
   meta?: Record<string, unknown>
 }
 
+/** One entry of a registry's index: an item without its file contents. */
+export type IndexItem = {
+  name: string
+  type: string
+  title?: string
+  description?: string
+  categories?: string[]
+  [field: string]: unknown
+}
+export type RegistryIndex = { items: IndexItem[] }
+
 export type RegistryClientOptions = {
   /** Registry name to item URL template, from `heart-ui.json`. */
   registries: Record<string, string>
@@ -29,6 +40,9 @@ export type RegistryClientOptions = {
 }
 
 const DEFAULT_REGISTRY = '@heart-ui'
+
+/** The `@heart-ui` item URL until the registry's host is settled (docs/questions.md). */
+export const DEFAULT_REGISTRY_URL = 'https://registry.heart-ui.dev/r/{name}.json'
 const TIMEOUT_MS = 30_000
 const MAX_BYTES = 5 * 1024 * 1024
 const MAX_REDIRECTS = 5
@@ -79,7 +93,8 @@ async function readBody(response: Response): Promise<string> {
 }
 
 /**
- * Fetches items by name (`button`, `@acme/data-grid`), optionally pinned to a version. A pinned
+ * Fetches items by name (`button`, `@acme/data-grid`), optionally pinned to a version, and the
+ * registry's index, which follows the unpinned rule. A pinned
  * item never changes, so it comes from the cache when there; an unpinned one is always fetched and
  * falls back to the cache only when the registry cannot give a usable answer.
  */
@@ -91,53 +106,55 @@ export function createRegistryClient(options: RegistryClientOptions) {
     onWarn = () => {},
   } = options
 
-  async function readCache(file: string, name: string): Promise<RegistryItem | undefined> {
+  // What one fetch is about, worded for its messages.
+  type Subject<T> = {
+    scope: string
+    url: string
+    check: (value: unknown) => value is T
+    // `"button"` or `its index`, after "for".
+    about: string
+    // The cache, named in warnings: `the cached copy` or `the cached index`.
+    cached: string
+    // The same, where the warning does not name the subject yet: `the cached copy of "button"`.
+    cachedOf: string
+    // `an invalid item for "button"` or `an invalid index`.
+    invalid: string
+    notFound: string
+  }
+
+  async function readCache<T>(file: string, check: (value: unknown) => value is T) {
     try {
-      const item: unknown = JSON.parse(await readFile(file, 'utf8'))
-      return isItem(item, name) ? item : undefined
+      const value: unknown = JSON.parse(await readFile(file, 'utf8'))
+      return check(value) ? value : undefined
     } catch {
       return undefined
     }
   }
 
-  async function writeCache(file: string, item: RegistryItem): Promise<void> {
+  async function writeCache(file: string, value: unknown): Promise<void> {
     try {
       await mkdir(cacheDir, { recursive: true })
-      await writeFileAtomic(file, JSON.stringify(item))
+      await writeFileAtomic(file, JSON.stringify(value))
     } catch {
       onWarn(`Could not write the cache in ${cacheDir}.`)
     }
   }
 
-  async function fetchItem(ref: string, pinned?: string): Promise<RegistryItem> {
-    const scoped = /^(@[^/]+)\/(.*)$/.exec(ref)
-    const scope = scoped?.[1] ?? DEFAULT_REGISTRY
-    const name = scoped ? (scoped[2] ?? '') : ref
-    if ((scoped && !registryName.test(scope)) || !itemName.test(name)) {
-      throw new CliError(`"${ref}" is not a valid item name.`)
-    }
-    if (pinned !== undefined && !version.test(pinned)) {
-      throw new CliError(`"${pinned}" is not a valid version.`)
-    }
-    const template = Object.hasOwn(registries, scope) ? registries[scope] : undefined
-    if (template === undefined) {
-      throw new CliError(`Unknown registry "${scope}". Add it under "registries" in heart-ui.json.`)
-    }
+  const cacheFileFor = (url: string) =>
+    join(cacheDir, `${createHash('sha256').update(url).digest('hex')}.json`)
 
-    const url = template.replaceAll('{name}', pinned ? `${name}@${pinned}` : name)
-    const cacheFile = join(cacheDir, `${createHash('sha256').update(url).digest('hex')}.json`)
-    if (pinned) {
-      const cached = await readCache(cacheFile, name)
-      if (cached) return cached
-    }
-
+  // Fetches and checks one JSON document, caching it; the cached copy stands in, with a warning,
+  // only when the registry gives no usable answer.
+  async function getJson<T>(subject: Subject<T>): Promise<T> {
+    const { scope, url, check } = subject
+    const cacheFile = cacheFileFor(url)
     const fallback = async (error: string, warning: string) => {
-      const cached = await readCache(cacheFile, name)
-      if (!cached) throw new CliError(error)
+      const cached = await readCache(cacheFile, check)
+      if (cached === undefined) throw new CliError(error)
       onWarn(warning)
       return cached
     }
-    const invalid = `${scope} sent an invalid item for "${name}"`
+    const invalid = `${scope} sent ${subject.invalid}`
 
     // Redirects are followed by hand so that every hop, not only the last, must be https.
     const request = async () => {
@@ -164,40 +181,110 @@ export function createRegistryClient(options: RegistryClientOptions) {
       text = await readBody(response)
     } catch (error) {
       if (error instanceof TooLarge) {
-        const tooLarge = `${scope} sent more than 5 MB for "${name}"`
-        return fallback(`${tooLarge}.`, `${tooLarge}; using the cached copy.`)
+        const tooLarge = `${scope} sent more than 5 MB for ${subject.about}`
+        return fallback(`${tooLarge}.`, `${tooLarge}; using ${subject.cached}.`)
       }
       if (!isNetworkError(error)) throw error
       return fallback(
         `Could not reach ${scope} (${shown(url)}). Check your connection.`,
-        `Could not reach ${scope}; using the cached copy of "${name}".`,
+        `Could not reach ${scope}; using ${subject.cachedOf}.`,
       )
     }
     const { status } = response
-    if (status === 404) throw new CliError(`Item "${name}" not found in ${scope} (${shown(url)}).`)
+    if (status === 404) throw new CliError(subject.notFound)
     if (status >= 500) {
       return fallback(
         `${scope} answered ${status} for ${shown(url)}.`,
-        `${scope} answered ${status}; using the cached copy of "${name}".`,
+        `${scope} answered ${status}; using ${subject.cachedOf}.`,
       )
     }
     if (status < 200 || status > 299) {
       throw new CliError(`${scope} answered ${status} for ${shown(url)}.`)
     }
 
-    let item: unknown
+    let value: unknown
     try {
-      item = JSON.parse(text)
+      value = JSON.parse(text)
     } catch {
-      item = undefined
+      value = undefined
     }
     // A captive portal answers 200 with its own page: as unusable as no answer.
-    if (!isItem(item, name)) return fallback(`${invalid}.`, `${invalid}; using the cached copy.`)
-    await writeCache(cacheFile, item)
-    return item
+    if (!check(value)) return fallback(`${invalid}.`, `${invalid}; using ${subject.cached}.`)
+    await writeCache(cacheFile, value)
+    return value
   }
 
-  return { fetchItem }
+  const templateFor = (scope: string) => {
+    const template = Object.hasOwn(registries, scope) ? registries[scope] : undefined
+    if (template === undefined) {
+      throw new CliError(`Unknown registry "${scope}". Add it under "registries" in heart-ui.json.`)
+    }
+    return template
+  }
+
+  async function fetchItem(ref: string, pinned?: string): Promise<RegistryItem> {
+    const scoped = /^(@[^/]+)\/(.*)$/.exec(ref)
+    const scope = scoped?.[1] ?? DEFAULT_REGISTRY
+    const name = scoped ? (scoped[2] ?? '') : ref
+    if ((scoped && !registryName.test(scope)) || !itemName.test(name)) {
+      throw new CliError(`"${ref}" is not a valid item name.`)
+    }
+    if (pinned !== undefined && !version.test(pinned)) {
+      throw new CliError(`"${pinned}" is not a valid version.`)
+    }
+    const url = templateFor(scope).replaceAll('{name}', pinned ? `${name}@${pinned}` : name)
+    const check = (value: unknown): value is RegistryItem => isItem(value, name)
+    if (pinned) {
+      const cached = await readCache(cacheFileFor(url), check)
+      if (cached) return cached
+    }
+    return getJson({
+      scope,
+      url,
+      check,
+      about: `"${name}"`,
+      cached: 'the cached copy',
+      cachedOf: `the cached copy of "${name}"`,
+      invalid: `an invalid item for "${name}"`,
+      notFound: `Item "${name}" not found in ${scope} (${shown(url)}).`,
+    })
+  }
+
+  /**
+   * The default registry's index: `registry.json` beside the `r/` folder that holds the items
+   * (docs/registry.md, Hosting), or beside the items when they sit in another folder.
+   */
+  async function fetchIndex(): Promise<RegistryIndex> {
+    const scope = DEFAULT_REGISTRY
+    const template = templateFor(scope)
+    const marked = new URL(template.replaceAll('{name}', 'heart-ui-item-name'))
+    const file = marked.pathname.slice(marked.pathname.lastIndexOf('/') + 1)
+    if (!file.includes('heart-ui-item-name') || marked.search.includes('heart-ui-item-name')) {
+      throw new CliError(
+        `The ${scope} template names items outside its file name, so list cannot find its index.`,
+      )
+    }
+    const folder = new URL('.', marked)
+    const index = new URL(
+      'registry.json',
+      folder.pathname.endsWith('/r/') ? new URL('..', folder) : folder,
+    )
+    // A private registry's token travels in the query; relative resolution would drop it.
+    index.search = marked.search
+    const url = index.href
+    return getJson({
+      scope,
+      url,
+      check: isIndex,
+      about: 'its index',
+      cached: 'the cached index',
+      cachedOf: 'the cached index',
+      invalid: 'an invalid index',
+      notFound: `${scope} has no index at ${shown(url)}.`,
+    }).then((index) => ({ items: index.items.filter(isIndexItem) }))
+  }
+
+  return { fetchItem, fetchIndex }
 }
 
 const isStringArray = (value: unknown) =>
@@ -253,5 +340,21 @@ function isItem(value: unknown, name: string): value is RegistryItem {
         typeof file.content === 'string' &&
         optional(file.target, isContainedPath),
     )
+  )
+}
+
+// The index is a list; one malformed entry is skipped, not a reason to refuse the rest.
+function isIndex(value: unknown): value is RegistryIndex {
+  return isObject(value) && Array.isArray(value.items)
+}
+
+function isIndexItem(item: unknown): item is IndexItem {
+  return (
+    isObject(item) &&
+    typeof item.name === 'string' &&
+    typeof item.type === 'string' &&
+    optional(item.title, isString) &&
+    optional(item.description, isString) &&
+    optional(item.categories, isStringArray)
   )
 }

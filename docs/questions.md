@@ -3,6 +3,12 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-19 P1-16: where is a registry's index? Upstream shadcn defines no
+  index URL for a namespace. Chose: `registry.json` beside the `r/` folder of
+  the item template, as registry.md's hosting layout puts it, read for
+  `@heart-ui` only. Why: the documented layout; listing a third-party
+  registry can come with a flag when one is wanted. Decided by the agent
+  (delegated).
 - 2026-11-19 P1-15: calls in `add`, decided by the agent (delegated). (1)
   Which registry holds an unscoped `registryDependencies` name in a
   third-party item? Chose: the default registry, `@heart-ui`, as the shadcn

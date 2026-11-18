@@ -3,7 +3,8 @@ import { parseArgs } from 'node:util'
 import manifest from '../package.json' with { type: 'json' }
 import { createAdd } from './commands/add.ts'
 import { createInit } from './commands/init.ts'
-import { CliError, isControl } from './errors.ts'
+import { createList } from './commands/list.ts'
+import { CliError, printable } from './errors.ts'
 import { isDirectory } from './fs.ts'
 
 export type Io = {
@@ -32,7 +33,11 @@ export type Command = {
 }
 
 /** The commands `heart-ui` runs, by name. */
-export const commands: Record<string, Command> = { init: createInit(), add: createAdd() }
+export const commands: Record<string, Command> = {
+  init: createInit(),
+  add: createAdd(),
+  list: createList(),
+}
 
 const globalOptions: Record<string, OptionSpec> = {
   cwd: { type: 'string', description: 'Run in this folder instead of the current one.' },
@@ -44,9 +49,6 @@ const USAGE_ERROR = 2
 
 // Terminal control characters in echoed input (argv, a registry's JSON, a cloned repo's config)
 // could rewrite the user's terminal.
-function printable(text: string): string {
-  return [...text].filter((char) => !isControl(char)).join('')
-}
 
 /** Runs the CLI with `argv` (no node or script path) and returns the exit code. */
 export async function run(

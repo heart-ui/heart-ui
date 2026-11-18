@@ -126,7 +126,11 @@ Exit codes: 0 on success, 1 when a command fails (or, for `diff` and
 option, a missing value, a `--cwd` that is not a folder). Errors print one
 line, `heart-ui: <message>`, to stderr.
 
-Fetched items are cached in `$XDG_CACHE_HOME/heart-ui`, else
+`list` reads the `@heart-ui` index, `registry.json` beside the `r/` folder
+of its item template, from `heart-ui.json` or the default registry when
+there is none. `--json` prints the matching index entries on one line.
+
+Fetched items and indexes are cached in `$XDG_CACHE_HOME/heart-ui`, else
 `~/.cache/heart-ui`. A pinned item (`<name>@<version>`) never changes, so
 it comes from the cache when present. An unpinned item is always fetched;
 its cached copy is used, with a warning, only when the registry cannot be
