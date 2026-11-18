@@ -100,7 +100,7 @@ matching alias; a file with `target` goes under the project root (`~/`).
 
 | Command | Behavior |
 | --- | --- |
-| `heart-ui init` | Detect Nuxt or Vite. Check Tailwind v4 and minimum versions. Write `heart-ui.json`, `tokens.css`, `theme.css`, the `utils` and `icon` helpers, and agent rule files. Flags: `--theme <preset>`, `--yes`. |
+| `heart-ui init` | Detect Nuxt or Vite. Check Tailwind v4 and minimum versions. Write `heart-ui.json`, `tokens.css`, `theme.css`, the `utils` and `icon` helpers, and agent rule files. Flags: `--theme <preset>`, `--registry <url>` (the `@heart-ui` item URL, for a mirror), `--yes`. |
 | `heart-ui add <item...>` | Resolve `registryDependencies` recursively. Rewrite import aliases. Write files. Install npm `dependencies` with the project's package manager. Update the lock file. Refuse to overwrite an existing file unless `--overwrite`. |
 | `heart-ui list` | Print items from the index. Flags: `--type`, `--category`, `--json`. |
 | `heart-ui diff [item]` | For each installed item, compare lock version with the registry. Print a unified diff of upstream changes per file. Exit 1 when updates exist. |

@@ -782,3 +782,31 @@ describe('AC-011 workspaces, catalogs and C1 characters', () => {
     )
   })
 })
+
+describe('AC-003 another registry', () => {
+  it('writes the --registry template and fetches the helpers from it', async () => {
+    const root = project('init-vite')
+    const { table, calls } = setup()
+    const mirror = 'https://mirror.test/r/{name}.json'
+    const c = capture(root)
+    expect(await run(['init', '--yes', '--registry', mirror], c.io, table), c.err()).toBe(0)
+    expect(JSON.parse(read(root, 'heart-ui.json')).registries).toEqual({ '@heart-ui': mirror })
+    expect(calls.length).toBeGreaterThan(0)
+    expect(calls.every((url) => url.startsWith('https://mirror.test/r/'))).toBe(true)
+  })
+
+  it('refuses a registry URL the config would refuse, before fetching or writing', async () => {
+    const root = project('init-vite')
+    const before = listFiles(root)
+    const { table, calls } = setup()
+    const c = capture(root)
+    expect(
+      await run(['init', '--yes', '--registry', 'http://mirror.test/r/{name}.json'], c.io, table),
+    ).toBe(1)
+    expect(c.err()).toBe(
+      'heart-ui: --registry: must be an https URL (http only for localhost) containing {name}.\n',
+    )
+    expect(calls).toEqual([])
+    expect(listFiles(root)).toEqual(before)
+  })
+})

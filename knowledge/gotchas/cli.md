@@ -1,7 +1,7 @@
 ---
 type: gotcha
 title: CLI gotchas
-description: parseArgs, fetch redirects, tsconfig paths, symlink-safe edits, write order, test caches.
+description: parseArgs, fetch redirects, tsconfig paths, symlink-safe edits, write order, test caches, e2e installs.
 ---
 
 # CLI gotchas
@@ -18,3 +18,6 @@ description: parseArgs, fetch redirects, tsconfig paths, symlink-safe edits, wri
 - **"Did the user edit it?" is a question for the lock, not the registry.** Compare the file with the hash `heart-ui.lock.json` recorded (LF-normalised); comparing with the latest registry copy calls every untouched but outdated file "yours".
 - **A bare `registryDependencies` name means the default registry.** The shadcn CLI reads it that way, and its docs advise full names (`@acme/x`) for anything else.
 - **Run the install inside the write's rollback.** Writes then install, with the install as `writeSteps`'s `after` step: a failed install undoes the files and the lock, and the message must then say so rather than offer a command that finishes half the job.
+- **A test that serves HTTP in-process must spawn its children async.** `spawnSync` blocks the event loop, so the server never answers and the CLI reports "Could not reach". `tests/cli-e2e.test.ts` uses an async `run()`.
+- **Items need `typescript` in the user's project.** Their props extend Reka's `PrimitiveProps`, which Vue's SFC compiler resolves through TypeScript; without it `vite build` fails with "Failed to resolve extends base type". Vue TS starters ship it.
+- **pnpm offline needs cached metadata; `prefer-offline` doesn't.** A frozen workspace install leaves none, so a template install uses `prefer-offline` and its own committed lockfile. Don't set `XDG_CACHE_HOME` for pnpm: it moves pnpm's metadata cache too.

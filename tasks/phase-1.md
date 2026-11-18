@@ -71,7 +71,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-17 CLI end-to-end test
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P1-15, P1-01 to P1-12
 - Deliver: `test:cli-e2e`. It copies committed minimal Nuxt and Vite

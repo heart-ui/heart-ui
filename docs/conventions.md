@@ -132,7 +132,7 @@ pull request.
 ## Checks
 
 `pnpm check` runs, in order: `lint`, `typecheck`, `test:unit`,
-`test:browser`, `test:visual`, `test:ssr`, `registry:build`. Each is also
+`test:browser`, `test:visual`, `test:ssr`, `registry:build`, `test:cli-e2e`. Each is also
 a standalone script. `check:item <name>` filters every step to one item.
 CI runs `pnpm check` on each pull request and blocks merge on failure.
 

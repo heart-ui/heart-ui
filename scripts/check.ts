@@ -16,6 +16,7 @@ const steps = [
   'test:visual',
   'test:ssr',
   'registry:build',
+  'test:cli-e2e',
 ]
 
 type Step = {
@@ -146,6 +147,8 @@ function itemPlan(name: string, temp: () => string): Step[] {
           ? `${name} is not in the built registry`
           : undefined,
     },
+    // The CLI end to end sets up whole apps with every Tier 1 item, so it belongs to the full gate.
+    skip('test:cli-e2e', 'runs every Tier 1 item through the CLI in pnpm check'),
   ]
 }
 

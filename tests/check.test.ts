@@ -12,6 +12,7 @@ const steps = [
   'test:visual',
   'test:ssr',
   'registry:build',
+  'test:cli-e2e',
 ]
 
 function check(...args: string[]) {
@@ -86,6 +87,9 @@ describe('check:item', () => {
     expect(planned['test:visual']).toBe('skipped: registry/lib/utils has no demo')
     expect(planned['test:ssr']).toBe('skipped: registry/lib/utils has no demo')
     expect(planned['registry:build']).toMatch(/\(checks r\/utils\.json\)/)
+    expect(planned['test:cli-e2e']).toBe(
+      'skipped: runs every Tier 1 item through the CLI in pnpm check',
+    )
   })
 
   it('rejects an unknown item before running any step', () => {

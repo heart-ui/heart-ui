@@ -35,10 +35,14 @@ const tailwindImport = /^([ \t]*)@import\s+(["'])tailwindcss\2[ \t]*;?[ \t]*$/m
 export function createInit(deps: InitDeps = {}): Command {
   return {
     summary: 'Set up Heart UI in a Nuxt or Vite project.',
-    usage: 'heart-ui init [--theme <preset>] [--yes]',
+    usage: 'heart-ui init [--theme <preset>] [--registry <url>] [--yes]',
     options: {
       theme: { type: 'string', description: `Theme preset: ${Object.keys(presets).join(', ')}.` },
       yes: { type: 'boolean', description: 'Write without asking.' },
+      registry: {
+        type: 'string',
+        description: 'The @heart-ui item URL, with {name} for the item (a mirror, say).',
+      },
     },
     run: (ctx) => init(ctx.cwd, ctx.options, ctx.io, deps),
   }
@@ -87,7 +91,24 @@ async function init(
     css: show(themePath),
     aliases: defaultAliases,
     iconSet: 'fluent',
-    registries: { '@heart-ui': deps.registryUrl ?? DEFAULT_REGISTRY_URL },
+    registries: {
+      '@heart-ui':
+        typeof options.registry === 'string'
+          ? options.registry
+          : (deps.registryUrl ?? DEFAULT_REGISTRY_URL),
+    },
+  }
+  // Checked now, before a fetch uses the registry URL, and named as the flag the user typed.
+  let configText: string
+  try {
+    configText = formatConfig(config, configPath)
+  } catch (error) {
+    // Only a refusal of the registry URL is about the flag; config.ts's message says why.
+    const about = error instanceof CliError && error.message.includes('"registries.@heart-ui"')
+    if (typeof options.registry !== 'string' || !about) throw error
+    throw new CliError(
+      `--registry: ${(error as CliError).message.replace(/^.*"registries\.@heart-ui" /, '')}`,
+    )
   }
 
   const client = createRegistryClient({
@@ -153,7 +174,7 @@ async function init(
   const steps: Step[] = [
     ...creates.map(({ path, content }) => ({ kind: 'create' as const, path, content })),
     ...edits.map((edit) => ({ kind: 'edit' as const, ...edit })),
-    { kind: 'create', path: configPath, content: formatConfig(config, configPath) },
+    { kind: 'create', path: configPath, content: configText },
   ]
   await writeSteps(steps, show, 'init', 'nothing was set up')
 

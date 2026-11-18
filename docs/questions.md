@@ -3,6 +3,18 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-19 P1-17: how does the end-to-end test install packages without
+  a published registry? Chose: real `pnpm install` and `pnpm add` with
+  `prefer-offline`, so packages come from the pnpm store and only missing
+  metadata is fetched; `pnpm check` therefore needs the network. Why: a
+  frozen workspace install leaves no metadata for a fully offline install,
+  and skipping installs would not test `init` and `add`. Decided by the
+  agent (delegated).
+- 2026-11-19 P1-17: the end-to-end build found that items need `typescript`
+  in the user's project: their props extend Reka's `PrimitiveProps`, which
+  Vue's SFC compiler resolves through TypeScript. Vue TS starters
+  (`create-vue`, `create-vite` vue-ts, Nuxt) ship it, so the templates add it.
+  Open for a later task: should `init` check for `typescript` and say so?
 - 2026-11-19 P1-16: where is a registry's index? Upstream shadcn defines no
   index URL for a namespace. Chose: `registry.json` beside the `r/` folder of
   the item template, as registry.md's hosting layout puts it, read for

@@ -17,6 +17,6 @@ export default defineConfig({
       'apps/docs/test/**/*.test.ts',
     ],
     // Seeded regressions run every heavy script in a sandbox: `pnpm test:harness`.
-    exclude: ['tests/harness.test.ts', '**/node_modules/**'],
+    exclude: ['tests/harness.test.ts', 'tests/cli-e2e.test.ts', '**/node_modules/**'],
   },
 })

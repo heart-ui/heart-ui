@@ -20,5 +20,5 @@
     "packages/cli/test/**/*.ts",
     "scripts/**/*.ts"
   ],
-  "exclude": ["packages/cli/test/fixtures/**"]
+  "exclude": ["packages/cli/test/fixtures/**", "tests/cli-e2e/templates/**"]
 }
