@@ -3,6 +3,29 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-18 P1-13: calls in the CLI core, decided by the agent
+  (delegated). (1) Where does a namespace's index live? Upstream shadcn
+  defines no index URL for a namespace. Chose: leave index fetching to
+  P1-16 (`list`), which can settle it. (2) How are Nuxt aliases found
+  without running `nuxt.config`? Chose: Nuxt 4's documented defaults: `@`
+  and `~` to `app/` (the root when there is no `app/`), `@@` and `~~` to the
+  root. Why: loading the config runs user code. A project that moves
+  `srcDir` or adds aliases in `nuxt.config` is not seen. (3) Usage mistakes
+  exit 2, command failures 1. Why: `diff` uses exit 1 for "updates exist".
+  (4) The item cache lives in `$XDG_CACHE_HOME/heart-ui`, else
+  `~/.cache/heart-ui`; pinned versions are served from it, unpinned items
+  only when offline. Why: `/r/<name>@<version>.json` is immutable
+  (Hosting); an unpinned item must not go stale while online. (5) Unknown
+  top-level keys in `heart-ui.json` are an error. Why: a misspelt key would
+  otherwise be ignored silently.
+  (6) Which parent folders count when looking for a lock file or a hoisted
+  Tailwind? Chose: the project's folder up to the nearest folder holding
+  `.git`, `pnpm-workspace.yaml` or a `package.json` with `workspaces`; with
+  no such folder, only the project's own. Why: a stray lock file in a home
+  folder says nothing about the project. (7) Registry URLs must be https
+  (http only on loopback, for a local registry build). Why: items are source
+  copied into the user's project. A home folder kept in git never counts as
+  a workspace root.
 - 2026-11-15 Working mode for phases 1–4. The maintainer (2026-11-15):
   "you build all planned tasks by yourself, when done i will do only 1
   review round with you." So, until that review: a task whose dependencies

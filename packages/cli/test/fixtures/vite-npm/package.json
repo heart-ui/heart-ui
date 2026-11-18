@@ -1,0 +1,12 @@
+{
+  "name": "fixture-vite-npm",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "vue": "3.5.45"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17",
+    "vite": "7.0.0"
+  }
+}

@@ -166,7 +166,14 @@ importers:
 
   packages/chart-echarts: {}
 
-  packages/cli: {}
+  packages/cli:
+    devDependencies:
+      tsdown:
+        specifier: 0.23.7
+        version: 0.23.7(@volar/typescript@2.4.30(typescript@6.0.3))(@vue/language-core@3.3.14)(typescript@6.0.3)(vue-tsc@3.3.14(typescript@6.0.3))
+      vitest:
+        specifier: 5.1.0
+        version: 5.1.0(@types/node@22.20.5)(@vitest/browser-playwright@5.1.0)(@vitest/ui@5.1.0)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))
 
   packages/eslint-plugin:
     dependencies:

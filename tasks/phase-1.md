@@ -26,7 +26,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-13 CLI core
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P0-14
 - Read: [registry.md](../docs/registry.md)

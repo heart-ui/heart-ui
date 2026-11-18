@@ -1,0 +1,11 @@
+{
+  // As create-vite writes it: the alias lives in the app config.
+  "compilerOptions": {
+    "strict": true,
+    /* Paths are relative to this file. */
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue"]
+}

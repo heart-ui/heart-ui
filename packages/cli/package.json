@@ -2,7 +2,22 @@
   "name": "heart-ui",
   "version": "0.0.0",
   "private": true,
-  "description": "Heart UI CLI. Stub until the CLI task.",
+  "description": "Heart UI CLI: copies Vue components, blocks and layouts into your project as source.",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "bin": {
+    "heart-ui": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepare": "tsdown",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "tsdown": "0.23.7",
+    "vitest": "5.1.0"
+  }
 }

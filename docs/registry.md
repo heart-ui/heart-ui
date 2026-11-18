@@ -105,6 +105,27 @@ when stdout is not a TTY.
 `update` needs old versions. The registry keeps every published item
 version at `/r/<name>@<version>.json`.
 
+Exit codes: 0 on success, 1 when a command fails (or, for `diff` and
+`audit`, finds something), 2 for a usage mistake (an unknown command or
+option, a missing value, a `--cwd` that is not a folder). Errors print one
+line, `heart-ui: <message>`, to stderr.
+
+Fetched items are cached in `$XDG_CACHE_HOME/heart-ui`, else
+`~/.cache/heart-ui`. A pinned item (`<name>@<version>`) never changes, so
+it comes from the cache when present. An unpinned item is always fetched;
+its cached copy is used, with a warning, only when the registry cannot be
+reached, answers with a server error, or sends something that is not an
+item.
+
+Registry URLs must be https; plain http is accepted only for `localhost`,
+`127.0.0.1` and `[::1]`. Every redirect hop is checked the same way, and a
+URL may not hold a user name or password. Items are untrusted: a file
+`path` or `target` must be relative (`~/` for the project root) with no
+`..`, `.git` or `node_modules` segment, and a response over 5 MB is refused.
+
+Global options (`--cwd`, `--help`, `--version`) go before or after the
+command name; a command's own options go after it.
+
 ## Third-party registries
 
 Any host serving the same schema works. Users add it under `registries`
