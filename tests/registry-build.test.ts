@@ -157,6 +157,101 @@ describe('registry:build', () => {
     timeout,
   )
 
+  describe('block and layout meta', () => {
+    const blockMeta = {
+      version: '0.1.0',
+      useWhen: 'A list of customers.',
+      avoidWhen: 'One record: use detail-page.',
+      data: { customers: 'Customer[]' },
+      states: ['empty', 'loading', 'error', 'long'],
+    }
+    const block = (kind: 'blocks' | 'layouts', meta: Record<string, unknown>) =>
+      registry({
+        [`registry/${kind}/sample/item.json`]: item({
+          type: 'registry:block',
+          ...(kind === 'layouts' ? { categories: ['layout'] } : {}),
+          meta,
+        }),
+        [`registry/${kind}/sample/Sample.vue`]: '<template><p /></template>\n',
+      })
+
+    it(
+      'builds a block with every required field',
+      () => {
+        const result = buildIn(block('blocks', blockMeta))
+        expect(result.status, result.output).toBe(0)
+      },
+      timeout,
+    )
+
+    it.each(['useWhen', 'avoidWhen', 'data', 'states'])(
+      'fails a block without %s',
+      (field) => {
+        const meta: Record<string, unknown> = { ...blockMeta }
+        delete meta[field]
+        const result = buildIn(block('blocks', meta))
+        expect(result.status).toBe(1)
+        expect(result.output).toMatch(new RegExp(`blocks/sample.*${field}`))
+        expect(result.output).not.toMatch(/\n\s+at /)
+      },
+      timeout,
+    )
+
+    it(
+      'fails a layout without regions, and builds one with them',
+      () => {
+        const without = buildIn(block('layouts', blockMeta))
+        expect(without.status).toBe(1)
+        expect(without.output).toMatch(/layouts\/sample.*regions/)
+        const withRegions = buildIn(
+          block('layouts', { ...blockMeta, regions: { main: 'The list' } }),
+        )
+        expect(withRegions.status, withRegions.output).toBe(0)
+      },
+      timeout,
+    )
+
+    it(
+      'keeps ui and lib items to version only',
+      () => {
+        const result = buildIn(
+          registry({
+            'registry/ui/sample/item.json': item({ meta: { version: '0.1.0' } }),
+            'registry/ui/sample/Sample.vue': '<template><p /></template>\n',
+          }),
+        )
+        expect(result.status, result.output).toBe(0)
+      },
+      timeout,
+    )
+  })
+
+  it.each(['blocks', 'layouts'])(
+    'skips a demo-support folder under %s',
+    (kind) => {
+      const dir = registry({
+        [`registry/${kind}/_fixtures/index.ts`]: 'export const rows = [1, 2, 3]\n',
+        [`registry/${kind}/_fixtures/DemoStates.vue`]: '<template><p /></template>\n',
+      })
+      const result = buildIn(dir)
+      expect(result.status, result.output).toBe(0)
+      const index = readJson(join(dir, 'dist/registry.json'))
+      expect((index.items as { name: string }[]).map((entry) => entry.name)).toEqual(['utils'])
+    },
+    timeout,
+  )
+
+  it(
+    'still fails on a stray _ file beside the blocks',
+    () => {
+      const dir = registry({ 'registry/blocks/_notes.ts': 'export const notes = 1\n' })
+      const result = buildIn(dir)
+      expect(result.status).toBe(1)
+      expect(result.output).toMatch(/blocks\/_notes\.ts.*item folder/)
+    },
+    timeout,
+  )
+
   describe('fixture folders', () => {
     it(
       'skips a folder with only demos, tests and docs',

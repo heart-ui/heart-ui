@@ -2,15 +2,15 @@
 import axe from 'axe-core'
 import { userEvent } from 'vitest/browser'
 import { createApp, type App, type VNode } from 'vue'
-import { demos } from '../../gallery-rules'
+import { demoStateKey, demos, galleryState } from '../../gallery-rules'
 import '../src/style.css'
 
 const mounted: { app: App; root: HTMLElement }[] = []
 
-/** Mounts the demo for an item name into a fresh element, in light or dark mode. */
+/** Mounts the demo for an item name into a fresh element, in light or dark mode and a demo state. */
 export async function mountDemo(
   name: string,
-  { mode = 'light' }: { mode?: 'light' | 'dark' } = {},
+  { mode = 'light', state }: { mode?: 'light' | 'dark'; state?: string } = {},
 ) {
   const load = demos.get(name)
   if (!load) throw new Error(`No demo named "${name}"`)
@@ -18,7 +18,7 @@ export async function mountDemo(
   // A page landmark around the demo, as the gallery pages have.
   const root = document.createElement('main')
   document.body.append(root)
-  const app = createApp((await load()).default)
+  const app = createApp((await load()).default).provide(demoStateKey, galleryState(name, { state }))
   app.mount(root)
   mounted.push({ app, root })
   return root

@@ -46,6 +46,14 @@ Fields Heart UI adds go under `meta`, which the schema leaves free-form.
 | `data` | Blocks, layouts | Shape of the props the item expects |
 | `states` | Blocks, layouts | Subset of `empty`, `loading`, `error`, `long` that the item renders |
 
+`version` is required everywhere. Blocks need every field that applies to
+them (`useWhen`, `avoidWhen`, `data`, `states`), and layouts need `regions`
+as well. The build fails and names the missing field. A folder under
+`blocks/` or `layouts/` whose name starts with `_` holds demo support:
+`registry/blocks/_fixtures` has typed sample data and `DemoStates`, the
+switch each block and layout demo puts above its content. The build skips
+these folders.
+
 ## Hosting
 
 `dist/registry` deploys to Cloudflare R2 behind `https://registry.heart.tammai.me`;

@@ -52,6 +52,11 @@ function expectScopedPresets(css: string) {
   }
 }
 
+// The state the demo's switch marks pressed in server-rendered HTML.
+function pressedState(html: string) {
+  return /<button[^>]*aria-pressed="true"[^>]*>(?:<[^>]*>|\s)*([a-z]+)/.exec(html)?.[1]
+}
+
 type ViteServer = {
   ssrLoadModule(id: string): Promise<unknown>
   close(): Promise<void>
@@ -143,7 +148,7 @@ describe('vite playground', () => {
   })
 
   describe('gallery route', () => {
-    let render: (path: string) => Promise<string>
+    let render: (path: string, search?: string) => Promise<string>
     let indexDemos: (modules: Record<string, unknown>) => Map<string, unknown>
     let close: () => Promise<void>
 
@@ -161,7 +166,7 @@ describe('vite playground', () => {
       })
       close = () => server.close()
       const { createGallery } = (await server.ssrLoadModule('/src/gallery.ts')) as {
-        createGallery(path: string): unknown
+        createGallery(path: string, search?: string): unknown
       }
       const { renderToString } = (await server.ssrLoadModule('vue/server-renderer')) as {
         renderToString(app: unknown): Promise<string>
@@ -169,9 +174,14 @@ describe('vite playground', () => {
       ;({ indexDemos } = (await server.ssrLoadModule(join(root, 'apps/gallery-rules.ts'))) as {
         indexDemos: typeof indexDemos
       })
-      render = (path) => renderToString(createGallery(path))
+      render = (path, search) => renderToString(createGallery(path, search))
     }, buildTimeout)
     afterAll(() => close?.())
+
+    it('vite playground takes the first state, as the Nuxt playground does', async () => {
+      const html = await render('/demo/placeholder-block', '?state=empty&state=error')
+      expect(pressedState(html)).toBe('empty')
+    })
 
     it('vite playground renders the placeholder demo', async () => {
       expect(await render('/demo/placeholder')).toContain(placeholderText)
@@ -246,6 +256,13 @@ describe('nuxt playground', () => {
 
   it('nuxt playground ships every preset scoped', () => {
     expectScopedPresets(cssIn(join(app, '.output/public')))
+  })
+
+  it('nuxt playground takes the first state, as the Vite playground does', async () => {
+    const html = await (
+      await fetch(`${base}/demo/placeholder-block?state=empty&state=error`)
+    ).text()
+    expect(pressedState(html)).toBe('empty')
   })
 
   it('nuxt playground renders the placeholder demo', async () => {

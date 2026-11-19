@@ -81,7 +81,19 @@ function itemPlan(name: string, temp: () => string): Step[] {
   // The browser config runs item tests under ui, blocks and layouts only.
   const hasBrowserTest = kind !== 'lib' && files.some((file) => file.endsWith('.test.ts'))
   const isItem = files.includes('item.json')
-  const unitTests = unitTestsFor(folder)
+  // Block and layout demos run on the shared demo support, so its checks run with them.
+  // Every `_` folder the registry build skips as demo support (scripts/registry-build.ts).
+  const support =
+    kind === 'blocks' || kind === 'layouts'
+      ? ['blocks', 'layouts'].flatMap((k) =>
+          existsSync(join(repo, 'registry', k))
+            ? readdirSync(join(repo, 'registry', k), { withFileTypes: true })
+                .filter((entry) => entry.isDirectory() && entry.name.startsWith('_'))
+                .map((entry) => `registry/${k}/${entry.name}`)
+            : [],
+        )
+      : []
+  const unitTests = [...new Set([folder, ...support].flatMap(unitTestsFor))].sort()
   const env = { HEART_UI_ITEM: name }
   const skip = (step: string, note: string): Step => ({ name: step, commands: [], note })
   const tsconfig = () => join(temp(), 'tsconfig.json')
@@ -92,8 +104,8 @@ function itemPlan(name: string, temp: () => string): Step[] {
       name: 'lint',
       commands: [
         ['pnpm', '--dir', 'packages/eslint-plugin', 'run', 'build'],
-        ['pnpm', 'exec', 'eslint', '--max-warnings', '0', folder],
-        ['pnpm', 'exec', 'prettier', '--check', folder],
+        ['pnpm', 'exec', 'eslint', '--max-warnings', '0', folder, ...support],
+        ['pnpm', 'exec', 'prettier', '--check', folder, ...support],
       ],
     },
     {
@@ -113,7 +125,7 @@ function itemPlan(name: string, temp: () => string): Step[] {
     unitTests.length > 0
       ? { name: 'test:unit', commands: [['pnpm', 'run', 'test:unit', ...unitTests]] }
       : skip('test:unit', `no unit test references ${folder}`),
-    hasDemo || hasBrowserTest
+    hasDemo || hasBrowserTest || support.length > 0
       ? {
           name: 'test:browser',
           commands: [
@@ -123,6 +135,7 @@ function itemPlan(name: string, temp: () => string): Step[] {
               'test:browser',
               ...(hasDemo ? ['test/demos.browser.test.ts'] : []),
               ...(hasBrowserTest ? [`${folder}/`] : []),
+              ...support.map((dir) => `${dir}/`),
             ],
           ],
           env,

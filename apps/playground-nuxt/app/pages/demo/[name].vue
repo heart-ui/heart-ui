@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
-import { demos } from '../../../../gallery-rules'
+import { defineAsyncComponent, provide } from 'vue'
+import { demoStateKey, demos, galleryState } from '../../../../gallery-rules'
 
-const name = String(useRoute().params.name)
+const route = useRoute()
+const name = String(route.params.name)
+provide(demoStateKey, galleryState(name, route.query))
 const load = demos.get(name)
 if (!load) {
   throw createError({

@@ -28,16 +28,18 @@ const markerName = '.heart-ui-registry-build.json'
 export class RegistryError extends Error {}
 
 // Each source folder, the item type its items must have, and the meta fields that apply to it
-// (docs/registry.md, Registry format and Item metadata).
+// (docs/registry.md, Registry format and Item metadata). Blocks and layouts need every field
+// they take: agents match screens on useWhen and avoidWhen, and demos render each of states.
+const blockMeta = ['version', 'useWhen', 'avoidWhen', 'data', 'states'] as const
+const layoutMeta = ['version', 'useWhen', 'avoidWhen', 'regions', 'data', 'states'] as const
 const kinds = {
-  ui: { type: 'registry:ui', meta: ['version', 'tier'] },
-  blocks: { type: 'registry:block', meta: ['version', 'useWhen', 'avoidWhen', 'data', 'states'] },
-  layouts: {
-    type: 'registry:block',
-    meta: ['version', 'useWhen', 'avoidWhen', 'regions', 'data', 'states'],
-  },
-  lib: { type: 'registry:lib', meta: ['version'] },
+  ui: { type: 'registry:ui', meta: ['version', 'tier'], required: ['version'] },
+  blocks: { type: 'registry:block', meta: blockMeta, required: blockMeta },
+  layouts: { type: 'registry:block', meta: layoutMeta, required: layoutMeta },
+  lib: { type: 'registry:lib', meta: ['version'], required: ['version'] },
 } as const
+// Under these, a folder named `_<name>` holds demo support (fixtures, the state switch): never an item.
+const supportKinds = new Set(['blocks', 'layouts'])
 // Under these, a folder holding only demos, tests, docs and dotfiles is a fixture, not an item.
 const fixtureKinds = new Set(['ui', 'blocks', 'layouts'])
 // Built from knob files by a later task, not from item folders.
@@ -253,6 +255,13 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
     }
     for (const name of entries) {
       if (name.startsWith('.')) continue
+      if (
+        supportKinds.has(kind) &&
+        name.startsWith('_') &&
+        isFolder(join(kindDir, name), `${kind}/${name}`)
+      ) {
+        continue
+      }
       const dir = join(kindDir, name)
       const label = `${kind}/${name}`
       if (!isFolder(dir, label)) {
@@ -300,6 +309,12 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
       }
       if (!validateMeta(item.meta ?? {})) {
         throw new RegistryError(`${label}: meta ${describe(validateMeta.errors)}`)
+      }
+      const missing = rules.required.filter(
+        (field) => !Object.hasOwn((item.meta ?? {}) as object, field),
+      )
+      if (missing.length > 0) {
+        throw new RegistryError(`${label}: meta needs ${missing.join(', ')} for ${kind}/`)
       }
       const misplaced = Object.keys((item.meta ?? {}) as object).filter(
         (field) => !(rules.meta as readonly string[]).includes(field),
