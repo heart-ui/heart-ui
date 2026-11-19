@@ -36,6 +36,22 @@ function expectTokenUtilities(css: string) {
   expect(css).toMatch(/--h-raw-primary-600:/)
 }
 
+// Each preset's tokens sit under its own `[data-heart-theme]` selector, so `?theme=` renders it.
+const presetRadius = { forest: '.75rem', graphite: '.25rem', sunset: '.5rem', violet: '1rem' }
+function expectScopedPresets(css: string) {
+  for (const [theme, radius] of Object.entries(presetRadius)) {
+    const scope = new RegExp(`\\[data-heart-theme=(["']?)${theme}\\1\\]\\{([^}]*)\\}`, 'g')
+    const blocks = [...css.matchAll(scope)].map((match) => match[2]!)
+    expect(blocks.length, theme).toBeGreaterThan(0)
+    expect(blocks.join(';'), theme).toMatch(
+      new RegExp(`--h-radius-md:0?${radius.replace('.', '\\.')}`),
+    )
+    expect(css, `${theme} dark`).toMatch(
+      new RegExp(`\\[data-heart-theme=(["']?)${theme}\\1\\]\\.dark`),
+    )
+  }
+}
+
 type ViteServer = {
   ssrLoadModule(id: string): Promise<unknown>
   close(): Promise<void>
@@ -65,6 +81,10 @@ describe('vite playground', () => {
 
   it('vite playground resolves token utilities through theme.css', () => {
     expectTokenUtilities(cssIn(join(app, 'dist')))
+  })
+
+  it('vite playground ships every preset scoped', () => {
+    expectScopedPresets(cssIn(join(app, 'dist')))
   })
 
   // The build (Lightning CSS) rewrites `:dir(rtl)` into `:lang(ar, he, …)`, which checks the
@@ -222,6 +242,10 @@ describe('nuxt playground', () => {
 
   it('nuxt playground resolves token utilities through theme.css', () => {
     expectTokenUtilities(cssIn(join(app, '.output/public')))
+  })
+
+  it('nuxt playground ships every preset scoped', () => {
+    expectScopedPresets(cssIn(join(app, '.output/public')))
   })
 
   it('nuxt playground renders the placeholder demo', async () => {

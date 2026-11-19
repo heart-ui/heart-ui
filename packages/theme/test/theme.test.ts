@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { checkContrast, generateTheme, type Knobs } from '../src'
@@ -154,6 +154,119 @@ describe('raw scales', () => {
 
   it('keeps full chroma where the gamut allows it', () => {
     expect(oklch(raw.get('raw-neutral-500')!).c).toBeCloseTo(0.02, 4)
+  })
+})
+
+const themesDir = join(root, 'registry/themes')
+const presetFiles = readdirSync(themesDir)
+  .filter((file) => file.endsWith('.json'))
+  .sort()
+const preset = (name: string) =>
+  JSON.parse(readFileSync(join(themesDir, `${name}.json`), 'utf8')) as Knobs
+
+describe('presets', () => {
+  it("ships the task's knobs", () => {
+    const shape = (name: string) => {
+      const { radius, density, shadow } = preset(name)
+      return { radius, density, shadow }
+    }
+    expect(shape('graphite')).toEqual({ radius: 0.25, density: 'compact', shadow: 'crisp' })
+    expect(shape('forest')).toEqual({ radius: 0.75, density: 'comfortable', shadow: 'soft' })
+    expect(shape('sunset')).toEqual({ radius: 0.5, density: 'default', shadow: 'soft' })
+    expect(shape('violet')).toEqual({ radius: 1, density: 'default', shadow: 'none' })
+    const color = (name: string) => oklch(preset(name).primary)
+    expect(color('graphite').c).toBeLessThanOrEqual(0.04)
+    const hue = (name: string, min: number, max: number) => {
+      expect(color(name).c, name).toBeGreaterThan(0.1)
+      expect(color(name).h, name).toBeGreaterThanOrEqual(min)
+      expect(color(name).h, name).toBeLessThanOrEqual(max)
+    }
+    hue('forest', 130, 165)
+    hue('sunset', 35, 60)
+    hue('violet', 280, 310)
+    for (const file of presetFiles) {
+      expect(preset(file.slice(0, -5)).name).toBe(file.slice(0, -5))
+    }
+  })
+
+  it.each(['default', 'graphite', 'forest', 'sunset', 'violet'])(
+    '%s passes every pair with no moves',
+    (name) => {
+      const report = checkContrast(preset(name))
+      expect(report.pass).toBe(true)
+      expect(report.adjustments).toEqual([])
+      for (const mode of ['light', 'dark'] as const) {
+        const checks = report.checks.filter((check) => check.mode === mode)
+        expect(checks).toHaveLength(37)
+        for (const check of checks) expect(check.pass, `${mode} ${check.foreground}`).toBe(true)
+      }
+    },
+  )
+
+  it('pins presets.css', () => {
+    // Regenerate with `pnpm --filter @heart-ui/theme generate`, then review the diff.
+    const expected = presetFiles
+      .map((file) => generateTheme(preset(file.slice(0, -5)), { scoped: true }))
+      .join('\n')
+    expect(readFileSync(join(import.meta.dirname, '../css/presets.css'), 'utf8')).toBe(expected)
+    const manifest = JSON.parse(
+      readFileSync(join(import.meta.dirname, '../package.json'), 'utf8'),
+    ) as { exports: Record<string, unknown> }
+    expect(manifest.exports['./presets.css']).toBe('./css/presets.css')
+  })
+})
+
+// The selector list of the scoped dark block, which opens with `<scope>.dark`.
+function darkSelector(css: string, at: string) {
+  const start = css.indexOf(`${at}.dark`)
+  expect(start, 'no scoped dark block').not.toBe(-1)
+  return css.slice(start, css.indexOf(' {', start)).split(',\n')
+}
+
+describe('scoped output', () => {
+  it('follows dark mode on the scope, inside it, or on an ancestor', () => {
+    const at = '[data-heart-theme="forest"]'
+    const selectors = darkSelector(
+      generateTheme({ ...defaults, name: 'forest' }, { scoped: true }),
+      at,
+    )
+    expect(selectors.sort()).toEqual(
+      [
+        `${at}.dark`,
+        `${at} .dark`,
+        `.dark ${at}`,
+        `${at}[data-theme="dark"]`,
+        `${at} [data-theme="dark"]`,
+        `[data-theme="dark"] ${at}`,
+      ].sort(),
+    )
+  })
+
+  it('scopes every block to the theme', () => {
+    const forest = { ...defaults, name: 'forest' }
+    const css = generateTheme(forest, { scoped: true })
+    const at = '[data-heart-theme="forest"]'
+    const light = declarations(css, `${at} {`)
+    expect(light.get('radius-md')).toBe('0.5rem')
+    expect(light.get('background')).toBe('oklch(1 0 0)')
+    const dark = declarations(css, `${darkSelector(css, at).join(',\n')} {`)
+    expect(dark.get('background')).toBe('var(--h-raw-neutral-950)')
+    expect(declarations(css, `@media (min-width: 768px) {\n  ${at} {`).get('page-px')).toBe(
+      '1.5rem',
+    )
+    expect(
+      declarations(css, `@media (prefers-reduced-motion: reduce) {\n  ${at} {`).get(
+        'duration-fast',
+      ),
+    ).toBe('0ms')
+    // Nothing is left on :root or an unscoped dark selector.
+    expect(css).not.toMatch(/:root/)
+    const selectors = css
+      .split('\n')
+      .filter((line) => /[{,]$/.test(line) && !line.trim().startsWith('@media'))
+    for (const selector of selectors) expect(selector).toContain(at)
+    // Without the option, the output is the unscoped default.
+    expect(generateTheme(defaults, { scoped: false })).toBe(generateTheme(defaults))
   })
 })
 

@@ -5,6 +5,13 @@ import { join } from 'node:path'
 export const registryDir = join(import.meta.dirname, '../registry')
 export type DemoKind = 'ui' | 'blocks' | 'layouts'
 
+/** Visual widths: blocks and layouts reflow, so they are pinned at phone, tablet and desktop. */
+export const visualWidths: Record<DemoKind, number[]> = {
+  ui: [1024],
+  blocks: [375, 768, 1280],
+  layouts: [375, 768, 1280],
+}
+
 /** Every item folder under ui, blocks and layouts that holds a `*.demo.vue`. */
 export function demoFiles(registry = registryDir): { kind: DemoKind; name: string }[] {
   return (['ui', 'blocks', 'layouts'] as const).flatMap((kind) => {

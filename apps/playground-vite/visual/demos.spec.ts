@@ -1,23 +1,22 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { generateTheme, type Knobs } from '@heart-ui/theme'
 import { expect, test } from '@playwright/test'
-import { demoFiles, themeNames } from '../../demo-files'
+import { demoFiles, registryDir, themeNames, visualWidths } from '../../demo-files'
 
-// The playgrounds load only the default theme's tokens.css (docs/questions.md, P0-07), so any
-// other theme would render as the default and its baselines would be wrong.
-const renderable = ['default']
-const unrenderable = themeNames().filter((theme) => !renderable.includes(theme))
-if (unrenderable.length > 0) {
-  throw new Error(
-    `The playgrounds can't render theme ${unrenderable.join(', ')} yet; load its tokens first`,
-  )
+// A theme missing from presets.css would render as the default, so each test first checks
+// that the page holds this theme's primary.
+const primary500 = (theme: string) => {
+  const knobs = JSON.parse(
+    readFileSync(join(registryDir, 'themes', `${theme}.json`), 'utf8'),
+  ) as Knobs
+  return /--h-raw-primary-500: ([^;]+);/.exec(generateTheme(knobs))![1]!
 }
-
-// Blocks and layouts reflow, so they are pinned at phone, tablet and desktop widths.
-const widths = { ui: [1024], blocks: [375, 768, 1280], layouts: [375, 768, 1280] }
 
 for (const { kind, name } of demoFiles()) {
   for (const theme of themeNames()) {
     for (const mode of ['light', 'dark']) {
-      for (const width of widths[kind]) {
+      for (const width of visualWidths[kind]) {
         test(`${kind}/${name} ${theme} ${mode} ${width}`, async ({ page }) => {
           await page.setViewportSize({ width, height: 800 })
           const response = await page.goto(`/demo/${name}?theme=${theme}&mode=${mode}`)
@@ -26,6 +25,18 @@ for (const { kind, name } of demoFiles()) {
           // A blocked host or a missing demo must never become a baseline.
           await expect(page.locator('#app > *').first()).toBeVisible()
           await expect(page.getByText(/No demo at|Blocked request/)).toHaveCount(0)
+          // The build minifies the value, so the browser resolves both sides to one color.
+          const [shown, expected] = await page.evaluate((value) => {
+            const resolve = (color: string) => {
+              const probe = document.body.appendChild(document.createElement('i'))
+              probe.style.color = color
+              const resolved = getComputedStyle(probe).color
+              probe.remove()
+              return resolved
+            }
+            return [resolve('var(--h-raw-primary-500)'), resolve(value)]
+          }, primary500(theme))
+          expect(shown, theme).toBe(expected)
           await expect(page).toHaveScreenshot(`${kind}-${name}-${theme}-${mode}-${width}.png`, {
             fullPage: true,
             animations: 'disabled',

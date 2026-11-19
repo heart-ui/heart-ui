@@ -8,7 +8,7 @@ blocks, agent surface, benchmark.
 
 ### P2-01 Presets
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P1-21
 - Read: [tokens.md](../docs/tokens.md)

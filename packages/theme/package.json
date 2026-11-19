@@ -17,7 +17,8 @@
       "default": "./dist/index.mjs"
     },
     "./theme.css": "./css/theme.css",
-    "./tokens.css": "./css/tokens.css"
+    "./tokens.css": "./css/tokens.css",
+    "./presets.css": "./css/presets.css"
   },
   "files": [
     "dist",

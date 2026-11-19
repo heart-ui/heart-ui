@@ -225,8 +225,34 @@ describe('AC-005 presets', () => {
     const { table } = setup()
     const c = capture(root)
     expect(await run(['init', '--yes', '--theme', 'neon'], c.io, table)).toBe(1)
-    expect(c.err()).toBe('heart-ui: No theme preset "neon". Presets: default.\n')
+    expect(c.err()).toBe(
+      'heart-ui: No theme preset "neon". Presets: default, forest, graphite, sunset, violet.\n',
+    )
     expect(listFiles(root)).toEqual(before)
+  })
+
+  it('offers every preset in registry/themes', async () => {
+    const names = readdirSync(join(repo, 'registry/themes'))
+      .filter((file) => file.endsWith('.json'))
+      .map((file) => file.slice(0, -'.json'.length))
+      .sort()
+    const root = project('init-vite')
+    const help = capture(root)
+    expect(await run(['init', '--help'], help.io, setup().table)).toBe(0)
+    expect(help.out()).toContain(`Theme preset: ${names.join(', ')}.`)
+  })
+
+  it('writes another preset and lists all five', async () => {
+    const root = project('init-vite')
+    const { table } = setup()
+    expect(await run(['init', '--yes', '--theme', 'forest'], capture(root).io, table)).toBe(0)
+    const forest = JSON.parse(
+      readFileSync(join(repo, 'registry/themes/forest.json'), 'utf8'),
+    ) as Knobs
+    expect(read(root, 'src/assets/css/tokens.css')).toBe(generateTheme(forest))
+    const help = capture(root)
+    expect(await run(['init', '--help'], help.io, table)).toBe(0)
+    expect(help.out()).toContain('default, forest, graphite, sunset, violet')
   })
 })
 
