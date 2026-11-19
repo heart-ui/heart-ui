@@ -37,7 +37,7 @@ The specs in `docs/` are the primary source (see `CLAUDE.md`). This folder holds
 - [gotchas/docs-site.md](gotchas/docs-site.md) — VitePress unlayered CSS, iframe sizing and focus, component meta, links
 
 ## Runbooks
--
+- [runbooks/deploy.md](runbooks/deploy.md) — release to R2 and npm, docs on Pages, smoke test, rollback
 
 ## Features
 -

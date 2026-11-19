@@ -154,7 +154,9 @@
     ]
   },
   "migrations": {
-    "applied": [],
+    "applied": [
+      "3.6.0-deploy-target"
+    ],
     "skipped": {}
   },
   "setup": {
