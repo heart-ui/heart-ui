@@ -3,6 +3,17 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-19 alpha dry run (P1-20, P1-21): two release blockers. (1) The
+  CLI depends on `@heart-ui/theme` at run time, and installing it fails while
+  that package is unpublished. Chose: publish `@heart-ui/theme` with the CLI
+  rather than bundle it. Why: it matches the spec's `@heart-ui` scope and the
+  changesets config, and the CLI doesn't change. Decided by the agent
+  (delegated). (2) `npm install -D typescript` now gets TypeScript 7, which
+  Vue's SFC compiler can't load, so a Nuxt app built from the docs failed.
+  Chose: the docs install `typescript@6`, and a test ties that to the e2e
+  templates' pin. Needs the maintainer: P0-01 (scope, GitHub org, domain), a
+  public remote for provenance, and the runbook in
+  docs/sdlc/changes/2026-11-19-s-alpha-release-dry-run.md.
 - 2026-11-19 P1-18: how does the publish reach R2 without a new dependency?
   Chose: R2's S3 API with SigV4 signing on `node:crypto`, conditional
   `If-None-Match: *` writes for versions. The release workflow is drafted in

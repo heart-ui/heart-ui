@@ -116,6 +116,8 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 - Depends on: P1-18, P1-19
 - Deliver: `heart-ui` published under the `alpha` dist-tag with provenance;
   registry and docs deployed.
+- Note (agent): dry run done 2026-11-19; blockers, runbook and the npm job
+  draft are in docs/sdlc/changes/2026-11-19-s-alpha-release-dry-run.md.
 
 ### P1-21 Gate: alpha
 

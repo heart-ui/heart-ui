@@ -586,6 +586,27 @@ describe('the get started pages', () => {
     expect(config).toContain(`{ text: '${title}', link: '/start/${name}' }`)
   })
 
+  // The end-to-end templates pin the TypeScript the items are tested with. An unpinned
+  // `typescript` installs the newest major, which Vue's SFC compiler may not load (TypeScript 7
+  // fails every `defineProps<ImportedType>()`), so the docs pin the same major.
+  it('installs the TypeScript major the end-to-end templates test', () => {
+    const templates = join(import.meta.dirname, 'cli-e2e/templates')
+    for (const template of ['vite', 'nuxt']) {
+      const pkg = JSON.parse(readFileSync(join(templates, template, 'package.json'), 'utf8')) as {
+        devDependencies?: Record<string, string>
+      }
+      const major = pkg.devDependencies?.typescript?.match(/\d+/)?.[0]
+      expect(major, `${template} template pins typescript`).toBeDefined()
+      for (const [name] of start) {
+        const page = readFileSync(join(docs, 'start', `${name}.md`), 'utf8')
+        for (const line of page.split('\n').filter((l) => /^npm (install|i)\b/.test(l))) {
+          const ts = line.split(/\s+/).find((word) => /^typescript(@|$)/.test(word))
+          if (ts) expect(ts, `${name}: ${line}`).toBe(`typescript@${major}`)
+        }
+      }
+    }
+  })
+
   it('has a component page for every Tier 1 item', () => {
     const ui = join(import.meta.dirname, '../registry/ui')
     const tier1 = readdirSync(ui).filter((name) => {

@@ -9,7 +9,7 @@ that the code is yours to read and change.
 You need:
 
 - Node 22 or later.
-- A Vite or Nuxt 4 app with Vue 3.5 or later and TypeScript.
+- A Vite or Nuxt 4 app with Vue 3.5 or later and TypeScript 6.
 - Tailwind CSS 4, imported from your app's CSS with `@import "tailwindcss";`.
 - The `@` import alias pointing at your source folder (`src/` in Vite, `app/`
   in Nuxt, where Nuxt sets it for you).
