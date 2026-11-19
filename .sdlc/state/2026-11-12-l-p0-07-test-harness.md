@@ -7,10 +7,10 @@ Risk: low
 Top model: opus   (fable only if the user chose it)
 Commands: test: `pnpm test`
 Started: 2026-11-12
-Base: 23e6ab8
+Base: 7ba4883
 Owner: tam.mai@bigin.vn
 Tool: claude-code
-Verified: 23e6ab8 tree bf7d55182f7bc7b6dfc54964de9a7beaf33636d5
+Verified: 7ba4883 tree bf7d55182f7bc7b6dfc54964de9a7beaf33636d5
 Current: Stage 4 – Ship
 
 ## Stages

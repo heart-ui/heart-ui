@@ -7,10 +7,10 @@ Risk: low
 Top model: opus   (fable only if the user chose it)
 Commands: test: `pnpm test`
 Started: 2026-11-13
-Base: 67133d4
+Base: 5720fff
 Owner: tam.mai@bigin.vn
 Tool: claude-code
-Verified: 67133d4 tree 8834d5ec6aa141e4a2c42ecdaf9f1f40e05f835f
+Verified: 5720fff tree 8834d5ec6aa141e4a2c42ecdaf9f1f40e05f835f
 Current: Stage 4 – Ship
 
 ## Stages
@@ -43,7 +43,7 @@ inline: this session builds it, one part
 - 2026-11-13 Stage 3: pass
 
 ## Deviations
-- 2026-11-13 task 3 What: docs/questions.md unchanged Why: the maintainer's answer was already recorded in 67133d4 Effect: none
+- 2026-11-13 task 3 What: docs/questions.md unchanged Why: the maintainer's answer was already recorded in 5720fff Effect: none
 
 ## Open questions
 -

@@ -4,7 +4,7 @@
 
 **Request (verbatim):** "you build all planned tasks by yourself, when done i will do only 1 review round with you." (working mode in docs/questions.md, 2026-11-15).
 
-Task [P1-04](../../../tasks/phase-1.md#tier-1-components), Recipe C: `radio-group`. Catalog row: Reka RadioGroup, part Item, "`size`, `orientation`". The spec is [registry/ui/radio-group/radio-group.md](../../../registry/ui/radio-group/radio-group.md), committed on its own (eb5d04a).
+Task [P1-04](../../../tasks/phase-1.md#tier-1-components), Recipe C: `radio-group`. Catalog row: Reka RadioGroup, part Item, "`size`, `orientation`". The spec is [registry/ui/radio-group/radio-group.md](../../../registry/ui/radio-group/radio-group.md), committed on its own (9f643a4).
 
 ## Decisions
 

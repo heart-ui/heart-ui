@@ -36,4 +36,4 @@ The button had to fake hover and pressed states for `danger` with a brightness f
 - **Recommended and chosen:** no separate review. `## Public Surface` is none, the maintainer chose the token values, and the tests cover them: every new pair passes contrast, the default theme needs zero moves, and the approved button baselines are unchanged.
 - **Verdicts:** `pnpm check` steps and verify passed. `tokens.css` gained exactly six lines (three tokens, light and dark).
 - **Fixed:** the button's danger hover and pressed states use `danger-hover` and `danger-active` instead of a brightness filter; secondary presses with `muted-active`.
-- **Drift and manual checks:** docs/questions.md already held the answer (67133d4). No `manual` ACs.
+- **Drift and manual checks:** docs/questions.md already held the answer (5720fff). No `manual` ACs.

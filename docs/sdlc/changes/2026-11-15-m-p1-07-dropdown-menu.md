@@ -4,7 +4,7 @@
 
 **Request (verbatim):** "you build all planned tasks by yourself, when done i will do only 1 review round with you." (working mode in docs/questions.md, 2026-11-15).
 
-Task [P1-07](../../../tasks/phase-1.md#tier-1-components), Recipe C: `dropdown-menu`. Catalog row: Reka DropdownMenu, parts Trigger, Content, Item, CheckboxItem, RadioGroup, RadioItem, Label, Separator, Sub, SubTrigger, SubContent; "Item `variant`: default, danger. Item slots `leading`, `trailing`." The spec is [registry/ui/dropdown-menu/dropdown-menu.md](../../../registry/ui/dropdown-menu/dropdown-menu.md), committed on its own (a9e5e76).
+Task [P1-07](../../../tasks/phase-1.md#tier-1-components), Recipe C: `dropdown-menu`. Catalog row: Reka DropdownMenu, parts Trigger, Content, Item, CheckboxItem, RadioGroup, RadioItem, Label, Separator, Sub, SubTrigger, SubContent; "Item `variant`: default, danger. Item slots `leading`, `trailing`." The spec is [registry/ui/dropdown-menu/dropdown-menu.md](../../../registry/ui/dropdown-menu/dropdown-menu.md), committed on its own (b7f79a1).
 
 ## Decisions
 
