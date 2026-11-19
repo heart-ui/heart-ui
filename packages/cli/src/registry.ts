@@ -41,8 +41,8 @@ export type RegistryClientOptions = {
 
 const DEFAULT_REGISTRY = '@heart-ui'
 
-/** The `@heart-ui` item URL until the registry's host is settled (docs/questions.md). */
-export const DEFAULT_REGISTRY_URL = 'https://registry.heart-ui.dev/r/{name}.json'
+/** The `@heart-ui` item URL: the R2 bucket's public host (docs/registry.md, Hosting). */
+export const DEFAULT_REGISTRY_URL = 'https://registry.heart.tammai.me/r/{name}.json'
 const TIMEOUT_MS = 30_000
 const MAX_BYTES = 5 * 1024 * 1024
 const MAX_REDIRECTS = 5

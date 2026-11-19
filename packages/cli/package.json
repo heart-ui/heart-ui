@@ -4,6 +4,13 @@
   "private": true,
   "description": "Heart UI CLI: copies Vue components, blocks and layouts into your project as source.",
   "license": "MIT",
+  "homepage": "https://heart.tammai.me",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heart-ui/heart-ui.git",
+    "directory": "packages/cli"
+  },
+  "bugs": "https://github.com/heart-ui/heart-ui/issues",
   "type": "module",
   "bin": {
     "heart-ui": "./dist/index.mjs"

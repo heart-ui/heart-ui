@@ -13,6 +13,11 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 - Deliver: npm package `heart-ui` and scope `@heart-ui` reserved; GitHub
   organization; domain. Update "Open items" in `docs/spec.md`.
 - Accept: all four exist, or the docs are renamed in one commit.
+- Note (agent): 2026-11-19, the npm name and scope were already the
+  maintainer's; the agent created the GitHub org `heart-ui` with the
+  maintainer's approval; the domain is the maintainer's subdomain
+  `heart.tammai.me` (registry at `registry.heart.tammai.me`). DNS is still
+  to do.
 
 ### P0-02 Workspace scaffold
 

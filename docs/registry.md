@@ -48,7 +48,8 @@ Fields Heart UI adds go under `meta`, which the schema leaves free-form.
 
 ## Hosting
 
-`dist/registry` deploys to Cloudflare R2 behind a public URL. Paths:
+`dist/registry` deploys to Cloudflare R2 behind `https://registry.heart.tammai.me`;
+the docs site deploys to Cloudflare Pages at `https://heart.tammai.me`. Paths:
 `/registry.json` (index), `/r/<name>.json` (items), `/docs/<name>.md`
 (agent docs), `/llms.txt`.
 
@@ -58,12 +59,12 @@ Fields Heart UI adds go under `meta`, which the schema leaves free-form.
 
 ```json
 {
-  "$schema": "https://<registry-host>/schema/config.json",
+  "$schema": "https://registry.heart.tammai.me/schema/config.json",
   "framework": "nuxt",
   "css": "app/assets/css/theme.css",
   "aliases": { "ui": "@/components/ui", "blocks": "@/components/blocks", "layouts": "@/layouts", "lib": "@/lib" },
   "iconSet": "fluent",
-  "registries": { "@heart-ui": "https://<registry-host>/r/{name}.json" }
+  "registries": { "@heart-ui": "https://registry.heart.tammai.me/r/{name}.json" }
 }
 ```
 

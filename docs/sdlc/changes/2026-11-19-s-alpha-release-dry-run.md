@@ -33,10 +33,10 @@ The end-to-end test didn't catch the TypeScript 7 failure because its templates 
 
 ## Blockers for P1-20 (maintainer)
 
-1. **P0-01 is still `todo`.** The npm package `heart-ui` already exists. Its maintainers are the
-   project owner's two npm accounts (version 0.0.16, an old Vite template from 2024), so the
-   alpha can publish to it as a new version. The `@heart-ui` scope, the GitHub organization and
-   the domain (`registry.heart-ui.dev` has no DNS) are not confirmed.
+1. **P0-01** (settled later the same day): the maintainer owns the npm package `heart-ui`
+   (0.0.16, an old Vite template from 2024, so the alpha is a new version of it) and the
+   `@heart-ui` org scope. The GitHub org `heart-ui` exists. The hosts are `heart.tammai.me`
+   (docs) and `registry.heart.tammai.me` (registry). DNS for both is still to do.
 2. **`@heart-ui/theme` must be published before or together with `heart-ui`.** Choice: publish
    it, not bundle it into the CLI. Why: it matches the `@heart-ui` scope in the spec and
    `.changeset/config.json` (`access: public`), and the CLI code doesn't change. Decided by the
@@ -51,11 +51,10 @@ The end-to-end test didn't catch the TypeScript 7 failure because its templates 
 
 ## Runbook for P1-20
 
-1. Finish P0-01: claim the `@heart-ui` npm org, create the GitHub repository (public) and
-   push, and point the domain's `registry` host and the docs at Cloudflare.
+1. DNS: attach `registry.heart.tammai.me` to the R2 bucket as a custom domain and
+   `heart.tammai.me` to the `heart-ui-docs` Pages project.
 2. In `packages/cli/package.json` and `packages/theme/package.json`: remove `"private": true`
-   and add `"repository": { "type": "git", "url": "git+https://github.com/<org>/<repo>.git",
-   "directory": "packages/<cli|theme>" }`.
+   (the `repository` fields are already set).
 3. Versions: `pnpm changeset pre enter alpha`, then `pnpm changeset version`. This consumes
    `.changeset/*.md` and sets `0.1.0-alpha.0`-style versions. Commit the result and tag `v<version>`.
 4. Registry: create the R2 bucket and the `release` environment's secrets, then follow the
