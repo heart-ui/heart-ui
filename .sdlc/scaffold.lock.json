@@ -134,7 +134,9 @@
     ".claude/settings.json": [
       "Bash(pnpm install --frozen-lockfile:*)",
       "Bash(pnpm test:*)",
-      "Bash(pnpm typecheck:*)"
+      "Bash(pnpm typecheck:*)",
+      "Bash(pnpm install --frozen-lockfile && pnpm test:install:*)",
+      "Bash(pnpm lint:*)"
     ],
     ".claude/settings.json#plugin": [
       "extraKnownMarketplaces.sdlc",
