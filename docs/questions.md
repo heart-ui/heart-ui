@@ -3,6 +3,17 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-19 P2-01: the four new presets add 128 visual baselines
+  (`ui-<item>-<graphite|forest|sunset|violet>-<light|dark>-1024.png`), made
+  with `pnpm test:visual --update`; the default baselines are unchanged.
+  They need the maintainer's approval. Also: the P0-07 answer is now done.
+  Each theme is scoped under `[data-heart-theme="<name>"]` by
+  `generateTheme(knobs, { scoped: true })`, and `@heart-ui/theme/presets.css`
+  (generated, pinned) is loaded by both playgrounds. Scoped dark mode
+  follows `.dark` or `data-theme="dark"` on the scope, inside it, or on an
+  ancestor; themes don't nest (one `data-heart-theme` per page), since an
+  inner scope's descendants also match the outer one's selectors. Decided by
+  the agent (delegated).
 - 2026-11-19 alpha dry run (P1-20, P1-21): two release blockers. (1) The
   CLI depends on `@heart-ui/theme` at run time, and installing it fails while
   that package is unpublished. Chose: publish `@heart-ui/theme` with the CLI

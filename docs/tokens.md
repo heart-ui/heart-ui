@@ -12,7 +12,8 @@ semantic and component layers only, through Tailwind utilities.
 ## Knobs
 
 A theme is fully described by one knob file. `@heart-ui/theme` exports
-`generateTheme(knobs): string`, which returns `tokens.css`.
+`generateTheme(knobs, options?): string`, which returns `tokens.css`
+(`options.scoped`: see the presets below).
 
 ```json
 {
@@ -34,6 +35,14 @@ A theme is fully described by one knob file. `@heart-ui/theme` exports
 | `density` | enum | `compact`, `default`, `comfortable` |
 | `font` | two font stacks | `sans`, `mono` |
 | `shadow` | enum | `none`, `soft`, `crisp` |
+
+Presets live in `registry/themes/`: `default`, `graphite`, `forest`,
+`sunset` and `violet`. Each passes every contrast pair with no moves.
+`generateTheme(knobs, { scoped: true })` puts every block under
+`[data-heart-theme="<name>"]` (dark: `.dark` or `[data-theme="dark"]` on
+that element, inside it, or on an ancestor; themes don't nest);
+`@heart-ui/theme/presets.css` holds every preset
+scoped, and the playgrounds load it so `?theme=<name>` renders that preset.
 
 ## Raw layer
 

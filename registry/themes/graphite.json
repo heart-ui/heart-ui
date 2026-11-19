@@ -1,0 +1,9 @@
+{
+  "name": "graphite",
+  "primary": "oklch(0.45 0.02 260)",
+  "neutral": { "hue": 260, "chroma": 0.01 },
+  "radius": 0.25,
+  "density": "compact",
+  "font": { "sans": "Inter, system-ui, sans-serif", "mono": "ui-monospace, monospace" },
+  "shadow": "crisp"
+}

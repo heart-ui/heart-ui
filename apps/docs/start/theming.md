@@ -42,3 +42,19 @@ text on it keeps its contrast.
 
 `npx heart-ui init --theme <preset>` writes a preset's `tokens.css` when you
 set a project up. The presets are listed by `npx heart-ui init --help`.
+
+| Preset | Primary | Radius | Density | Shadow |
+| --- | --- | --- | --- | --- |
+| `default` | blue | 0.5 rem | default | soft |
+| `graphite` | neutral gray | 0.25 rem | compact | crisp |
+| `forest` | green | 0.75 rem | comfortable | soft |
+| `sunset` | orange | 0.5 rem | default | soft |
+| `violet` | violet | 1 rem | default | none |
+
+To switch presets on one page, install the theme package at your CLI's
+version (`npm install @heart-ui/theme@<heart-ui version>`; `init` copies its
+files but doesn't add it), import `@heart-ui/theme/presets.css` after
+`theme.css`, and set `data-heart-theme="<preset>"` on `<html>`. Dark mode
+still follows `.dark` or `data-theme="dark"`. Themes don't nest: set one per
+page. A preset set this way wins over edits to your `tokens.css`; to change
+values, edit `tokens.css` and leave `data-heart-theme` off.

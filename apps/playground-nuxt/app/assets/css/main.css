@@ -1,4 +1,6 @@
 @import '@heart-ui/theme/theme.css';
+/* Every preset, scoped by data-heart-theme; after theme.css so it wins over the default's :root. */
+@import '@heart-ui/theme/presets.css';
 @source '../../../../../registry';
 
 /* The page itself reads the tokens, so dark mode, axe and screenshots see the theme's background. */

@@ -1,0 +1,9 @@
+{
+  "name": "forest",
+  "primary": "oklch(0.55 0.15 155)",
+  "neutral": { "hue": 155, "chroma": 0.015 },
+  "radius": 0.75,
+  "density": "comfortable",
+  "font": { "sans": "Inter, system-ui, sans-serif", "mono": "ui-monospace, monospace" },
+  "shadow": "soft"
+}

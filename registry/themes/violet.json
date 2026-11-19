@@ -1,0 +1,9 @@
+{
+  "name": "violet",
+  "primary": "oklch(0.55 0.22 295)",
+  "neutral": { "hue": 295, "chroma": 0.02 },
+  "radius": 1,
+  "density": "default",
+  "font": { "sans": "Inter, system-ui, sans-serif", "mono": "ui-monospace, monospace" },
+  "shadow": "none"
+}

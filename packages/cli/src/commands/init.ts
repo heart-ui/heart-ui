@@ -3,6 +3,10 @@ import { createRequire } from 'node:module'
 import { dirname, join, relative, sep } from 'node:path'
 import type { Knobs } from '@heart-ui/theme'
 import defaultPreset from '../../../../registry/themes/default.json' with { type: 'json' }
+import forestPreset from '../../../../registry/themes/forest.json' with { type: 'json' }
+import graphitePreset from '../../../../registry/themes/graphite.json' with { type: 'json' }
+import sunsetPreset from '../../../../registry/themes/sunset.json' with { type: 'json' }
+import violetPreset from '../../../../registry/themes/violet.json' with { type: 'json' }
 import { agentsBlock, AGENTS_MARKER } from '../agents.ts'
 import { aliasPath, rewriteImports } from '../aliases.ts'
 import type { Command, Io } from '../cli.ts'
@@ -22,7 +26,13 @@ export type InitDeps = {
   registryUrl?: string
 }
 
-const presets: Record<string, Knobs> = { default: defaultPreset as Knobs }
+const presets: Record<string, Knobs> = {
+  default: defaultPreset as Knobs,
+  forest: forestPreset as Knobs,
+  graphite: graphitePreset as Knobs,
+  sunset: sunsetPreset as Knobs,
+  violet: violetPreset as Knobs,
+}
 const helpers = ['utils', 'icon']
 const defaultAliases: Config['aliases'] = {
   ui: '@/components/ui',
