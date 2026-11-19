@@ -82,4 +82,7 @@ Brand spelling is `Heart UI`; packages, CLI, and repo use `heart-ui`.
 ## Open items
 
 - Confirm the npm scope `@heart-ui`, the GitHub organization, and a domain.
+  Checked 2026-11-19: the npm package `heart-ui` and the `@heart-ui` org
+  scope belong to the maintainer. The GitHub login `heart-ui` and the domain
+  `heart-ui.dev` were free that day.
   Docs in this repo assume `@heart-ui`; rename in one commit if it is taken.
