@@ -1,7 +1,6 @@
 {
   "name": "@heart-ui/theme",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0-alpha.0",
   "description": "Theme knobs to CSS: OKLCH scales, semantic tokens, contrast checks and the Tailwind mapping.",
   "license": "MIT",
   "homepage": "https://heart.tammai.me",

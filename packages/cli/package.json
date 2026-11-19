@@ -1,7 +1,6 @@
 {
   "name": "heart-ui",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0-alpha.0",
   "description": "Heart UI CLI: copies Vue components, blocks and layouts into your project as source.",
   "license": "MIT",
   "homepage": "https://heart.tammai.me",
