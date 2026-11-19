@@ -6,17 +6,17 @@
   "files": {
     ".github/workflows/sdlc-verify.yml": {
       "class": "seeded",
-      "sha256": "63a2f96133dc5f604be8c97be7833fd38c095724b753d3271566170c702d89b4",
+      "sha256": "ee3692de7262d1e385f68d6c769f91dcce7b8005799eda8b18814a86c1728893",
       "template": "builtin:ci"
     },
     ".sdlc/ci/invariants.py": {
       "class": "seeded",
-      "sha256": "39f3ee9ea6398758fbd83b909022cc8f75debf4604c8cbc7ad7c009b0fa9b654",
+      "sha256": "2b294a8082c64f035f2b2602ea0f7a00c7414fc16ac0cd8c0afe7d9d501866b9",
       "template": "templates/project/ci/invariants.py"
     },
     ".github/workflows/sdlc-invariants.yml": {
       "class": "seeded",
-      "sha256": "7d51f78b140b6b54e0738a92ada79e722e040b62d7cf16fe6b31e4a24bb2d10b",
+      "sha256": "f2fe5793f191ef2cf0973510ca4e4f88eb9f0fecb68aded6ee3b4a37e4411202",
       "template": "builtin:invariants"
     },
     ".claude/rules/sdlc.md": {
