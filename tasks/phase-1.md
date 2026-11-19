@@ -117,6 +117,12 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
   registry and docs deployed.
 - Note (agent): dry run done 2026-11-19; blockers, runbook and the npm job
   draft are in docs/sdlc/changes/2026-11-19-s-alpha-release-dry-run.md.
+- Note (agent): released 2026-11-19 from tag `v0.1.0-alpha.0`: the registry
+  at registry.heart.tammai.me (18 items), `heart-ui@0.1.0-alpha.0` from the
+  release workflow with provenance, and `@heart-ui/theme@0.1.0-alpha.0`
+  published by hand (its first version). Docs at heart.tammai.me. Open: npm's
+  `latest` for `heart-ui` is still the old 0.0.16; the theme has no trusted
+  publisher yet.
 
 ### P1-21 Gate: alpha
 
@@ -125,3 +131,9 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 - Depends on: P1-20
 - Accept: a new Nuxt app and a new Vite app, outside this repo, install
   and render every Tier 1 component from the published CLI.
+- Note (agent): checked 2026-11-19 with `npx heart-ui@alpha` and the live
+  registry (no `--registry`): fresh `create vite` (vue-ts) and `create nuxt`
+  apps set up per the docs, `init` and `add` of all 15 Tier 1 items, both
+  build, and all 15 render in Chromium with the theme and no console errors
+  (Nuxt also server-rendered all 15). Plain `npx heart-ui` gets the old
+  0.0.16 until `latest` moves.
