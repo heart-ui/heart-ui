@@ -10,7 +10,11 @@ const app = join(import.meta.dirname, '..')
 const only = process.env.HEART_UI_ITEM
 const cases = demoFiles()
   .filter(({ name }) => !only || name === only)
-  .flatMap(({ kind, name }) => demoStates(kind, name).map((state) => [name, state] as const))
+  .flatMap(({ kind, name }) =>
+    demoStates(kind, name).map(
+      (state) => [state === 'default' ? name : `${name} in state ${state}`, name, state] as const,
+    ),
+  )
 let stop: (() => void) | undefined
 let browser: Browser | undefined
 let base = ''
@@ -28,7 +32,7 @@ afterAll(async () => {
 })
 
 describe.each(['light', 'dark'])('every demo server-renders and hydrates in %s mode', (mode) => {
-  it.each(cases)('%s in state %s hydrates without a warning', async (name, state) => {
+  it.each(cases)('%s hydrates without a warning', async (_, name, state) => {
     const page = await browser!.newPage()
     const problems: string[] = []
     page.on('console', (message) => {

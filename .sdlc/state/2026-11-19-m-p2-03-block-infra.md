@@ -61,6 +61,7 @@ inline: this session builds it, one part
 - 2026-11-19 Stage 3: pass — round 2: one medium and four low, fixing in passing
 - 2026-11-19 Stage 2: pass
 - 2026-11-19 Stage 3: pass
+- 2026-11-19 CI check red: tests/harness.test.ts matched the old axe test title; default-state titles restored (pnpm test:harness 4/4)
 
 ## Deviations
 - 2026-11-19 apps/playground-vite/visual/__screenshots__/blocks-placeholder-block-default-default-dark-1280.png What: placeholder-block baseline from pnpm test:visual --update, sampled by eye Why: AC-006, Recipe B baselines per state, theme, mode and width; maintainer delegated decisions Effect: listed for human approval in docs/questions.md
