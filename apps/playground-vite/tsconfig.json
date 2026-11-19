@@ -4,6 +4,7 @@
     "noEmit": true,
     "types": ["vite/client", "@vitest/browser-playwright"],
     "paths": {
+      "@registry/*": ["../../registry/*"],
       "@/lib/*": ["../../registry/lib/*"],
       "@/components/ui/*": ["../../registry/ui/*"]
     }

@@ -2,15 +2,15 @@ import { spawnSync } from 'node:child_process'
 import { join } from 'node:path'
 import { chromium, type Browser } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { demoFiles } from '../../demo-files'
+import { demoFiles, demoStates } from '../../demo-files'
 import { startNodeServer } from '../../test-utils'
 
 const app = join(import.meta.dirname, '..')
 // `pnpm check:item <name>` narrows the run to that item's demo.
 const only = process.env.HEART_UI_ITEM
-const names = demoFiles()
-  .map(({ name }) => name)
-  .filter((name) => !only || name === only)
+const cases = demoFiles()
+  .filter(({ name }) => !only || name === only)
+  .flatMap(({ kind, name }) => demoStates(kind, name).map((state) => [name, state] as const))
 let stop: (() => void) | undefined
 let browser: Browser | undefined
 let base = ''
@@ -28,7 +28,7 @@ afterAll(async () => {
 })
 
 describe.each(['light', 'dark'])('every demo server-renders and hydrates in %s mode', (mode) => {
-  it.each(names)('%s hydrates without a warning', async (name) => {
+  it.each(cases)('%s in state %s hydrates without a warning', async (name, state) => {
     const page = await browser!.newPage()
     const problems: string[] = []
     page.on('console', (message) => {
@@ -37,7 +37,7 @@ describe.each(['light', 'dark'])('every demo server-renders and hydrates in %s m
       }
     })
     page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
-    const response = await page.goto(`${base}/demo/${name}?mode=${mode}`)
+    const response = await page.goto(`${base}/demo/${name}?mode=${mode}&state=${state}`)
     await page.waitForLoadState('networkidle')
     await page.close()
     expect(response?.status()).toBe(200)

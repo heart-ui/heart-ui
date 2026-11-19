@@ -34,7 +34,7 @@ blocks, agent surface, benchmark.
 
 ### P2-03 Block infrastructure
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P1-21
 - Read: [registry.md](../docs/registry.md#item-metadata)

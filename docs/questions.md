@@ -3,6 +3,20 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-19 P2-03: which `meta` fields must blocks and layouts have
+  (left open by P0-08)? Chose: every field that applies to them. Blocks need
+  `useWhen`, `avoidWhen`, `data` and `states`, and layouts also need
+  `regions`. Why: the block-spec template fills each of them, and agents,
+  demos and the visual runner read them. Also chosen:
+  - Demo states are `default` plus `meta.states`, passed by `?state=` and
+    shown by `DemoStates`.
+  - Block and layout baselines are named
+    `<kind>-<name>-<state>-<theme>-<mode>-<width>.png`.
+  - `placeholder-block` is a fixture with no `item.json`, and its 150
+    baselines are listed for approval.
+  - P2-01's 128 preset baselines were approved when the maintainer merged
+    PR #1.
+  Decided by the agent (delegated).
 - 2026-11-19 P2-01: the four new presets add 128 visual baselines
   (`ui-<item>-<graphite|forest|sunset|violet>-<light|dark>-1024.png`), made
   with `pnpm test:visual --update`; the default baselines are unchanged.

@@ -7,5 +7,6 @@ useHead({ htmlAttrs: computed(() => galleryAttrs(route.query)) })
 </script>
 
 <template>
-  <NuxtPage />
+  <!-- Keyed on the full path, so a client-side query change (?state=) remounts the demo. -->
+  <NuxtPage :page-key="(route) => route.fullPath" />
 </template>

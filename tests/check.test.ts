@@ -78,6 +78,22 @@ describe('check:item', () => {
     )
   })
 
+  it('checks the demo support a block demo runs on', () => {
+    const planned = Object.fromEntries(
+      plan('--item', 'placeholder-block').map(({ step, command }) => [step, command]),
+    )
+    expect(planned.lint).toContain(
+      'eslint --max-warnings 0 registry/blocks/placeholder-block registry/blocks/_fixtures',
+    )
+    expect(planned.lint).toContain(
+      'prettier --check registry/blocks/placeholder-block registry/blocks/_fixtures',
+    )
+    expect(planned['test:unit']).toBe('pnpm run test:unit tests/block-fixtures.test.ts')
+    expect(planned['test:browser']).toBe(
+      'HEART_UI_ITEM=placeholder-block pnpm run test:browser test/demos.browser.test.ts registry/blocks/_fixtures/',
+    )
+  })
+
   it('runs the unit tests that reference the item, and skips demo steps without a demo', () => {
     const planned = Object.fromEntries(
       plan('--item', 'utils').map(({ step, command }) => [step, command]),
