@@ -1,5 +1,5 @@
 {
-  "scaffold_version": "3.5.0",
+  "scaffold_version": "3.13.0",
   "hosts": [
     "claude-code"
   ],
@@ -186,22 +186,28 @@
   "command_runs": {
     "(root)": {
       "install": {
-        "command": "pnpm install --frozen-lockfile",
+        "command": "pnpm install --frozen-lockfile && pnpm test:install",
         "ran": true,
         "exit": 0,
-        "at": "2026-11-12T04:04:09Z"
+        "at": "2026-11-19T15:16:42Z"
+      },
+      "lint": {
+        "command": "pnpm lint",
+        "ran": true,
+        "exit": 0,
+        "at": "2026-11-19T15:16:50Z"
       },
       "typecheck": {
         "command": "pnpm typecheck",
         "ran": true,
         "exit": 0,
-        "at": "2026-11-12T04:04:10Z"
+        "at": "2026-11-19T15:17:01Z"
       },
       "test": {
         "command": "pnpm test",
         "ran": true,
         "exit": 0,
-        "at": "2026-11-12T04:04:11Z"
+        "at": "2026-11-19T15:17:17Z"
       }
     }
   },
