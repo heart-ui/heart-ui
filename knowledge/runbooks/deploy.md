@@ -44,17 +44,38 @@ Routine matches `deploy.environments` in `.sdlc/config.json` (`scaffold.py deplo
 
 ## Rollback
 
-- **Registry:** item versions are immutable (`/r/<name>@<version>.json`); a bad release is fixed forward with a new
-  `meta.version` and a new tag. [unknown: how to restore the previous latest `registry.json` / `r/<name>.json` by hand]
+- **Registry:** item versions are immutable (`/r/<name>@<version>.json`), so only the latest files move back. Re-publish
+  the previous good tag by hand; `release.yml` can't do it, because its guard refuses any tag older than the newest:
+  ```sh
+  git switch --detach v<previous>
+  pnpm install --frozen-lockfile
+  R2_ACCOUNT_ID=… R2_ACCESS_KEY_ID=… R2_SECRET_ACCESS_KEY=… R2_BUCKET=heart-ui-registry pnpm registry:publish
+  ```
+  Use an R2 token with Object Read & Write on `heart-ui-registry` (the `release` environment's secrets can't be read
+  back). The run prints `skip` for every versioned file and `put` for the latest `r/<name>.json`, the agent docs,
+  `llms.txt` and `registry.json`. It checks every version before writing anything, so a rebuild that differs from what
+  was published stops with nothing changed. Effects that last:
+  - An item first added in the bad release keeps its `r/<name>.json` and versioned file but drops out of `registry.json`.
+  - The latest files are served with `max-age=300`, so clients can see the bad release for up to 5 minutes.
+  - The fix ships as a newer tag (new `meta.version` for each changed item), never as the bad tag again.
 - **npm:** move the dist-tag back (`npm dist-tag add heart-ui@<previous> <tag>`, same for `@heart-ui/theme`) and
-  deprecate the bad version; npm versions can't be republished.
-- **Docs:** roll back to the previous deployment in the Cloudflare Pages dashboard (`heart-ui-docs`). [unknown: confirmed]
+  deprecate the bad version (`npm deprecate heart-ui@<bad> "<reason>"`). npm versions can't be republished.
+- **Docs:** in the Pages dashboard, open `heart-ui-docs` → **Deployments**, then on an earlier production deployment
+  choose ⋯ → **Rollback to this deployment**. Only successful production builds qualify, and the switch is
+  immediate. API: `POST /accounts/{account_id}/pages/projects/heart-ui-docs/deployments/{deployment_id}/rollback`. The
+  next push to `main` deploys over the rollback, so revert the bad commit on `main` as well.
 
 ## Logs
 
 - Release: the `release` workflow run in GitHub Actions (`gh run list --workflow release.yml`).
-- Docs builds: the Cloudflare Pages dashboard, project `heart-ui-docs`. [unknown: Pages build log CLI command]
-- Registry traffic: [unknown]
+- Docs builds: Pages dashboard → `heart-ui-docs` → **Deployments** → **View details** → **Build log** (kept 1 year).
+  Wrangler has no build-log command (`wrangler pages deployment tail` streams Functions logs only, and the site has
+  none). To find a deployment id, run `pnpm dlx wrangler pages deployment list --project-name heart-ui-docs`. The
+  API returns the log: `GET /accounts/{account_id}/pages/projects/heart-ui-docs/deployments/{deployment_id}/history/logs`.
+- Registry traffic: R2 dashboard → `heart-ui-registry` → **Metrics** for request and bandwidth totals (also in the
+  GraphQL Analytics API). For per-request events, turn on **Data Access Logs** in the bucket's settings (off by default;
+  kept 7 days; billed at Observability rates from 2026-12-01; status 400 and up isn't logged), then
+  **View logs in Workers Observability**. [unknown: whether Data Access Logs are turned on for the bucket]
 
 ## Learnt on deploys
 
