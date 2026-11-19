@@ -1,0 +1,136 @@
+# Publishes a release from a `v*` tag: the registry to R2, then `@heart-ui/theme` and `heart-ui`
+# to npm with provenance (docs/registry.md, Hosting; the runbook is in
+# docs/sdlc/changes/2026-11-19-s-alpha-release-dry-run.md).
+# Actions are pinned to commits (a tag can be moved); the version is in the comment.
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+# One release at a time, so an older run's latest items never land after a newer one's.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      dist-tag: ${{ steps.check.outputs.dist-tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - id: check
+        name: The tag is the CLI's version and the newest release tag
+        env:
+          TAG: ${{ github.ref_name }}
+        # A tag pushed later for an older line would put older items back as the latest.
+        run: |
+          node --input-type=module - <<'EOF'
+          import { readFileSync, appendFileSync } from 'node:fs'
+          import { execFileSync } from 'node:child_process'
+          const tag = process.env.TAG
+          const version = JSON.parse(readFileSync('packages/cli/package.json', 'utf8')).version
+          if (tag !== `v${version}`) throw new Error(`Tag ${tag} is not v${version} (packages/cli).`)
+          const parse = (v) => {
+            const [core, pre] = v.replace(/^v/, '').split('-', 2)
+            return { core: core.split('.').map(Number), pre: pre ? pre.split('.') : [] }
+          }
+          const ids = (a, b) => {
+            const na = /^\d+$/.test(a), nb = /^\d+$/.test(b)
+            if (na && nb) return Number(a) - Number(b)
+            if (na !== nb) return na ? -1 : 1
+            return a < b ? -1 : a > b ? 1 : 0
+          }
+          const compare = (x, y) => {
+            const a = parse(x), b = parse(y)
+            for (let i = 0; i < 3; i++) if (a.core[i] !== b.core[i]) return a.core[i] - b.core[i]
+            if (!a.pre.length || !b.pre.length) return b.pre.length - a.pre.length
+            for (let i = 0; i < Math.max(a.pre.length, b.pre.length); i++) {
+              if (a.pre[i] === undefined) return -1
+              if (b.pre[i] === undefined) return 1
+              const d = ids(a.pre[i], b.pre[i])
+              if (d) return d
+            }
+            return 0
+          }
+          const tags = execFileSync('git', ['tag', '--list', 'v*'], { encoding: 'utf8' })
+            .split('\n')
+            .filter((t) => /^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(t))
+          const newest = tags.reduce((a, b) => (compare(a, b) >= 0 ? a : b), tag)
+          if (newest !== tag) throw new Error(`${tag} is older than ${newest}; publish from the newest tag.`)
+          const pre = parse(tag).pre[0]
+          appendFileSync(process.env.GITHUB_OUTPUT, `dist-tag=${pre ?? 'latest'}\n`)
+          EOF
+
+  registry:
+    needs: guard
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: release
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        # No dependency cache: a restored cache is a path into the job that holds the write key.
+        with:
+          node-version: 22.x
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm registry:publish
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+
+  # After the registry, so a published CLI never points at items that aren't there yet.
+  npm:
+    needs: [guard, registry]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: release
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing (OIDC); provenance comes with it
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      # Trusted publishing needs npm 11.5.1 or later: Node 24 ships it, Node 22 ships npm 10.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.x
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: npm --version
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --dir packages/theme build && pnpm --dir packages/cli build
+      # pnpm pack turns workspace:* into real versions; npm publish would not. The theme goes
+      # first because the CLI depends on it, and a version npm already has is skipped.
+      - name: Publish
+        env:
+          DIST_TAG: ${{ needs.guard.outputs.dist-tag }}
+        run: |
+          out="$RUNNER_TEMP/pack"
+          mkdir -p "$out"
+          for dir in packages/theme packages/cli; do
+            name=$(node -p "require('./$dir/package.json').name")
+            version=$(node -p "require('./$dir/package.json').version")
+            if [ -n "$(npm view "$name@$version" version 2>/dev/null)" ]; then
+              echo "skip $name@$version (already on npm)"
+              continue
+            fi
+            tarball=$(cd "$dir" && pnpm pack --pack-destination "$out" | tail -n 1)
+            npm publish "$tarball" --tag "$DIST_TAG" --access public
+          done

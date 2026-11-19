@@ -66,41 +66,14 @@ The end-to-end test didn't catch the TypeScript 7 failure because its templates 
 7. P1-21: repeat the dry run above against the published packages and registry, without
    `--registry`.
 
-## Release workflow, npm job (draft, for the maintainer's go-ahead)
+## Release workflow
 
-This job extends the `registry` job drafted in
-[the P1-18 change file](2026-11-19-m-p1-18-registry-publish.md#release-workflow-draft-for-the-maintainers-go-ahead).
-Pin actions by SHA as that draft does, and run `zizmor`. `pnpm pack` turns `workspace:*` into
-real versions; `npm publish` doesn't, so the job publishes the packed tarballs. The theme goes
-first.
-
-```yaml
-  npm:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    environment: release
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@<sha> # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: pnpm/action-setup@<sha> # v6.1.1
-      - uses: actions/setup-node@<sha> # v7.1.0
-        with:
-          node-version: 22.x
-          registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@11
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm --dir packages/theme build && pnpm --dir packages/cli build
-      - run: |
-          mkdir -p "$RUNNER_TEMP/pack"
-          (cd packages/theme && pnpm pack --pack-destination "$RUNNER_TEMP/pack")
-          (cd packages/cli && pnpm pack --pack-destination "$RUNNER_TEMP/pack")
-          npm publish "$RUNNER_TEMP"/pack/heart-ui-theme-*.tgz --tag alpha --access public
-          npm publish "$(ls "$RUNNER_TEMP"/pack/heart-ui-[0-9]*.tgz)" --tag alpha
-```
+Approved by the maintainer and committed as `.github/workflows/release.yml` (2026-11-19). It
+has three jobs. `guard` checks that the tag is `v` plus the CLI's version and is the newest
+release tag, and derives the dist-tag (`alpha`, `beta`, `rc` or `latest`). `registry` publishes
+to R2. `npm` runs after it on Node 24, whose npm (11.19) does trusted publishing, and publishes
+the packed tarballs, skipping any version npm already has. The action pins match their release
+tags. zizmor and actionlint report nothing, and the guard was run against eight tag cases.
 
 ## Follow-ups (tickets)
 

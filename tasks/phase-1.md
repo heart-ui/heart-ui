@@ -91,9 +91,8 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 - Read: [registry.md](../docs/registry.md#hosting)
 - Deliver: `scripts/registry-publish.ts` that uploads the build to R2,
   including immutable `/r/<name>@<version>.json` files; a release workflow.
-- Note (agent): the release workflow is drafted in
-  docs/sdlc/changes/2026-11-19-m-p1-18-registry-publish.md and waits for the
-  maintainer's go-ahead (CI changes need it); not committed.
+- Note (agent): the release workflow is `.github/workflows/release.yml`,
+  committed 2026-11-19 with the maintainer's go-ahead.
 - Accept: a dry run lists the exact objects to upload; a published item
   version is never overwritten.
 - Check: `pnpm registry:publish --dry-run`
