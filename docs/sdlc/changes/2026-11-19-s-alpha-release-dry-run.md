@@ -36,7 +36,7 @@ The end-to-end test didn't catch the TypeScript 7 failure because its templates 
 1. **P0-01** (settled later the same day): the maintainer owns the npm package `heart-ui`
    (0.0.16, an old Vite template from 2024, so the alpha is a new version of it) and the
    `@heart-ui` org scope. The GitHub org `heart-ui` exists. The hosts are `heart.tammai.me`
-   (docs) and `registry.heart.tammai.me` (registry). DNS for both is still to do.
+   (docs) and `registry.heart.tammai.me` (registry), both live since 2026-11-19.
 2. **`@heart-ui/theme` must be published before or together with `heart-ui`.** Choice: publish
    it, not bundle it into the CLI. Why: it matches the `@heart-ui` scope in the spec and
    `.changeset/config.json` (`access: public`), and the CLI code doesn't change. Decided by the
@@ -51,18 +51,20 @@ The end-to-end test didn't catch the TypeScript 7 failure because its templates 
 
 ## Runbook for P1-20
 
-1. DNS: attach `registry.heart.tammai.me` to the R2 bucket as a custom domain and
-   `heart.tammai.me` to the `heart-ui-docs` Pages project.
+1. Done 2026-11-19: R2 bucket `heart-ui-registry` with custom domain
+   `registry.heart.tammai.me` (TLS 1.2 minimum); Pages project `heart-ui-docs` built from
+   GitHub with custom domain `heart.tammai.me`; the GitHub `release` environment (deploys
+   from `v*` tags only) with `R2_ACCOUNT_ID` and `R2_BUCKET`.
 2. In `packages/cli/package.json` and `packages/theme/package.json`: remove `"private": true`
    (the `repository` fields are already set).
 3. Versions: `pnpm changeset pre enter alpha`, then `pnpm changeset version`. This consumes
    `.changeset/*.md` and sets `0.1.0-alpha.0`-style versions. Commit the result and tag `v<version>`.
-4. Registry: create the R2 bucket and the `release` environment's secrets, then follow the
-   manual checks in docs/questions.md (P1-18 entry).
+4. Registry: add `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` (an R2 token with Object Read
+   & Write on `heart-ui-registry` only) to the `release` environment, then follow the manual
+   checks in docs/questions.md (P1-18 entry).
 5. npm: attach a trusted publisher (repository plus `release.yml`) to `heart-ui` and
    `@heart-ui/theme`, approve the workflow below, and push the tag.
-6. Docs: `pnpm --filter docs build`, then deploy `apps/docs/.vitepress/dist` with
-   `apps/docs/wrangler.toml` (Cloudflare Pages project `heart-ui-docs`).
+6. Docs: nothing to do; Pages rebuilds `heart.tammai.me` on every push to main.
 7. P1-21: repeat the dry run above against the published packages and registry, without
    `--registry`.
 
