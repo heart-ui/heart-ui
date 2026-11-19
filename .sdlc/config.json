@@ -8,7 +8,7 @@
   },
   "docs_dir": "docs/sdlc",
   "commands": {
-    "install": "pnpm install --frozen-lockfile",
+    "install": "pnpm install --frozen-lockfile && pnpm test:install",
     "test": "pnpm test",
     "lint": "pnpm lint",
     "typecheck": "pnpm typecheck",
