@@ -9,24 +9,24 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 | ID | Item | Depends on | Status |
 | --- | --- | --- | --- |
-| P1-01 | `label` | P0-14 | review |
-| P1-02 | `textarea` | P0-14 | review |
-| P1-03 | `checkbox` | P1-01 | review |
-| P1-04 | `radio-group` | P1-01 | review |
-| P1-05 | `switch` | P1-01 | review |
-| P1-06 | `select` | P0-14 | review |
-| P1-07 | `dropdown-menu` | P0-14 | review |
-| P1-08 | `tooltip` | P0-14 | review |
-| P1-09 | `tabs` | P0-14 | review |
-| P1-10 | `card` | P0-14 | review |
-| P1-11 | `badge` | P0-14 | review |
-| P1-12 | `toast` | P0-14 | review |
+| P1-01 | `label` | P0-14 | done |
+| P1-02 | `textarea` | P0-14 | done |
+| P1-03 | `checkbox` | P1-01 | done |
+| P1-04 | `radio-group` | P1-01 | done |
+| P1-05 | `switch` | P1-01 | done |
+| P1-06 | `select` | P0-14 | done |
+| P1-07 | `dropdown-menu` | P0-14 | done |
+| P1-08 | `tooltip` | P0-14 | done |
+| P1-09 | `tabs` | P0-14 | done |
+| P1-10 | `card` | P0-14 | done |
+| P1-11 | `badge` | P0-14 | done |
+| P1-12 | `toast` | P0-14 | done |
 
 ## CLI
 
 ### P1-13 CLI core
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P0-14
 - Read: [registry.md](../docs/registry.md)
@@ -40,7 +40,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-14 `init`
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P1-13
 - Deliver: the `init` command per the command table. Fails with a clear
@@ -51,7 +51,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-15 `add` and the lock file
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P1-14
 - Deliver: `add` with recursive dependency resolution, file writes, npm
@@ -62,7 +62,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-16 `list`
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P1-13
 - Deliver: `list` with `--type`, `--category`, `--json`.
@@ -71,7 +71,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-17 CLI end-to-end test
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P1-15, P1-01 to P1-12
 - Deliver: `test:cli-e2e`. It copies committed minimal Nuxt and Vite
@@ -85,7 +85,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-18 Registry publish
 
-- Status: review
+- Status: done
 - Owner: agent, with human for Cloudflare credentials
 - Depends on: P1-17
 - Read: [registry.md](../docs/registry.md#hosting)
@@ -99,7 +99,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-19 Docs for alpha
 
-- Status: review
+- Status: done
 - Owner: agent
 - Depends on: P1-01 to P1-16
 - Deliver: pages for getting started, installation (Nuxt and Vite),
@@ -110,7 +110,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-20 Alpha release
 
-- Status: todo
+- Status: done
 - Owner: human
 - Depends on: P1-18, P1-19
 - Deliver: `heart-ui` published under the `alpha` dist-tag with provenance;
@@ -126,7 +126,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-1-phases
 
 ### P1-21 Gate: alpha
 
-- Status: todo
+- Status: done
 - Owner: human
 - Depends on: P1-20
 - Accept: a new Nuxt app and a new Vite app, outside this repo, install

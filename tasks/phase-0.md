@@ -7,7 +7,7 @@ Order: P0-01 may run any time; P0-02 to P0-09 in sequence; then the pilots.
 
 ### P0-01 Secure the name
 
-- Status: todo
+- Status: done
 - Owner: human
 - Depends on: none
 - Deliver: npm package `heart-ui` and scope `@heart-ui` reserved; GitHub
