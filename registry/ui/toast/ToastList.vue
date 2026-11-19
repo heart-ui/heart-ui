@@ -28,7 +28,8 @@ const variant = (item: ToastObject<ToastData>) => item.data?.variant ?? 'neutral
 // window is in the background.
 const focused = ref(false)
 const hovered = ref(false)
-// Listened to from mount, so a toast that arrives while the window is in the background waits.
+// Read at mount and listened to after, so a toast that arrives while the window is in the
+// background waits.
 const windowFocused = ref(true)
 const paused = computed(() => focused.value || hovered.value || !windowFocused.value)
 
@@ -69,6 +70,8 @@ watch(
 )
 
 interface Timer {
+  // The toast it times: one dismissed and added again with its id is a new object.
+  item: ToastObject<ToastData>
   updateKey: number
   duration: number
   remaining: number
@@ -89,13 +92,13 @@ function schedule() {
   for (const item of toasts.value) {
     const duration = item.data?.duration ?? props.duration
     const timed = duration > 0 && duration < Number.POSITIVE_INFINITY
-    if (!item.open || item.status === 'loading' || !timed) continue
+    if (!item.open || !timed) continue
     live.add(item.id)
     let timer = timers.get(item.id)
     // Adding a toast again with its id, updating it or a new duration starts its time over.
-    if (timer?.updateKey !== item.updateKey || timer.duration !== duration) {
+    if (timer?.item !== item || timer.updateKey !== item.updateKey || timer.duration !== duration) {
       if (timer) clearTimeout(timer.handle)
-      timer = { updateKey: item.updateKey, duration, remaining: duration, startedAt: 0 }
+      timer = { item, updateKey: item.updateKey, duration, remaining: duration, startedAt: 0 }
       timers.set(item.id, timer)
     }
     if (paused.value) stop(timer)
@@ -111,21 +114,28 @@ function schedule() {
   }
 }
 
+// Focus and pointer are read first, so the schedule sees this change's pause.
 watch(
-  toasts,
+  [toasts, () => props.duration],
   () => {
     readFocus()
     readPointer()
+    schedule()
   },
   { flush: 'post' },
 )
-watch([toasts, paused, () => props.duration], schedule, { flush: 'post' })
+watch(paused, schedule, { flush: 'post' })
 
 onMounted(() => {
   window.addEventListener('blur', onWindowBlur)
   window.addEventListener('focus', onWindowFocus)
+  windowFocused.value = document.hasFocus()
   schedule()
 })
+
+// Reka's store puts the newest first; the list shows the newest at the bottom (toast.md), also
+// for toasts added in the same tick.
+const ordered = computed(() => [...toasts.value].reverse())
 onBeforeUnmount(() => {
   window.removeEventListener('blur', onWindowBlur)
   window.removeEventListener('focus', onWindowFocus)
@@ -157,7 +167,7 @@ function onEscape(event: KeyboardEvent, id: string) {
 
 <template>
   <ToastRoot
-    v-for="item in toasts"
+    v-for="item in ordered"
     :key="item.id"
     :toast="item"
     data-slot="toast"
@@ -171,7 +181,6 @@ function onEscape(event: KeyboardEvent, id: string) {
       <ToastDescription data-slot="toast-description" class="text-sm" />
     </div>
     <ToastAction
-      as="button"
       data-slot="toast-action"
       :class="buttonVariants({ variant: 'outline', size: 'sm' })"
     />

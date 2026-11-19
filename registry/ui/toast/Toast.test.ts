@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
 import { h } from 'vue'
 import {
@@ -9,7 +9,14 @@ import {
 } from '../../../apps/playground-vite/test/harness'
 import { Toaster, toast, useToast } from '.'
 
+// The browser runs these tests in an iframe that may never get focus, which the Toaster reads as a
+// window in the background; tests assume a focused window unless they say otherwise.
+beforeEach(() => {
+  vi.spyOn(document, 'hasFocus').mockReturnValue(true)
+})
+
 afterEach(() => {
+  vi.restoreAllMocks()
   toast.dismiss()
   unmountAll()
 })
@@ -483,5 +490,60 @@ describe('Toast', () => {
         await expectNoAxeViolations()
       },
     )
+  })
+
+  describe('follow-ups', () => {
+    it('waits while the window had no focus at mount', async () => {
+      vi.spyOn(document, 'hasFocus').mockReturnValue(false)
+      toaster({ duration: 200 })
+      toast({ title: 'Restored' })
+      await expect.poll(() => open().length).toBe(1)
+      await wait(500)
+      expect(open()).toHaveLength(1)
+      window.dispatchEvent(new FocusEvent('focus'))
+      await expect.poll(() => open().length, { timeout: 1500 }).toBe(0)
+    })
+
+    it('gives a re-added toast its full time', async () => {
+      toaster()
+      toast({ id: 'save', title: 'Saving', duration: 600 })
+      await expect.poll(() => open().length).toBe(1)
+      await wait(450)
+      toast.dismiss('save')
+      toast({ id: 'save', title: 'Saved', duration: 600 })
+      await wait(350)
+      expect(open().map((element) => element.textContent)).toEqual([
+        expect.stringContaining('Saved'),
+      ])
+      await expect.poll(() => open().length, { timeout: 1500 }).toBe(0)
+    })
+
+    it('stacks toasts from one tick oldest first', async () => {
+      toaster()
+      toast({ title: 'Older', duration: 0 })
+      toast({ title: 'Newer', duration: 0 })
+      await expect.poll(() => open().length).toBe(2)
+      expect(
+        open().map((element) => element.querySelector('[data-slot="toast-title"]')!.textContent),
+      ).toEqual(['Older', 'Newer'])
+    })
+
+    it('renders an action with an empty altText', async () => {
+      const errors: unknown[] = []
+      const onError = (event: ErrorEvent) => errors.push(event.error)
+      window.addEventListener('error', onError)
+      try {
+        toaster()
+        toast({
+          title: 'Archived',
+          duration: 0,
+          action: { label: 'Undo', altText: '', onClick: () => {} },
+        })
+        await expect.element(page.getByRole('button', { name: 'Undo' })).toBeVisible()
+        expect(errors).toEqual([])
+      } finally {
+        window.removeEventListener('error', onError)
+      }
+    })
   })
 })

@@ -33,7 +33,13 @@ function show({ title, description, variant = 'neutral', action, duration, id }:
     data: { variant, duration },
     // Only warnings and errors interrupt a screen reader; the rest wait their turn.
     type: variant === 'warning' || variant === 'danger' ? 'foreground' : 'background',
-    actionProps: action && { ...action, closeOnClick: true },
+    // Reka's ToastAction throws without altText and takes the list down; the label is a fair
+    // fallback for an empty one.
+    actionProps: action && {
+      ...action,
+      altText: action.altText || action.label,
+      closeOnClick: true,
+    },
   })
 }
 
