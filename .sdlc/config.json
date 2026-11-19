@@ -24,5 +24,15 @@
     ]
   },
   "prd": "docs/spec.md",
-  "design": "builtin"
+  "design": "builtin",
+  "deploy": {
+    "target": "cloudflare",
+    "environments": [
+      {
+        "name": "production",
+        "routine": false
+      }
+    ],
+    "runbook": "knowledge/runbooks/deploy.md"
+  }
 }
