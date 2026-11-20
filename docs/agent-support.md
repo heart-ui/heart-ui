@@ -36,7 +36,18 @@ and `avoidWhen`. No embeddings.
 ## Project rule files
 
 `heart-ui init` writes `AGENTS.md` (and appends a pointer to an existing
-`CLAUDE.md`). Content, under 40 lines:
+`CLAUDE.md`) and installs the Heart UI skill. `AGENTS.md` is always in the
+agent's context, so it carries the API itself, not only pointers to it: an
+index in `AGENTS.md` beat on-demand skills in
+[Vercel's agent evals](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals).
+
+The API index, generated from each item's `<name>.api.json`: one line per
+item with its import path and props as literal unions, at most 8 KB.
+
+The skill (`SKILL.md`), generated from the registry: the conventions and a
+"need X → use Y" table built from each item's `useWhen`.
+
+The rules, under 40 lines:
 
 - Where components, blocks, and layouts live in this project.
 - The screen workflow from [layout-rules.md](layout-rules.md#screen-workflow).
