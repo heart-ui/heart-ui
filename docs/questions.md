@@ -559,3 +559,21 @@ Gaps and conflicts found while building. Format in
   checks their API tables against the code with `vue-component-meta`, which
   covers the proposal's typed `defineSpec` files. **Answered (maintainer,
   2026-11-20):** adopt items 1 to 3 only.
+
+- 2026-11-20 P2-57: the task says the registry build writes the API
+  snapshots, but the build never writes into `registry/`, and extracting in
+  every build added 2.2 s to each run. Chose: `pnpm registry:api` writes
+  and checks them; the `registry:build` package script runs
+  `registry:api --check` first, so `pnpm check` and `check:item` fail on a
+  stale snapshot, while the build script itself only checks that each
+  snapshot exists. Why: same guarantee without slowing the many test
+  builds. Decided by the agent (delegated).
+
+- 2026-11-20 P2-57: `lib/icon` exports a component (`Icon`, a
+  `defineComponent` in `icon.ts`), but snapshots cover only `.vue`
+  components re-exported as `default as X`, the docs build's rule. Chose:
+  leave `icon` without a snapshot for now and record it; extend the
+  extraction to named `.ts` component exports when a second such item
+  appears. Why: one item, and its API is a single `name` prop. Decided by
+  the agent (delegated).
+

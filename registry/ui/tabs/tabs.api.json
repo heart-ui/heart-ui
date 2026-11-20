@@ -1,0 +1,99 @@
+{
+  "name": "tabs",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Tabs",
+      "props": [
+        {
+          "name": "variant",
+          "type": "'line' | 'pill'",
+          "required": false,
+          "default": "'line'"
+        },
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal'",
+          "required": false,
+          "default": "'horizontal'"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false,
+          "description": "The tab active at first, without `v-model`."
+        },
+        {
+          "name": "dir",
+          "type": "'ltr' | 'rtl'",
+          "required": false,
+          "description": "Sets layout and arrow keys together; by default both follow the page."
+        },
+        {
+          "name": "modelValue",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "TabsContent",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "TabsList",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "TabsTrigger",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}

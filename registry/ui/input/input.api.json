@@ -1,0 +1,49 @@
+{
+  "name": "input",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Input",
+      "props": [
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "required": false,
+          "default": "'md'"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "modelValue",
+          "type": "string",
+          "required": false,
+          "default": "''"
+        }
+      ],
+      "slots": [
+        {
+          "name": "leading"
+        },
+        {
+          "name": "trailing"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string"
+        }
+      ]
+    }
+  ]
+}

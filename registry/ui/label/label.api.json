@@ -1,0 +1,36 @@
+{
+  "name": "label",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Label",
+      "props": [
+        {
+          "name": "for",
+          "type": "string",
+          "required": false,
+          "description": "`id` of the control the label names."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "requiredLabel",
+          "type": "string",
+          "required": false,
+          "default": "'required'",
+          "description": "Read by screen readers in place of the required marker."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}

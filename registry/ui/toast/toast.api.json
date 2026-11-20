@@ -1,0 +1,37 @@
+{
+  "name": "toast",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Toaster",
+      "props": [
+        {
+          "name": "duration",
+          "type": "number",
+          "required": false,
+          "default": "5000"
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Close'"
+        },
+        {
+          "name": "regionLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Notifications ({hotkey})'"
+        },
+        {
+          "name": "announceLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Notification'"
+        }
+      ],
+      "slots": [],
+      "events": []
+    }
+  ]
+}

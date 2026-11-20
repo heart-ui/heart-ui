@@ -11,3 +11,6 @@ description: Deleting build output safely, macOS path case, Node type stripping.
 - **Case-only differences collide on macOS.** Two item names, or two listed files, that differ only in case are one file on disk. Item names are lowercase, and a listed file must match its on-disk path exactly.
 - **Case tests depend on the disk.** On Linux CI `REGISTRY` is a different folder, so assert per disk (`existsSync` of the variant) instead of expecting a refusal everywhere.
 - **`statSync` follows links and throws on broken ones.** Wrap it (`isFolder`) so a dangling link gets a named error, not raw `ENOENT`.
+- **`pnpm registry:build` and `node scripts/registry-build.ts` differ.** The package script runs `registry:api --check` (a type checker, about 2 s) first; tests and `registry:publish` call the build script directly and skip it. `pnpm run x --flag` appends `--flag` only to the script's last command.
+- **Test fixtures under `dist/` belong to the repo's git but are ignored.** `registry:api` treats an ignored registry as having no history; a fixture that needs a baseline runs `git init` in its own folder (and drops `CI` from its environment, since that repo has no `origin/main`).
+

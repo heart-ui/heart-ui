@@ -25,7 +25,8 @@ shadcn-format registry. Package and CLI name: `heart-ui`.
 | `pnpm check` | Full gate: lint, types, unit, browser, axe, visual, SSR, registry build, CLI end to end (needs the network) |
 | `pnpm check:item <name>` | Same gate, scoped to one registry item |
 | `pnpm dev:vite` / `pnpm dev:nuxt` | Run a playground |
-| `pnpm registry:build` | Emit registry JSON to `dist/registry` |
+| `pnpm registry:build` | Check the API snapshots, then emit registry JSON to `dist/registry` |
+| `pnpm registry:api` | Regenerate each item's `<name>.api.json` after an API change |
 | `pnpm test:visual --update` | Regenerate baselines. Human approval required. |
 
 ## Working loop

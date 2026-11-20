@@ -59,7 +59,31 @@ these folders.
 `dist/registry` deploys to Cloudflare R2 behind `https://registry.heart.tammai.me`;
 the docs site deploys to Cloudflare Pages at `https://heart.tammai.me`. Paths:
 `/registry.json` (index), `/r/<name>.json` (items), `/docs/<name>.md`
-(agent docs), `/llms.txt`.
+(agent docs), `/docs/<name>.api.json` (API snapshots), `/llms.txt`.
+
+## API snapshots
+
+Each item that exports a `.vue` component commits `<name>.api.json` beside
+its `item.json`: its name, `meta.version`, and each component's props
+(name, type, required, default, description), slots and events, extracted
+from the code with `vue-component-meta`. `pnpm registry:api` writes them and
+`pnpm registry:api --check` (run by `pnpm check`) fails while one is stale;
+`registry:build` fails while one is missing or left over, and copies each
+to `docs/<name>.api.json` in its output. The snapshot is not in the
+item's `files`, so users never receive it.
+
+A breaking API change removes an item, a component, a prop, a slot or an
+event (a rename is a removal) or makes a prop required. It is judged
+against the snapshots as committed where the branch left `main` (the merge
+base with `origin/main`, else `HEAD`), so a deleted or conflicted file
+can't hide one. `registry:api` refuses to write one, and `--check` fails
+on one, until the item's `meta.version` rises at the breaking position
+(the minor while `0.x`, else the major) and a line of a pending changeset
+says `BREAKING` and names the item in backticks (`` `button` ``); only
+changesets added on the branch count. In CI the check fails when
+`origin/main` is missing; locally it warns and uses `HEAD`.
+`pnpm registry:build` runs `--check` on `registry/` first; the build script
+itself, and so `registry:publish`, trust that check and CI.
 
 ## Project config
 

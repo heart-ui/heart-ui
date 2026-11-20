@@ -1,0 +1,32 @@
+{
+  "name": "badge",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Badge",
+      "props": [
+        {
+          "name": "variant",
+          "type": "'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'",
+          "required": false,
+          "default": "'neutral'"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm'",
+          "required": false,
+          "default": "'md'"
+        }
+      ],
+      "slots": [
+        {
+          "name": "leading"
+        },
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}
