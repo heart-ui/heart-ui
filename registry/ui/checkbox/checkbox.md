@@ -71,7 +71,9 @@ unchecked, checked, indeterminate; hover, focus-visible, disabled
 ## Do
 
 ```vue
-<Checkbox v-model="all" :model-value="some ? 'indeterminate' : all">Select all</Checkbox>
+<Checkbox :model-value="some ? 'indeterminate' : all" @update:model-value="selectAll">
+  Select all
+</Checkbox>
 ```
 
 ## Do not

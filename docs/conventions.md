@@ -161,7 +161,16 @@ agents ([agent-support.md](agent-support.md#agent-docs)).
   shows in review. Removing or renaming a
   prop, slot or event is breaking ([registry.md](registry.md#api-snapshots)).
 - The `vue` examples under `## Usage` and `## Do` are type-checked against
-  the registry with `strictTemplates`; `## Do not` examples are not.
+  the registry with `strictTemplates` (`scripts/spec-examples.ts`, run by
+  `pnpm typecheck`); `## Do not` examples are not. An example may read page
+  state it doesn't declare (`save`, `country`) and pass global HTML
+  attributes, `aria-*`, `data-*` and element events (`@click`) to a
+  component's root; form attributes and events (`type`, `name`, `required`,
+  `@change`) only to a component that renders a native field. Field state
+  (`value`, `checked`) never falls through. Any other unknown prop, event
+  or component fails, and examples are template-only. `check:item <name>`
+  checks the item's spec and every spec whose examples use its components. Router, Nuxt and
+  Vue built-in components need no import.
 - `docs/layout-rules.md` and `docs/tokens.md` are published as `/guide/`
   pages. A link to them, or to another published item, becomes a site
   link; any other relative link keeps only its text.

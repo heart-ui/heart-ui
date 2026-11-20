@@ -83,7 +83,7 @@ new item ships with them.
 
 ### P2-58 Type-checked spec examples
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P2-57
 - Read: [conventions.md](../docs/conventions.md#docs-site),

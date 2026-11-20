@@ -577,3 +577,14 @@ Gaps and conflicts found while building. Format in
   appears. Why: one item, and its API is a single `name` prop. Decided by
   the agent (delegated).
 
+- 2026-11-20 P2-58: `strictTemplates` reports `id`, `aria-label` and
+  `@click` on every registry component, though Vue passes them to the
+  root element and the specs rely on that. Chose: keep `strictTemplates`
+  for spec examples, and blank out before checking only what falls
+  through: global HTML attributes, `aria-*`, `data-*` and element events
+  on any component, form attributes and events only on one that renders a
+  native field, never field state (`value`, `checked`). Any other unknown
+  prop or event fails. Why: the task's made-up prop still fails, and the
+  conventions' fallthrough attributes don't. Decided by the agent
+  (delegated).
+

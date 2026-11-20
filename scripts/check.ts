@@ -110,7 +110,11 @@ function itemPlan(name: string, temp: () => string): Step[] {
     },
     {
       name: 'typecheck',
-      commands: [['pnpm', 'exec', 'vue-tsc', '-p', tsconfig(), '--noEmit']],
+      commands: [
+        // The item's spec examples, type-checked against the registry (scripts/spec-examples.ts).
+        ['node', 'scripts/spec-examples.ts', '--item', name],
+        ['pnpm', 'exec', 'vue-tsc', '-p', tsconfig(), '--noEmit'],
+      ],
       note: `includes ${folder} only`,
       // The registry's compiler settings, only this item's files.
       before: () =>
