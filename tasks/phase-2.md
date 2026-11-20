@@ -98,7 +98,7 @@ new item ships with them.
 
 ### P2-59 Agent context: API index and skill
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P2-57
 - Read: [agent-support.md](../docs/agent-support.md#project-rule-files)

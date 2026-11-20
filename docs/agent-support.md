@@ -41,11 +41,24 @@ agent's context, so it carries the API itself, not only pointers to it: an
 index in `AGENTS.md` beat on-demand skills in
 [Vercel's agent evals](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals).
 
-The API index, generated from each item's `<name>.api.json`: one line per
-item with its import path and props as literal unions, at most 8 KB.
+The API index, generated from each item's `<name>.api.json`: under a heading
+per kind naming its import alias, one line per item with its path, its named
+exports and its props as literal unions and booleans, at most 8 KB. Item
+descriptions live in the skill's table, not here.
 
 The skill (`SKILL.md`), generated from the registry: the conventions and a
 "need X → use Y" table built from each item's `useWhen`.
+
+`registry:build` generates both (`scripts/agent-context.ts`) and the
+registry publishes them at `/agents/api-index.md` and
+`/skills/heart-ui/SKILL.md`. The skill follows the Agent Skills format
+(agentskills.io): `name` matches its folder, `description` stays under
+1,024 characters, the body under 500 lines. The conventions in it are
+hand-written in `scripts/skill-template.md`; the table is generated. The
+build fails when the index passes 8 KB. The index names the default aliases
+(`@/components/ui`, `@/lib`); `init` rewrites them to the project's
+`heart-ui.json` aliases when it writes `AGENTS.md`, as `add` rewrites item
+imports.
 
 The rules, under 40 lines:
 

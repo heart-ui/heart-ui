@@ -15,6 +15,14 @@ import {
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Ajv, type ErrorObject } from 'ajv'
+import {
+  type AgentItem,
+  AgentContextError,
+  apiIndex,
+  moduleExports,
+  skillMarkdown,
+} from './agent-context.ts'
+import type { ApiSnapshot } from './api-snapshot.ts'
 import { snapshotEntries, snapshotProblems } from './registry-api.ts'
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -22,6 +30,8 @@ const schemaDir = join(repo, 'scripts/registry-schemas')
 const itemSchemaId = 'https://ui.shadcn.com/schema/registry-item.json'
 const indexSchemaId = 'https://ui.shadcn.com/schema/registry.json'
 const scope = '@heart-ui'
+// The agent context the build writes beside the items: the API index, then the skill.
+const agentFiles = ['agents/api-index.md', 'skills/heart-ui/SKILL.md']
 // Lists what the build wrote into --out, so a rebuild deletes exactly that and nothing else.
 const markerName = '.heart-ui-registry-build.json'
 
@@ -50,7 +60,7 @@ const namePattern = /^[a-z0-9][a-z0-9_-]*$/
 
 type SourceItem = { name: string; type: string; files: string[] } & Record<string, unknown>
 type BuiltFile = { path: string; type: string; content: string }
-type BuiltItem = Omit<SourceItem, 'files'> & { $schema: string; files: BuiltFile[] }
+type BuiltItem = Omit<SourceItem, 'files'> & { name: string; $schema: string; files: BuiltFile[] }
 
 function errorCode(error: unknown) {
   return (error as { code?: string }).code ?? 'unknown error'
@@ -155,7 +165,8 @@ function writeOut(out: string, registry: string, files: Map<string, string>) {
             namePattern.test(file.slice(2, -5))) ||
           (file.startsWith('docs/') &&
             file.endsWith('.api.json') &&
-            namePattern.test(file.slice(5, -9))))
+            namePattern.test(file.slice(5, -9))) ||
+          agentFiles.includes(file))
       if (!Array.isArray(listed) || !listed.every(owned)) {
         throw new RegistryError(`--out ${out}: ${markerName} is not one this build wrote`)
       }
@@ -175,12 +186,12 @@ function writeOut(out: string, registry: string, files: Map<string, string>) {
   }
   try {
     for (const file of previous) rmSync(join(target, file), { force: true })
-    for (const folder of ['r', 'docs']) {
+    for (const folder of ['r', 'docs', 'agents', 'skills/heart-ui', 'skills']) {
       if (existsSync(join(target, folder)) && readdirSync(join(target, folder)).length === 0) {
         rmdirSync(join(target, folder))
       }
-      mkdirSync(join(target, folder), { recursive: true })
     }
+    for (const file of files.keys()) mkdirSync(dirname(join(target, file)), { recursive: true })
     // The marker goes first, so a build that stops halfway still owns what it wrote.
     const marker = { files: [...files.keys()] }
     writeFileSync(join(target, markerName), `${JSON.stringify(marker, null, 2)}\n`)
@@ -467,6 +478,53 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
   for (const item of items) output.set(`r/${item.name}.json`, `${JSON.stringify(item, null, 2)}\n`)
   for (const snapshot of snapshots) {
     if (snapshot.expected !== null) output.set(`docs/${snapshot.name}.api.json`, snapshot.expected)
+  }
+
+  // What agents read: the API index for AGENTS.md and the Heart UI skill (docs/agent-support.md).
+  const apis = new Map<string, ApiSnapshot>()
+  for (const snapshot of snapshots) {
+    if (snapshot.expected === null) continue
+    let api: ApiSnapshot
+    try {
+      api = JSON.parse(snapshot.expected) as ApiSnapshot
+    } catch {
+      throw new RegistryError(`${snapshot.file}: is not valid JSON`)
+    }
+    const valid =
+      Array.isArray(api?.components) &&
+      api.components.every(
+        (component) => typeof component?.name === 'string' && Array.isArray(component.props),
+      )
+    if (!valid) throw new RegistryError(`${snapshot.file}: components or their props are missing`)
+    apis.set(snapshot.name, api)
+  }
+  const agentItems: AgentItem[] = items.map((item) => {
+    const meta = (item.meta ?? {}) as { useWhen?: unknown }
+    const [, kind = 'ui'] = item.files[0]?.path.split('/') ?? []
+    // The module a project imports: the folder's index.ts, else its one top-level .ts file.
+    const top = item.files.filter((file) => file.path.split('/').length === 4)
+    const entry =
+      top.find((file) => file.path.endsWith('/index.ts')) ??
+      (top.filter((file) => file.path.endsWith('.ts')).length === 1
+        ? top.find((file) => file.path.endsWith('.ts'))
+        : undefined)
+    const module = entry ? basename(entry.path, '.ts') : 'index'
+    return {
+      name: item.name,
+      kind,
+      entry: module === 'index' ? '' : `/${module}`,
+      exports: entry ? moduleExports(entry.content) : [],
+      description: typeof item.description === 'string' ? item.description : '',
+      useWhen: typeof meta.useWhen === 'string' ? meta.useWhen : undefined,
+      components: apis.get(item.name)?.components ?? [],
+    }
+  })
+  try {
+    output.set(agentFiles[0]!, apiIndex(agentItems))
+    output.set(agentFiles[1]!, skillMarkdown(agentItems))
+  } catch (error) {
+    if (error instanceof AgentContextError) throw new RegistryError(error.message)
+    throw error
   }
   writeOut(out, registry, output)
   return items.map((item) => item.name)
