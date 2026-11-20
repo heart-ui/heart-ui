@@ -59,6 +59,7 @@ registry/ui/button/
   index.ts            Re-exports
   item.json           Registry metadata (see registry.md)
   button.md           Agent and docs page source
+  button.api.json     Props, slots and events extracted from the code; generated, committed
   Button.demo.vue     Demo used by docs, visual tests, and playgrounds
   Button.test.ts      Browser test: behavior, keyboard, axe
 ```
@@ -155,6 +156,11 @@ agents ([agent-support.md](agent-support.md#agent-docs)).
   a prop whose type includes boolean and has no default equals `false`.
   `none` means no default; write a string default plainly (`md`), and quote
   it only when it would read as no default (`''`, `'none'`).
+- `<name>.api.json` is generated from the code by the registry build and
+  committed; `pnpm check` fails when it is stale, so an API change always
+  shows in review. Removing or renaming a prop, slot or event is breaking.
+- The `vue` examples under `## Usage` and `## Do` are type-checked against
+  the registry with `strictTemplates`; `## Do not` examples are not.
 - `docs/layout-rules.md` and `docs/tokens.md` are published as `/guide/`
   pages. A link to them, or to another published item, becomes a site
   link; any other relative link keeps only its text.

@@ -548,3 +548,14 @@ Gaps and conflicts found while building. Format in
   `v-if` chain counts. Why: closest to layout-rules.md that a file can
   prove without rendering; axe and the benchmark's render cover the rest.
   Decided by the agent (delegated).
+
+- 2026-11-20 (agent-first proposal): which parts of the proposal join the
+  plan? Chose, with the maintainer: an always-loaded API index in
+  `AGENTS.md`, a generated skill, a committed `<name>.api.json` snapshot
+  per item and type-checked spec examples (P2-57 to P2-59, and P2-50
+  widened). Kept as they are: the `heart-ui` CLI, Vite support, unprefixed
+  component names, the MCP server (P2-49) and the benchmark gates (80% at
+  beta, 90% at 1.0). Specs stay in `<name>.md`: the docs build already
+  checks their API tables against the code with `vue-component-meta`, which
+  covers the proposal's typed `defineSpec` files. **Answered (maintainer,
+  2026-11-20):** adopt items 1 to 3 only.

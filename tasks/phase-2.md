@@ -57,6 +57,62 @@ blocks, agent surface, benchmark.
 - Accept: each check has one passing and one failing fixture screen.
 - Check: `pnpm --filter heart-ui test`
 
+## Agent-first additions
+
+Adopted from the agent-first proposal (2026-11-20): an always-loaded API
+index and a skill for agents, a committed API snapshot per item, and
+type-checked spec examples. They run before the Tier 2 components so every
+new item ships with them.
+
+### P2-57 API snapshot
+
+- Status: todo
+- Owner: agent
+- Depends on: P2-04
+- Read: [conventions.md](../docs/conventions.md#docs-site),
+  [registry.md](../docs/registry.md#item-metadata)
+- Deliver: the registry build writes `<name>.api.json` next to each item:
+  props (name, type, default, required), slots and events, extracted with
+  `vue-component-meta` through the same code the docs build uses. The file
+  is committed; `pnpm check` fails when it is stale. The registry publishes
+  it at `/docs/<name>.api.json`.
+- Accept: changing a prop's type or default in `Button.vue` without
+  regenerating fails `pnpm check`; a change that removes or renames a prop,
+  slot or event is reported as breaking and needs a changeset that says so.
+- Check: `pnpm registry:build && pnpm check:item button`
+
+### P2-58 Type-checked spec examples
+
+- Status: todo
+- Owner: agent
+- Depends on: P2-57
+- Read: [conventions.md](../docs/conventions.md#docs-site),
+  [component-spec.md](../docs/templates/component-spec.md)
+- Deliver: every `vue` block under `## Usage` and `## Do` in an item's
+  `<name>.md` is type-checked against the registry with `vue-tsc` and
+  `strictTemplates` (unknown props, events and components fail). `## Do not`
+  blocks are skipped: they show mistakes on purpose.
+- Accept: a Usage example with a made-up prop fails `pnpm check`; every
+  existing item passes.
+- Check: `pnpm check`
+
+### P2-59 Agent context: API index and skill
+
+- Status: todo
+- Owner: agent
+- Depends on: P2-57
+- Read: [agent-support.md](../docs/agent-support.md#project-rule-files)
+- Deliver: a generator that turns the registry's `*.api.json` and
+  `useWhen` fields into (1) a compact API index, one line per item with its
+  import path and props as literal unions, at most 8 KB, and (2) a
+  `SKILL.md` holding the conventions and a "need X → use Y" table. Both are
+  published with the registry. `init` places the index in `AGENTS.md`
+  (P2-50) and the skill where agents load skills (check the current
+  `skills` convention upstream before building).
+- Accept: the index lists every registry item and fits in 8 KB; a new item
+  appears in both files after `pnpm registry:build` with no hand edits.
+- Check: `pnpm registry:build`
+
 ## Tier 2 components
 
 Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-2-phase-2).
@@ -148,10 +204,11 @@ All depend on P2-03, P2-04, and the Tier 2 components they use.
 
 - Status: todo
 - Owner: agent
-- Depends on: P2-04
+- Depends on: P2-04, P2-59
 - Read: [agent-support.md](../docs/agent-support.md#project-rule-files)
-- Deliver: `init` writes `AGENTS.md` and links it from an existing
-  `CLAUDE.md`; never overwrites user content.
+- Deliver: `init` writes `AGENTS.md` (rules plus the API index from P2-59)
+  and the skill, and links `AGENTS.md` from an existing `CLAUDE.md`; never
+  overwrites user content.
 - Accept: e2e test asserts both cases (no file, existing file).
 - Check: `pnpm test:cli-e2e`
 
