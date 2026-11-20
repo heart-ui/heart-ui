@@ -14,7 +14,7 @@ menus.
 
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | A horizontal rule spans the width; a vertical one stretches to the row's height |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | A horizontal rule spans the width of a stack; a vertical one stretches to the height of a flex row, so its parent must be `flex` (or `grid`) |
 | `decorative` | `boolean` | `true` | Hidden from screen readers (`role="none"`). Set `false` when the rule separates content groups readers should hear apart |
 | `class` | `string` | none | Merged last |
 
@@ -62,6 +62,6 @@ None. A separator is not focusable.
 ## Do not
 
 ```vue
-<!-- A rule made from a border class skips the token and the orientation. -->
+<!-- A border on an empty div has no separator role, no decorative switch and no vertical form. -->
 <div class="border-t border-border" />
 ```

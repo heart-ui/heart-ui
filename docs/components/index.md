@@ -44,7 +44,7 @@ Confirm each Reka UI primitive's current API in its docs before building.
 | `empty-state` | None | none | `title`, `description`. Slots `icon`, `actions`. |
 | `drawer` | Reka Dialog | Trigger, Content, Header, Title, Description, Footer, Close | `side`: start, end, bottom. Content `size`. |
 | `accordion` | Reka Accordion | Item, Trigger, Content | `type`: single, multiple. |
-| `separator` | Reka Separator | none | `orientation`. |
+| `separator` | Reka Separator | none | `orientation`, `decorative` (default `true`). |
 | `progress` | Reka Progress | none | `size`. Indeterminate when the value is null. |
 
 ## Tier 3 (Phase 3)
