@@ -17,4 +17,5 @@ One line per defect: what it looks like, then the severity.
 - A recursive walk (or a recursive parser) over untrusted nested input with no depth cap, so a crafted file overflows the stack and reports "Unexpected error": high.
 - A scan of untrusted input that is quadratic: a regex with overlapping quantifiers, a per-item rescan of the whole file, a per-item copy of growing state (including a library's, such as a parser's lookahead cloning): high.
 - A parser-free reading of code by regex or token walk that is meant to match a real rule or compiler: it diverges on each new syntax shape; use the real parser: medium.
+- A check that the task's own gate never runs: wired into a unit test that the per-item plan (`check:item`) skips, or into a script that other callers bypass: high.
 

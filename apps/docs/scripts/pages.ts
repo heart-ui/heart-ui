@@ -2,7 +2,17 @@
 // Links in the Markdown are rewritten when it renders (.vitepress/links.ts), not here.
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { createChecker, type ComponentMeta, type PropertyMetaSchema } from 'vue-component-meta'
+import {
+  type ApiComponent,
+  apiChecker,
+  apiEvents,
+  apiProps,
+  apiSlots,
+  componentExports,
+  defaultText,
+  defaultValue,
+  itemComponents,
+} from '../../../scripts/api-snapshot.ts'
 import { registryDir } from '../../demo-files.ts'
 import { type DocsItem, docsItems, escapeHtml, headingLines, markdownLines } from './items.ts'
 
@@ -14,44 +24,26 @@ export interface DocsPages {
   demoPage: string
 }
 
-export type ApiComponent = { name: string } & Pick<ComponentMeta, 'props' | 'slots' | 'events'>
+export { type ApiComponent, componentExports }
 
 /** Every item's pages. Throws once, listing the drift in every item, when a spec and its types disagree. */
 export function renderPages(registry = registryDir): DocsPages[] {
-  const checker = createChecker(join(registry, 'tsconfig.json'), { schema: true })
+  const checker = apiChecker(registry)
   const drift: string[] = []
   const pages = docsItems(registry).map((item) => {
     const markdown = readFileSync(join(item.dir, `${item.name}.md`), 'utf8')
-    const parts = componentExports(readFileSync(join(item.dir, 'index.ts'), 'utf8'))
-    if (parts.length === 0) {
+    const components = itemComponents(checker, item.dir)
+    if (components.length === 0) {
       throw new Error(
         `docs: ${item.name}/index.ts re-exports no component as default from a .vue file`,
       )
     }
-    const components = parts.map(({ name, file }) => ({
-      ...checker.getComponentMeta(join(item.dir, file)),
-      name,
-    }))
     const built = buildItemPage(item, markdown, components)
     drift.push(...built.drift)
     return { name: item.name, item: built.page, demoPage: demoPage(item) }
   })
   if (drift.length > 0) throw driftError(drift)
   return pages
-}
-
-/**
- * The components an item's `index.ts` re-exports as `export { default as X } from './X.vue'`.
- * vue-component-meta can't follow that re-export, so each file is read on its own.
- */
-export function componentExports(index: string) {
-  const source = index.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')
-  return [...source.matchAll(/export\s*\{([^}]*)\}\s*from\s*'\.\/([^']+\.vue)'/g)].flatMap(
-    (match) => {
-      const name = /(?:^|,)\s*default\s+as\s+(\w+)\s*(?:,|$)/.exec(match[1] as string)?.[1]
-      return name ? [{ name, file: match[2] as string }] : []
-    },
-  )
 }
 
 /** `components/index.md`: every published item, linked, with its one-line description. */
@@ -243,67 +235,27 @@ interface Member {
   description: string
 }
 
-// The default Vue gives a member; `null` is none. Vue casts an absent prop whose type includes boolean to `false`.
-function typesDefault(member: Member) {
-  if (member.default === undefined) return member.boolean ? 'false' : null
-  return member.default === 'undefined' ? null : unquote(member.default)
-}
-
 function typeMembers(section: Section, components: ApiComponent[]): Member[] {
   return components.flatMap((component): Member[] => {
     const part = component.name
-    if (section === 'Slots') {
-      return component.slots.map(({ name, description }) => ({ part, name, description }))
-    }
+    if (section === 'Slots') return apiSlots(component).map((slot) => ({ part, ...slot }))
     if (section === 'Events') {
-      return component.events.map(({ name, type, description }) => ({
+      return apiEvents(component).map(({ name, payload, description }) => ({
         part,
         name,
-        type: payloadText(type),
+        type: payload,
         description,
       }))
     }
-    return component.props
-      .filter((prop) => !prop.global)
-      .map((prop) => {
-        const members = unionMembers(prop.schema)
-        return {
-          part,
-          name: prop.name,
-          type: typeText(prop.schema, prop.type),
-          default: prop.default,
-          boolean: members.includes('true') && members.includes('false'),
-          description: prop.description,
-        }
-      })
+    return apiProps(component).map(({ name, type, default: value, boolean, description }) => ({
+      part,
+      name,
+      type,
+      default: value,
+      boolean,
+      description,
+    }))
   })
-}
-
-// Emits come back as argument tuples: `[]` is no payload, `[value: T]` reads as `T`. More than one
-// argument, or a rest argument, is shown as written.
-function payloadText(type: string) {
-  const inner = /^\[([\s\S]*)\]$/.exec(type.trim())?.[1]?.trim()
-  if (inner === undefined) return quotes(type)
-  if (inner === '') return ''
-  const args = topLevelSplit(inner)
-  const single = args.length === 1 && !inner.startsWith('...')
-  return quotes(single ? inner.replace(/^\w+\??:\s*/, '') : type)
-}
-
-// Splits on commas outside brackets, braces, parentheses and angle brackets.
-function topLevelSplit(text: string) {
-  const parts: string[] = []
-  let depth = 0
-  let start = 0
-  for (const [index, char] of [...text].entries()) {
-    if ('[{(<'.includes(char)) depth++
-    else if (']})>'.includes(char)) depth--
-    else if (char === ',' && depth === 0) {
-      parts.push(text.slice(start, index))
-      start = index + 1
-    }
-  }
-  return [...parts, text.slice(start)]
 }
 
 // Vue reports these as global attributes, so a spec may list them without the types doing so.
@@ -360,14 +312,14 @@ function mergeTable(
     }
     if (defaultAt >= 0) {
       const spec = row[defaultAt] ?? ''
-      const types = typesDefault(member)
+      const types = defaultValue(member)
       if (specDefault(spec) !== types) {
-        const shown = types === null ? 'nothing' : code(quotes(member.default ?? 'false'))
+        const shown = types === null ? 'nothing' : code(defaultText(member) ?? '')
         report(
           `${label(part, name)} defaults to ${shown} in the types but ${spec || 'nothing'} in ${item}.md`,
         )
       }
-      merged[defaultAt] = types === null ? 'none' : cell(code(quotes(member.default ?? 'false')))
+      merged[defaultAt] = types === null ? 'none' : cell(code(defaultText(member) ?? ''))
     }
     if (noteAt >= 0 && !merged[noteAt]) merged[noteAt] = cell(prose(member.description))
     return merged
@@ -397,33 +349,6 @@ function insertBefore(
   return at === undefined
     ? `${markdown.trimEnd()}\n\n${block}`
     : `${markdown.slice(0, at)}${block}${markdown.slice(at)}`
-}
-
-// Unions come back wrapped (`NonNullable<"sm" | "md" | null | undefined> | undefined`); the schema holds the
-// members. Only a union of literals is spelled out: a named type such as `AsTag | Component` reads better as written.
-function typeText(schema: PropertyMetaSchema, type: string): string {
-  const members = unionMembers(schema).filter(
-    (member) => member !== 'undefined' && member !== 'null',
-  )
-  const unique = [...new Set(members)]
-  if (unique.length === 2 && unique.includes('true') && unique.includes('false')) return 'boolean'
-  if (
-    unique.length > 0 &&
-    unique.every((member) => /^("[^"]*"|-?\d+(\.\d+)?|true|false)$/.test(member))
-  ) {
-    return quotes(unique.join(' | '))
-  }
-  return quotes(type.replace(/ \| undefined$/, ''))
-}
-
-function unionMembers(schema: PropertyMetaSchema): string[] {
-  if (typeof schema === 'string') return [schema]
-  if (schema.kind === 'enum' && schema.schema) return schema.schema.flatMap(unionMembers)
-  return [schema.type]
-}
-
-function quotes(text: string) {
-  return text.replace(/"([^"\\]*)"/g, "'$1'")
 }
 
 // A code span's fence is one backtick longer than the longest run inside it.

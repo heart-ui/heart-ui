@@ -22,7 +22,8 @@
     "typecheck": "vue-tsc -p tsconfig.json --noEmit && vue-tsc -p registry/tsconfig.json --noEmit && vue-tsc -p apps/playground-vite/tsconfig.json --noEmit && vue-tsc -p apps/playground-vite/tsconfig.node.json --noEmit && vue-tsc -p apps/docs/tsconfig.json --noEmit",
     "dev:vite": "pnpm --filter playground-vite dev",
     "dev:nuxt": "pnpm --filter playground-nuxt dev",
-    "registry:build": "node scripts/registry-build.ts",
+    "registry:build": "node scripts/registry-api.ts --check && node scripts/registry-build.ts",
+    "registry:api": "node scripts/registry-api.ts",
     "registry:publish": "node scripts/registry-publish.ts",
     "check": "node scripts/check.ts",
     "check:item": "node scripts/check.ts --item",
@@ -48,6 +49,7 @@
     "typescript-eslint": "8.72.2",
     "vitest": "5.1.0",
     "vue": "3.5.45",
+    "vue-component-meta": "3.3.14",
     "vue-eslint-parser": "10.4.2",
     "vue-tsc": "3.3.14"
   }

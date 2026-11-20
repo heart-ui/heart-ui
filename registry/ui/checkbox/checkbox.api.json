@@ -1,0 +1,52 @@
+{
+  "name": "checkbox",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Checkbox",
+      "props": [
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "required": false,
+          "default": "'md'"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "Submits `value` in its form while checked."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "default": "'on'"
+        },
+        {
+          "name": "modelValue",
+          "type": "false | true | 'indeterminate'",
+          "required": false,
+          "default": "false"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "boolean | 'indeterminate'"
+        }
+      ]
+    }
+  ]
+}

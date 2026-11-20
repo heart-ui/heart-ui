@@ -66,12 +66,12 @@ new item ships with them.
 
 ### P2-57 API snapshot
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P2-04
 - Read: [conventions.md](../docs/conventions.md#docs-site),
   [registry.md](../docs/registry.md#item-metadata)
-- Deliver: the registry build writes `<name>.api.json` next to each item:
+- Deliver: `pnpm registry:api` writes `<name>.api.json` next to each item:
   props (name, type, default, required), slots and events, extracted with
   `vue-component-meta` through the same code the docs build uses. The file
   is committed; `pnpm check` fails when it is stale. The registry publishes

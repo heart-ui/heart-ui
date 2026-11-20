@@ -65,6 +65,9 @@ importers:
       vue:
         specifier: 3.5.45
         version: 3.5.45(typescript@6.0.3)
+      vue-component-meta:
+        specifier: 3.3.14
+        version: 3.3.14(typescript@6.0.3)
       vue-eslint-parser:
         specifier: 10.4.2
         version: 10.4.2(eslint@10.14.0(jiti@2.7.0))

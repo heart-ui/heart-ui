@@ -1,0 +1,49 @@
+{
+  "name": "textarea",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Textarea",
+      "props": [
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "required": false,
+          "default": "'md'"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "autoresize",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Grows with its content; cap it with a `max-h-*` class."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "modelValue",
+          "type": "string",
+          "required": false,
+          "default": "''"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string"
+        }
+      ]
+    }
+  ]
+}

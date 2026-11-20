@@ -15,6 +15,7 @@ import {
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Ajv, type ErrorObject } from 'ajv'
+import { snapshotEntries, snapshotProblems } from './registry-api.ts'
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..')
 const schemaDir = join(repo, 'scripts/registry-schemas')
@@ -149,7 +150,12 @@ function writeOut(out: string, registry: string, files: Map<string, string>) {
       const owned = (file: unknown) =>
         typeof file === 'string' &&
         (file === 'registry.json' ||
-          (file.startsWith('r/') && file.endsWith('.json') && namePattern.test(file.slice(2, -5))))
+          (file.startsWith('r/') &&
+            file.endsWith('.json') &&
+            namePattern.test(file.slice(2, -5))) ||
+          (file.startsWith('docs/') &&
+            file.endsWith('.api.json') &&
+            namePattern.test(file.slice(5, -9))))
       if (!Array.isArray(listed) || !listed.every(owned)) {
         throw new RegistryError(`--out ${out}: ${markerName} is not one this build wrote`)
       }
@@ -169,10 +175,12 @@ function writeOut(out: string, registry: string, files: Map<string, string>) {
   }
   try {
     for (const file of previous) rmSync(join(target, file), { force: true })
-    if (existsSync(join(target, 'r')) && readdirSync(join(target, 'r')).length === 0) {
-      rmdirSync(join(target, 'r'))
+    for (const folder of ['r', 'docs']) {
+      if (existsSync(join(target, folder)) && readdirSync(join(target, folder)).length === 0) {
+        rmdirSync(join(target, folder))
+      }
+      mkdirSync(join(target, folder), { recursive: true })
     }
-    mkdirSync(join(target, 'r'), { recursive: true })
     // The marker goes first, so a build that stops halfway still owns what it wrote.
     const marker = { files: [...files.keys()] }
     writeFileSync(join(target, markerName), `${JSON.stringify(marker, null, 2)}\n`)
@@ -383,7 +391,11 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
         }
       })
       const unlisted = filesOf(dir, label).find(
-        (file) => file !== 'item.json' && !isFixtureFile(file) && !shipped.has(file),
+        (file) =>
+          file !== 'item.json' &&
+          file !== `${name}.api.json` &&
+          !isFixtureFile(file) &&
+          !shipped.has(file),
       )
       if (unlisted) {
         throw new RegistryError(`${label}: ${unlisted} is not in files; list it or remove it`)
@@ -445,8 +457,17 @@ export function buildRegistry({ registry, out }: { registry: string; out: string
     throw new RegistryError(`registry.json: ${describe(validateIndex.errors)}`)
   }
 
+  // Each component item commits an API snapshot, published beside the items. Whether it matches
+  // the code is `registry:api --check`'s job (a type checker run, part of pnpm check).
+  const snapshots = snapshotEntries(registry, false)
+  const stale = snapshotProblems(snapshots)
+  if (stale.length > 0) throw new RegistryError(stale.join('\n'))
+
   const output = new Map([['registry.json', `${JSON.stringify(index, null, 2)}\n`]])
   for (const item of items) output.set(`r/${item.name}.json`, `${JSON.stringify(item, null, 2)}\n`)
+  for (const snapshot of snapshots) {
+    if (snapshot.expected !== null) output.set(`docs/${snapshot.name}.api.json`, snapshot.expected)
+  }
   writeOut(out, registry, output)
   return items.map((item) => item.name)
 }

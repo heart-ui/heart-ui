@@ -1,0 +1,191 @@
+{
+  "name": "dialog",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Dialog",
+      "props": [
+        {
+          "name": "modal",
+          "type": "boolean",
+          "required": false,
+          "default": "true"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "DialogClose",
+      "props": [
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Change the default rendered element for the one passed as a child, merging their props and behavior.\n\nRead our [Composition](https://www.reka-ui.com/docs/guides/composition) guide for more details."
+        },
+        {
+          "name": "as",
+          "type": "AsTag | Component",
+          "required": false,
+          "description": "The element or component this component should render as. Can be overwritten by `asChild`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "DialogContent",
+      "props": [
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "required": false,
+          "default": "'md'"
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "`false` keeps the dialog open on Escape and on a click outside."
+        },
+        {
+          "name": "showClose",
+          "type": "boolean",
+          "required": false,
+          "default": "true"
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Close'"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": [
+        {
+          "name": "close",
+          "payload": ""
+        }
+      ]
+    },
+    {
+      "name": "DialogDescription",
+      "props": [
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Change the default rendered element for the one passed as a child, merging their props and behavior.\n\nRead our [Composition](https://www.reka-ui.com/docs/guides/composition) guide for more details."
+        },
+        {
+          "name": "as",
+          "type": "AsTag | Component",
+          "required": false,
+          "description": "The element or component this component should render as. Can be overwritten by `asChild`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "DialogFooter",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "DialogHeader",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "DialogTitle",
+      "props": [
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Change the default rendered element for the one passed as a child, merging their props and behavior.\n\nRead our [Composition](https://www.reka-ui.com/docs/guides/composition) guide for more details."
+        },
+        {
+          "name": "as",
+          "type": "AsTag | Component",
+          "required": false,
+          "description": "The element or component this component should render as. Can be overwritten by `asChild`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "DialogTrigger",
+      "props": [
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Change the default rendered element for the one passed as a child, merging their props and behavior.\n\nRead our [Composition](https://www.reka-ui.com/docs/guides/composition) guide for more details."
+        },
+        {
+          "name": "as",
+          "type": "AsTag | Component",
+          "required": false,
+          "description": "The element or component this component should render as. Can be overwritten by `asChild`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}

@@ -156,9 +156,10 @@ agents ([agent-support.md](agent-support.md#agent-docs)).
   a prop whose type includes boolean and has no default equals `false`.
   `none` means no default; write a string default plainly (`md`), and quote
   it only when it would read as no default (`''`, `'none'`).
-- `<name>.api.json` is generated from the code by the registry build and
+- `<name>.api.json` is generated from the code by `pnpm registry:api` and
   committed; `pnpm check` fails when it is stale, so an API change always
-  shows in review. Removing or renaming a prop, slot or event is breaking.
+  shows in review. Removing or renaming a
+  prop, slot or event is breaking ([registry.md](registry.md#api-snapshots)).
 - The `vue` examples under `## Usage` and `## Do` are type-checked against
   the registry with `strictTemplates`; `## Do not` examples are not.
 - `docs/layout-rules.md` and `docs/tokens.md` are published as `/guide/`
