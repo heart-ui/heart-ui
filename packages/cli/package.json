@@ -11,6 +11,9 @@
   },
   "bugs": "https://github.com/heart-ui/heart-ui/issues",
   "type": "module",
+  "engines": {
+    "node": "^22.18.0 || >=24.11.0"
+  },
   "bin": {
     "heart-ui": "./dist/index.mjs"
   },
@@ -23,6 +26,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@babel/parser": "8.1.2",
     "@heart-ui/theme": "workspace:*"
   },
   "devDependencies": {
