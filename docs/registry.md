@@ -59,7 +59,10 @@ these folders.
 `dist/registry` deploys to Cloudflare R2 behind `https://registry.heart.tammai.me`;
 the docs site deploys to Cloudflare Pages at `https://heart.tammai.me`. Paths:
 `/registry.json` (index), `/r/<name>.json` (items), `/docs/<name>.md`
-(agent docs), `/docs/<name>.api.json` (API snapshots), `/llms.txt`.
+(agent docs), `/docs/<name>.api.json` (API snapshots), `/llms.txt`,
+`/agents/api-index.md` (the API index for `AGENTS.md`) and
+`/skills/heart-ui/SKILL.md` (the Heart UI skill; `npx skills add` takes
+this URL).
 
 ## API snapshots
 
