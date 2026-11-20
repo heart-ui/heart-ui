@@ -3,6 +3,14 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-20 P2-05: the catalog row for `separator` names only
+  `orientation`; Reka's Separator also takes `decorative`, and nothing
+  says which default to pick. Chose: expose `decorative`, default `true`
+  (`role="none"`), as shadcn does. Why: most rules are visual and an
+  announced "separator" for each is noise; a rule between groups readers
+  should hear apart opts in with `:decorative="false"`. Decided by the
+  agent (delegated).
+
 - 2026-11-19 P2-03: which `meta` fields must blocks and layouts have
   (left open by P0-08)? Chose: every field that applies to them. Blocks need
   `useWhen`, `avoidWhen`, `data` and `states`, and layouts also need
@@ -587,4 +595,3 @@ Gaps and conflicts found while building. Format in
   prop or event fails. Why: the task's made-up prop still fails, and the
   conventions' fallthrough attributes don't. Decided by the agent
   (delegated).
-

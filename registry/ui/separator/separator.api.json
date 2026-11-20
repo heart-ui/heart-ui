@@ -1,0 +1,26 @@
+{
+  "name": "separator",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Separator",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal'",
+          "required": false,
+          "default": "'horizontal'"
+        },
+        {
+          "name": "decorative",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Hidden from screen readers. Turn off when the rule separates groups readers should hear."
+        }
+      ],
+      "slots": [],
+      "events": []
+    }
+  ]
+}
