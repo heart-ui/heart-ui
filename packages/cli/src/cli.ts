@@ -2,6 +2,7 @@ import { resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import manifest from '../package.json' with { type: 'json' }
 import { createAdd } from './commands/add.ts'
+import { createAudit } from './commands/audit.ts'
 import { createInit } from './commands/init.ts'
 import { createList } from './commands/list.ts'
 import { CliError, printable } from './errors.ts'
@@ -37,6 +38,7 @@ export const commands: Record<string, Command> = {
   init: createInit(),
   add: createAdd(),
   list: createList(),
+  audit: createAudit(),
 }
 
 const globalOptions: Record<string, OptionSpec> = {

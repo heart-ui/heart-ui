@@ -49,7 +49,7 @@ blocks, agent surface, benchmark.
 
 ### P2-04 `audit` command
 
-- Status: todo
+- Status: review
 - Owner: agent
 - Depends on: P1-21
 - Read: [agent-support.md](../docs/agent-support.md#audit-checklist)

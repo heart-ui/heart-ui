@@ -164,6 +164,28 @@ URL may not hold a user name or password. Items are untrusted: a file
 Global options (`--cwd`, `--help`, `--version`) go before or after the
 command name; a command's own options go after it.
 
+`audit` reads each named file statically: a `.vue` file gets A1 to A8, a
+`.ts` or `.js` file only A2 and A6 (the others pass). Another extension, a
+missing file, a file that is not a regular file or is larger than
+512 KB, markup nested deeper than 256 levels, code nested too deeply to
+parse, more than 20,000 template expressions, or a template in another
+language than HTML is a usage mistake. A2 reads scripts and template
+expressions with `@babel/parser`, as `no-raw-values` reads them; code that
+doesn't parse is an A2 failure. A1 passes a Nuxt page (a file under `pages/`) whose parent route
+file or Nuxt layout (`default`, or the one `definePageMeta` names) has a
+layout at its root. Text output is one line per finding,
+`<file>:<line>  <id>  <message>`, then a summary. `--json` prints one line:
+
+```json
+{ "ok": false, "files": [{ "file": "src/pages/customers.vue", "checks": [
+  { "id": "A1", "pass": true, "findings": [] },
+  { "id": "A3", "pass": false, "findings": [{ "line": 20, "message": "Bare <button>: use the Heart UI Button component." }] }
+] }] }
+```
+
+Every file lists all eight checks in order; `ok` is false when any check
+fails. The MCP `audit_screen` tool returns the same object.
+
 ## Third-party registries
 
 Any host serving the same schema works. Users add it under `registries`

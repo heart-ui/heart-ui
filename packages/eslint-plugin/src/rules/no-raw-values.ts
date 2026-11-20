@@ -1,5 +1,15 @@
 import type { Rule } from 'eslint'
-import { findProblems, hasNamedColor, isColorProperty, type Problem } from '../raw-values'
+import {
+  classHelpers,
+  inClassLanding,
+  isClassName,
+  isLabelLanding,
+  kebab,
+  type Landing,
+  passThrough,
+  type Problem,
+  problemsWhere,
+} from '../raw-values'
 
 type AnyNode = { type: string; parent?: AnyNode } & Record<string, unknown>
 
@@ -15,38 +25,17 @@ type TemplateServices = {
 // whether it is an argument of a class helper such as `cn()`.
 type Context = { attribute?: string; properties: string[]; classHelper?: boolean }
 
-// Hex in these is an anchor or id (`href="#add"`), not a color.
-const hexFreeAttributes = new Set(['href', 'xlink:href', 'to', 'id', 'for'])
-const hexFreeProperties = new Set(['href', 'hash', 'id'])
-const classHelpers = new Set(['cn', 'clsx', 'cva', 'cx', 'tv', 'twMerge', 'twJoin'])
-
-function isClassName(name: string) {
-  return /^(?:class|classes|class-name|ui)$|-class(?:es)?$/.test(name)
+// The rule's reading of where a string lands, in the shape the shared helpers take.
+function landing(context: Context): Landing {
+  return {
+    attribute: context.attribute,
+    property: context.properties.find((name) => name !== 'default'),
+    classProperty: context.properties.some((name) => isClassName(kebab(name))),
+    classHelper: context.classHelper,
+  }
 }
 
-function inClassContext(context: Context) {
-  if (context.classHelper) return true
-  if (context.attribute !== undefined && isClassName(kebab(context.attribute))) return true
-  return context.properties.some((name) => isClassName(kebab(name)))
-}
-
-// Nodes a value passes through unchanged on its way to the attribute or property that uses it.
-const passThrough = new Set([
-  'ConditionalExpression',
-  'LogicalExpression',
-  'ArrayExpression',
-  'ObjectExpression',
-  'TemplateLiteral',
-  'ChainExpression',
-  'TSAsExpression',
-  'TSSatisfiesExpression',
-  'TSNonNullExpression',
-  'TSTypeAssertion',
-])
-
-function kebab(name: string) {
-  return name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
-}
+const inClassContext = (context: Context) => inClassLanding(landing(context))
 
 function nameOf(node: unknown): string | undefined {
   const n = node as AnyNode | null | undefined
@@ -116,34 +105,10 @@ function contextOf(node: AnyNode): Context {
   return { properties }
 }
 
-// The name that decides how a string is read: the nearest property, past a runtime prop's
-// `default`, or else the attribute.
-function nearestName(context: Context) {
-  return context.properties.find((name) => name !== 'default') ?? context.attribute
-}
-
-// CLAUDE.md allows English text only in `*Label` props: those carry words, not styles.
-function isLabel(context: Context) {
-  const name = nearestName(context)
-  return name !== undefined && (/[a-z0-9]Label$/.test(name) || /-label$/.test(name))
-}
+const isLabel = (context: Context) => isLabelLanding(landing(context))
 
 function problemsIn(text: string, context: Context, keyOfClassMap = false): Set<Problem> {
-  if (isLabel(context)) return new Set()
-  const attribute = context.attribute === undefined ? undefined : kebab(context.attribute)
-  const classes = keyOfClassMap || attribute === undefined || inClassContext(context)
-  const nearestProperty = context.properties.find((name) => name !== 'default')
-  const skipHex =
-    nearestProperty !== undefined
-      ? hexFreeProperties.has(kebab(nearestProperty))
-      : attribute !== undefined && hexFreeAttributes.has(attribute)
-  const problems = new Set(findProblems(text, { classes, skipHex }))
-  const nearest = nearestName(context)
-  const colorName = nearest === undefined ? undefined : kebab(nearest)
-  if (colorName && !isClassName(colorName) && isColorProperty(colorName) && hasNamedColor(text)) {
-    problems.add('rawColor')
-  }
-  return problems
+  return problemsWhere(text, landing(context), keyOfClassMap)
 }
 
 // An object key names a class only in a class context: `:class="{ 'bg-x': on }"` or `cn({ … })`.

@@ -525,3 +525,26 @@ Gaps and conflicts found while building. Format in
   `<6.1.0`. Chose: pin TypeScript 6.0.3, approved by the maintainer. Why:
   newest release that `vue-tsc` and `typescript-eslint` support; revisit
   when both support TS 7.
+
+- 2026-11-20 P2-04: `audit` needs to parse `.vue` files, but no doc names a
+  parser for the CLI. Chose: a small in-house SFC, template and script
+  scanner in `packages/cli/src/audit/scan.ts`; A2 imports `findProblems`
+  from `packages/eslint-plugin/src/raw-values.ts` by relative path, bundled
+  into the CLI by tsdown. Why: CLAUDE.md forbids an unnamed dependency,
+  and one shared detector keeps A2 equal to `no-raw-values`.
+  Decided by the agent (delegated).
+  **Revised in review (2026-11-20):** A2 needs a real JS/TS tree to read
+  strings the way the lint rule does; a hand-written walk kept diverging
+  and was super-linear on crafted input. Chose: `@babel/parser` 8.1.2
+  (ESTree plugin) as a dependency of `heart-ui`, for scripts and template
+  expressions; templates keep the in-house scanner. **Approved by the
+  maintainer** at the review cap (2026-11-20).
+- 2026-11-20 P2-04: the checklist doesn't define "data region" (A5) or
+  "view" (A4) for a static check. Chose: the definitions in
+  `docs/sdlc/changes/2026-11-20-m-p2-04-audit.md` (Decisions): a region is
+  a `v-for` over data (not a number, array literal, `const` array, or a
+  loop of controls) or a table, and the file must show loading, error and
+  empty; a dialog's content is its own view and only one branch of a
+  `v-if` chain counts. Why: closest to layout-rules.md that a file can
+  prove without rendering; axe and the benchmark's render cover the rest.
+  Decided by the agent (delegated).
