@@ -233,9 +233,26 @@ function plugins(jsx: boolean): ParserPlugin[] {
   return jsx ? [...base, 'jsx'] : base
 }
 
+// Babel counts the lines a block comment spans by searching from its start for the next line
+// break anywhere in the input (skipBlockComment), so many block comments on one long line cost
+// O(comments × line length). This is that cost, worked out in one pass before parsing.
+const MAX_COMMENT_SCAN = 20_000_000
+
+function blockCommentScan(code: string): number {
+  let total = 0
+  let nextBreak = code.length
+  for (let i = code.length - 1; i >= 0; i--) {
+    const char = code[i]
+    if (char === '\n' || char === '\r' || char === '\u2028' || char === '\u2029') nextBreak = i
+    else if (char === '/' && code[i + 1] === '*') total += nextBreak - i
+  }
+  return total
+}
+
 // No error recovery, as ESLint's parser has none, and no comment attachment, which nothing
 // reads: both make Babel copy growing lists at each TypeScript `<` lookahead.
-function parsed(run: () => unknown): Tree {
+function parsed(code: string, run: () => unknown): Tree {
+  if (blockCommentScan(code) > MAX_COMMENT_SCAN) throw new TooDeepError('comments')
   // Babel reports bad code by throwing; a stack trace per throw is most of its cost.
   const limit = Error.stackTraceLimit
   Error.stackTraceLimit = 0
@@ -253,7 +270,7 @@ function parsed(run: () => unknown): Tree {
 
 /** Parses a script block or file. */
 export function parseScript(code: string, jsx = false): Tree {
-  return parsed(() =>
+  return parsed(code, () =>
     parse(code, {
       sourceType: 'module',
       attachComment: false,
@@ -275,5 +292,7 @@ export const needsParse = (code: string) => !plainPath.test(code)
 export function parseTemplateCode(code: string, statements: boolean): Tree {
   if (plainPath.test(code)) return { type: 'Identifier', name: code.trim(), start: 0 }
   if (statements) return parseScript(code)
-  return parsed(() => parseExpression(code, { attachComment: false, plugins: plugins(false) }))
+  return parsed(code, () =>
+    parseExpression(code, { attachComment: false, plugins: plugins(false) }),
+  )
 }

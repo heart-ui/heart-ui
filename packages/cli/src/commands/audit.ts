@@ -86,7 +86,9 @@ function audit(cwd: string, args: string[], json: boolean, io: Io): number {
           ? 'its code is nested too deeply to parse'
           : error.reason === 'expressions'
             ? `it holds more than ${MAX_EXPRESSIONS} template expressions`
-            : `it nests deeper than ${MAX_DEPTH} levels`
+            : error.reason === 'comments'
+              ? 'its block comments sit on lines too long to parse in time'
+              : `it nests deeper than ${MAX_DEPTH} levels`
       throw new CliError(`Can't audit ${input.shown}: ${why}.`, 2)
     }
   })

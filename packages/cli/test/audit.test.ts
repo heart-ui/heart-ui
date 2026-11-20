@@ -743,4 +743,15 @@ const items: {
       [],
     )
   })
+  it('AC-009 block comments on one long line are refused, not parsed for minutes', async () => {
+    const oneLine = await audit({ 'one.ts': '/**/a<b;'.repeat(56_000) }, ['one.ts'])
+    expect(oneLine.code).toBe(2)
+    expect(oneLine.err).toMatch(/^heart-ui: Can't audit one\.ts: [^\n]*comment[^\n]*\n$/)
+
+    const start = performance.now()
+    const doc = Array.from({ length: 11_000 }, (_, k) => `/** A doc comment. */\nconst a${k} = 1\n`)
+    const documented = await audit({ 'doc.ts': doc.join('') }, ['doc.ts'])
+    expect(documented).toMatchObject({ code: 0, err: '' })
+    expect(performance.now() - start).toBeLessThan(3000)
+  }, 60_000)
 })

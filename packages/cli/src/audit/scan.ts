@@ -23,12 +23,13 @@ export const MAX_EXPRESSIONS = 20_000
 /**
  * Thrown when a file can't be audited safely: its markup or template literals nest past
  * MAX_DEPTH (`markup`), its code is too deep for the parser's stack (`code`), or it holds more
- * than MAX_EXPRESSIONS template expressions (`expressions`).
+ * than MAX_EXPRESSIONS template expressions (`expressions`), or its block comments would
+ * cost the parser too long (`comments`).
  */
 export class TooDeepError extends Error {
-  readonly reason: 'markup' | 'code' | 'expressions'
+  readonly reason: 'markup' | 'code' | 'expressions' | 'comments'
 
-  constructor(reason: 'markup' | 'code' | 'expressions' = 'markup') {
+  constructor(reason: 'markup' | 'code' | 'expressions' | 'comments' = 'markup') {
     super(reason)
     this.reason = reason
   }
