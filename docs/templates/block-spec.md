@@ -38,6 +38,9 @@ Registry items used. Bare HTML is allowed for layout containers only.
 
 ## Usage
 
+<!-- Usage and Do examples are type-checked against the registry (conventions.md,
+     Docs site): page state may stay undeclared, props and events must exist. -->
+
 ```vue
 <!-- Smallest working example with realistic data. -->
 ```

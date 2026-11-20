@@ -19,7 +19,7 @@
     "test:install": "pnpm --dir apps/playground-vite exec playwright install chromium",
     "lint": "pnpm --dir packages/eslint-plugin run build && eslint --max-warnings 0 . && prettier --check .",
     "format": "prettier --write .",
-    "typecheck": "vue-tsc -p tsconfig.json --noEmit && vue-tsc -p registry/tsconfig.json --noEmit && vue-tsc -p apps/playground-vite/tsconfig.json --noEmit && vue-tsc -p apps/playground-vite/tsconfig.node.json --noEmit && vue-tsc -p apps/docs/tsconfig.json --noEmit",
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit && vue-tsc -p registry/tsconfig.json --noEmit && vue-tsc -p apps/playground-vite/tsconfig.json --noEmit && vue-tsc -p apps/playground-vite/tsconfig.node.json --noEmit && vue-tsc -p apps/docs/tsconfig.json --noEmit && node scripts/spec-examples.ts",
     "dev:vite": "pnpm --filter playground-vite dev",
     "dev:nuxt": "pnpm --filter playground-nuxt dev",
     "registry:build": "node scripts/registry-api.ts --check && node scripts/registry-build.ts",

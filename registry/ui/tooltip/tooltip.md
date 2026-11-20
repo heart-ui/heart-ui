@@ -9,7 +9,7 @@ interact with, and visible text for anything they must read.
 ```vue
 <!-- Once, at the app root. -->
 <TooltipProvider>
-  <App />
+  <RouterView />
 </TooltipProvider>
 
 <Tooltip>
