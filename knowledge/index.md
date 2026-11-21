@@ -29,10 +29,10 @@ The specs in `docs/` are the primary source (see `CLAUDE.md`). This folder holds
 ## Gotchas
 - [gotchas/lint-rules.md](gotchas/lint-rules.md) — context resolution and Vue parser traps in custom ESLint rules
 - [gotchas/toolchain.md](gotchas/toolchain.md) — TS 7 vs vue-tsc, seeded-error tests, tsconfig and gitignore traps
-- [gotchas/registry-items.md](gotchas/registry-items.md) — @/lib imports, cn utilities, pinned deps, clicks, Reka Dialog events
+- [gotchas/registry-items.md](gotchas/registry-items.md) — @/lib imports, cn utilities, clicks, Reka events, vertical rules
 - [gotchas/test-harness.md](gotchas/test-harness.md) — visual container runner, preview hosts, nuxt prepare, seeded sandboxes
 - [gotchas/theme.md](gotchas/theme.md) — contrast moves, CSS color syntax, Tailwind namespaces for tokens
-- [gotchas/registry-build.md](gotchas/registry-build.md) — safe --out deletion via marker, macOS case, broken links
+- [gotchas/registry-build.md](gotchas/registry-build.md) — --out marker, macOS case, replace `$` patterns, agent-index exports
 - [gotchas/cli.md](gotchas/cli.md) — parseArgs, fetch redirects, tsconfig paths, symlink-safe edits, write order
 - [gotchas/docs-site.md](gotchas/docs-site.md) — VitePress unlayered CSS, iframe sizing and focus, component meta, links
 
