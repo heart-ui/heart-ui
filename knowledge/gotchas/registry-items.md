@@ -1,7 +1,7 @@
 ---
 type: gotcha
 title: Registry item gotchas
-description: Import paths, tailwind-merge and token utilities, loading and disabled states, Playwright clicks, Reka Dialog events, attrs tracking.
+description: Import paths, tailwind-merge and token utilities, loading and disabled states, Playwright clicks, Reka Dialog events, attrs tracking, vertical rules.
 ---
 
 # Registry item gotchas
@@ -21,3 +21,4 @@ description: Import paths, tailwind-merge and token utilities, loading and disab
 - **Reka's Checkbox, Switch and Radio copy a `[for=id]` label's `innerText` into `aria-label` when given an `id`.** Hidden marks and `sr-only` text come along, it never updates, and the selector is unescaped (an `id` with a quote throws in Radio). Checkbox and Radio render their own button (`as-child`) carrying the `id`, so Reka never gets it; Switch passes the caller's `aria-label`, which its attribute order lets win.
 - **A computed doesn't track `in` or spread on `useAttrs()`.** The attrs proxy tracks only property reads. Do such checks in the render, which reruns when attrs change.
 - **Reka's toast closes every open toast on an Escape pressed anywhere.** `ToastRootImpl` listens on the window. Each toast's listener sees the same event and skips closing when it is already cancelled, so a guard that cancels must decide once per event (a `WeakMap` keyed by the event) and close the focused toast itself. Don't build on Reka's toast timers: `isClosePausedRef` goes stale (its keyboard close, Enter on Close included, marks timers running while others are paused; its resume listeners live only while toasts are mounted). `toast` passes Reka an infinite duration and counts down itself in `ToastList`; never cancel an Escape whose focus is outside the toasts, or a native dialog stays open. Toasts added in one tick mount newest first, which reverses Reka's `limit` order, and toasts hidden by `limit` keep timing out. Its swipe and stacked pile move toasts through `--reka-toast-*` variables, which only arbitrary-value classes can read, so `toast` turns swipe off.
+- **A vertical rule fills its row with `self-stretch`, not `h-full`.** `h-full` needs a parent with a set height; `self-stretch` fills a flex row even under `items-center`. Neither gives height outside a `flex` or `grid` parent, and a horizontal rule needs `shrink-0` or a flex row squeezes it to nothing (`separator`).

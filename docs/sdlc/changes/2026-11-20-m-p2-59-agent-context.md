@@ -70,3 +70,5 @@ Round 2 (closing check), `code-review high`: six findings, no high; all fixed.
 | The skill's workflow asked for a layout the registry doesn't have yet | Step 2 says to compose from components when none fits |
 | The skill pointed only at `AGENTS.md`, which a standalone `skills add` never writes | Also points at the published `/agents/api-index.md` |
 | A blank `useWhen` gave an empty Need cell | A blank `useWhen` falls back to the description |
+
+- **Lessons filed:** `knowledge/gotchas/registry-build.md` (`String.replace` expanding `$` patterns, default exports in import lines, lib items with no `index.ts`, naming a broken JSON snapshot) and `docs/sdlc/recurring-defects.md` (a budget sized on today's data, not the plan's; a bare `SyntaxError` added to the raw-error line).
