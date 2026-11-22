@@ -1,0 +1,16 @@
+{
+  "name": "avatar",
+  "type": "registry:ui",
+  "title": "Avatar",
+  "description": "A person's picture in a circle sized like a control, with their initials while it loads or when it fails.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils"],
+  "files": [
+    "Avatar.vue",
+    "AvatarImage.vue",
+    "AvatarFallback.vue",
+    "avatar.variants.ts",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}

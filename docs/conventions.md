@@ -129,6 +129,7 @@ pull request.
 | Text only screen readers hear, from a `*Label` prop (`sr-only`) | `label` |
 | Reka control inside a `label` that wraps it and its text slot; `state-*` variants for `data-state` | `checkbox` |
 | Hidden native input for forms under a Reka control (`registry/lib/form-control`: focus hand-off, form events on user changes, `id` on the control) | `checkbox`, `radio-group`, `switch`, `select` |
+| Parts sharing state through a provided context, including a fix to a Reka root context the primitive leaves stale (the image's name relayed to the fallback; the loading status reset when the last image goes) | `avatar` |
 
 ## Checks
 

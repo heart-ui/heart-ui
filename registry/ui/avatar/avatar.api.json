@@ -1,0 +1,58 @@
+{
+  "name": "avatar",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Avatar",
+      "props": [
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "required": false,
+          "default": "'md'"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "AvatarFallback",
+      "props": [
+        {
+          "name": "delayMs",
+          "type": "number",
+          "required": false,
+          "description": "Waits this long before showing, so a fast load shows no flash of initials."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "AvatarImage",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": true,
+          "description": "The person's name, or `''` when their name is next to the avatar."
+        }
+      ],
+      "slots": [],
+      "events": []
+    }
+  ]
+}

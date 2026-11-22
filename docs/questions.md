@@ -3,6 +3,17 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-22 P2-06: the catalog row for `avatar` names only `size`;
+  Reka's Avatar also has the image's `alt`, `referrerPolicy`,
+  `crossOrigin`, a loading-status event and the fallback's `delayMs`, and
+  no avatar size token exists. Chose: `AvatarImage` takes `src` and `alt`,
+  both required (`alt=""` makes the image `role="presentation"`);
+  `AvatarFallback` takes `delayMs`; the rest stay unexposed. Sizes are the
+  control heights (`size-control-sm`/`md`/`lg`). Why: a required `alt`
+  makes the accessible name a decision at each call site; `delayMs` avoids a
+  flash of initials on fast loads; an avatar in a row of controls lines up
+  with them. Decided by the agent (delegated).
+
 - 2026-11-20 P2-05: the catalog row for `separator` names only
   `orientation`; Reka's Separator also takes `decorative`, and nothing
   says which default to pick. Chose: expose `decorative`, default `true`
