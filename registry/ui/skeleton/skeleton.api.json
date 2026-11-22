@@ -1,0 +1,12 @@
+{
+  "name": "skeleton",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Skeleton",
+      "props": [],
+      "slots": [],
+      "events": []
+    }
+  ]
+}
