@@ -5,7 +5,7 @@ One line per defect: what it looks like, then the severity.
 - An axe or visual test that sees only the demo state open on load, when the spec lists more states (closed, each size, each variant, 375 px): high.
 - A spec line that promises a failure ("a missing title fails the browser test") with no test that triggers it: high.
 - A client that types data from the network or disk (registry items, config) with fields it never validates, such as a file `path` or `target` that may be absolute, contain `..`, or point into `.git`: high.
-- A catch-all that prints a raw system or library error message (`EACCES: …`, `fetch failed`) instead of a fixed line: high.
+- A catch-all that prints a raw system or library error message (`EACCES: …`, `fetch failed`, a bare `JSON.parse` `SyntaxError` with no file name) instead of a fixed line: high.
 - A command printed for the user to paste, or passed to a shell, that holds text from a registry or other untrusted source: high.
 - A file edit through temp-and-rename that replaces a symlink, or follows one out of the project: high.
 - A setup step that writes its "already set up" marker before the rest, so a failed run blocks every re-run: high.
@@ -18,4 +18,4 @@ One line per defect: what it looks like, then the severity.
 - A scan of untrusted input that is quadratic: a regex with overlapping quantifiers, a per-item rescan of the whole file, a per-item copy of growing state (including a library's, such as a parser's lookahead cloning): high.
 - A parser-free reading of code by regex or token walk that is meant to match a real rule or compiler: it diverges on each new syntax shape; use the real parser: medium.
 - A check that the task's own gate never runs: wired into a unit test that the per-item plan (`check:item`) skips, or into a script that other callers bypass: high.
-
+- A size or count budget (bytes, lines, items) checked only against today's data when the plan says the data grows; size it on the planned count and test that projection: medium.
