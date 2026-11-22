@@ -7,7 +7,7 @@
       "props": [
         {
           "name": "variant",
-          "type": "'primary' | 'danger' | 'secondary' | 'outline' | 'ghost' | 'link'",
+          "type": "'danger' | 'primary' | 'secondary' | 'outline' | 'ghost' | 'link'",
           "required": false,
           "default": "'secondary'"
         },

@@ -3,6 +3,15 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-22 P2-08: the catalog row for `alert` names the four variants
+  but no default, no icons and no element for the title. Chose: `info` by
+  default; a decorative status icon per variant from the published `icon`
+  helper (`info`, `check`, `warning`, `error`), so adding alert needs no
+  `icon` update, which the CLI can't do yet; title and description as
+  `div`s, since the heading level depends on the page. Why: `info` is the
+  mildest; status shouldn't rest on colour alone; a `div` never breaks the
+  outline. Decided by the agent (delegated).
+
 - 2026-11-22 P2-06: the catalog row for `avatar` names only `size`;
   Reka's Avatar also has the image's `alt`, `referrerPolicy`,
   `crossOrigin`, a loading-status event and the fallback's `delayMs`, and

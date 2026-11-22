@@ -37,7 +37,7 @@ Confirm each Reka UI primitive's current API in its docs before building.
 | `table` | Native `table` | Header, Body, Row, Head, Cell, Caption | `size` sets row density. Scrolls inside its own container. |
 | `pagination` | Reka Pagination | none | `total`, `pageSize`, `v-model:page`. |
 | `avatar` | Reka Avatar | Image, Fallback | `size`. Image `src` and `alt` required; Fallback `delayMs`. |
-| `alert` | None | Title, Description | `variant`: info, success, warning, danger. Role `alert` for danger, `status` otherwise. |
+| `alert` | None | Title, Description | `variant`: info (default), success, warning, danger, each with a status icon. Role `alert` for danger, `status` otherwise. |
 | `skeleton` | None | none | Shape set by `class`. Respects reduced motion. Always `aria-hidden`; the region it fills sets `aria-busy`. |
 | `breadcrumb` | None | Item, Link, Separator, Page | Renders a `nav` with an ordered list. |
 | `sidebar` | Reka Collapsible | Header, Content, Group, Item, Footer, Trigger | `v-model:collapsed`. Becomes a drawer below 768 px. |

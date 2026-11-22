@@ -1,0 +1,10 @@
+{
+  "name": "alert",
+  "type": "registry:ui",
+  "title": "Alert",
+  "description": "A message that stays in the page, in info, success, warning or danger, with a status icon and a live role that interrupts only for danger.",
+  "dependencies": ["class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils", "icon"],
+  "files": ["Alert.vue", "AlertTitle.vue", "AlertDescription.vue", "alert.variants.ts", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}
