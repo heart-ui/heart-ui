@@ -36,6 +36,15 @@ for (const { kind, name } of demoFiles()) {
             // A blocked host or a missing demo must never become a baseline.
             await expect(page.locator('#app > *').first()).toBeVisible()
             await expect(page.getByText(/No demo at|Blocked request/)).toHaveCount(0)
+            // `networkidle` doesn't cover image decoding (data URIs): wait until every avatar
+            // image has loaded or failed, and every loaded one is shown (Reka swaps it in).
+            await page.waitForFunction(() =>
+              [...document.querySelectorAll<HTMLImageElement>('[data-slot="avatar-image"]')].every(
+                (image) =>
+                  image.complete &&
+                  (image.naturalWidth === 0) === (getComputedStyle(image).display === 'none'),
+              ),
+            )
             if (kind !== 'ui') {
               // The state switch shows which state the demo took from ?state=.
               await expect(

@@ -120,7 +120,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-2-phase-
 | ID | Item | Depends on | Status |
 | --- | --- | --- | --- |
 | P2-05 | `separator` | P2-01 | review |
-| P2-06 | `avatar` | P2-01 | todo |
+| P2-06 | `avatar` | P2-01 | review |
 | P2-07 | `skeleton` | P2-01 | todo |
 | P2-08 | `alert` | P2-01 | todo |
 | P2-09 | `progress` | P2-01 | todo |
