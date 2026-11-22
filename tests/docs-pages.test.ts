@@ -85,6 +85,7 @@ describe('docs pages', () => {
 
   it('demo pages: bare pages that mount the demo, only for items with Markdown', () => {
     expect(docsItems().map((item) => item.name)).toEqual([
+      'alert',
       'avatar',
       'badge',
       'button',
@@ -106,6 +107,7 @@ describe('docs pages', () => {
     ])
     expect(pages.map((entry) => entry.name)).not.toContain('placeholder')
     for (const [name, demo] of [
+      ['alert', 'Alert.demo.vue'],
       ['avatar', 'Avatar.demo.vue'],
       ['badge', 'Badge.demo.vue'],
       ['button', 'Button.demo.vue'],
@@ -557,6 +559,7 @@ describe('docs page generator edge cases', () => {
 
   it('takes the sidebar title from the Markdown heading', () => {
     expect(docsItems().map((entry) => entry.title)).toEqual([
+      'Alert',
       'Avatar',
       'Badge',
       'Button',

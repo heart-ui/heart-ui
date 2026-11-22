@@ -7,7 +7,7 @@
       "props": [
         {
           "name": "variant",
-          "type": "'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'",
+          "type": "'info' | 'success' | 'warning' | 'danger' | 'neutral' | 'primary'",
           "required": false,
           "default": "'neutral'"
         },

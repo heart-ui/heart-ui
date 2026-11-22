@@ -1,0 +1,43 @@
+{
+  "name": "alert",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Alert",
+      "props": [
+        {
+          "name": "variant",
+          "type": "'info' | 'success' | 'warning' | 'danger'",
+          "required": false,
+          "default": "'info'"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "AlertDescription",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "AlertTitle",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}
