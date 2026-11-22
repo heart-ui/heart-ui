@@ -1,0 +1,10 @@
+{
+  "name": "skeleton",
+  "type": "registry:ui",
+  "title": "Skeleton",
+  "description": "A pulsing placeholder shaped by its classes like the content still loading; still under reduced motion and hidden from screen readers.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": ["Skeleton.vue", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}
