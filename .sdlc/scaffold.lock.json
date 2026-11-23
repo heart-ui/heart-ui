@@ -1,7 +1,8 @@
 {
   "scaffold_version": "3.13.0",
   "hosts": [
-    "claude-code"
+    "claude-code",
+    "antigravity"
   ],
   "files": {
     ".github/workflows/sdlc-verify.yml": {
@@ -151,6 +152,10 @@
       ".sdlc/state/*.events.jsonl",
       ".sdlc/state/*.commands/",
       ".claude/*.local.md"
+    ],
+    "AGENTS.md#sdlc": [
+      "block",
+      "file"
     ]
   },
   "migrations": {
