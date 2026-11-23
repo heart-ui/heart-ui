@@ -1,5 +1,5 @@
 {
-  "scaffold_version": "3.13.0",
+  "scaffold_version": "3.14.0",
   "hosts": [
     "claude-code",
     "antigravity"
