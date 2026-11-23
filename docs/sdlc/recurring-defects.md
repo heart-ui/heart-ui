@@ -19,3 +19,4 @@ One line per defect: what it looks like, then the severity.
 - A parser-free reading of code by regex or token walk that is meant to match a real rule or compiler: it diverges on each new syntax shape; use the real parser: medium.
 - A check that the task's own gate never runs: wired into a unit test that the per-item plan (`check:item`) skips, or into a script that other callers bypass: high.
 - A size or count budget (bytes, lines, items) checked only against today's data when the plan says the data grows; size it on the planned count and test that projection: medium.
+- A component `<style>` block that declares a Tailwind layer (`@layer base|components|utilities`) and gets bundled before `@import 'tailwindcss'`, locking that layer below Preflight: high.

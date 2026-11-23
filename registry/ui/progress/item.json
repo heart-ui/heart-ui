@@ -1,0 +1,10 @@
+{
+  "name": "progress",
+  "type": "registry:ui",
+  "title": "Progress",
+  "description": "A horizontal progress bar over Reka Progress, in sm, md or lg, supporting determinate values and an indeterminate state when null.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils"],
+  "files": ["Progress.vue", "progress.variants.ts", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}

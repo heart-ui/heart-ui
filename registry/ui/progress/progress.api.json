@@ -1,0 +1,32 @@
+{
+  "name": "progress",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Progress",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "number | null",
+          "required": false,
+          "default": "null",
+          "description": "Current progress from 0 to `max`; `null` renders an indeterminate bar."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "default": "100"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "required": false,
+          "default": "'md'"
+        }
+      ],
+      "slots": [],
+      "events": []
+    }
+  ]
+}

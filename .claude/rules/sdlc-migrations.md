@@ -7,7 +7,7 @@ paths:
   - "**/alembic/**"
   - "**/prisma/schema.prisma"
 ---
-<!-- Managed by the sdlc plugin v3.13.0; regenerated on upgrade. Change paths via "areas.migrations" in .sdlc/config.json. -->
+<!-- Managed by the sdlc plugin v3.14.0; regenerated on upgrade. Change paths via "areas.migrations" in .sdlc/config.json. -->
 # Schema migrations (sdlc policy)
 
 - Any migration is a hard stop: describe it and get the user's go-ahead before creating or running it.

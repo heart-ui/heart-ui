@@ -3,6 +3,22 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-23 P2-09: the catalog row for `progress` names `size` and
+  indeterminate when the value is `null`, but not the track heights, the
+  Reka props to expose, Reka's synthetic `getValueLabel`, or the
+  indeterminate animation. Chose: expose `modelValue` (`number | null`,
+  default `null`), `max` (`number`, default `100`), `size` (`sm`/`md`/`lg`
+  as `h-1`/`h-2`/`h-3`), and `class`; suppress Reka's default
+  `getValueLabel` so determinate bars do not emit a synthetic
+  `aria-label="50%"` and callers always name the bar via `aria-label` or
+  `aria-labelledby`; fill determinately with logical `inline-size` and
+  animate indeterminate with a self-contained `@keyframes` on
+  `margin-inline-start` under `prefers-reduced-motion: no-preference`,
+  resting centered (`w-2/5`) when motion is reduced. Why: keeps the API
+  minimal, works identically in LTR and RTL without `:dir()`, and needs no
+  edit to shared `theme.css` on `heart-ui add`. Decided by the agent
+  (delegated).
+
 - 2026-11-22 P2-08: the catalog row for `alert` names the four variants
   but no default, no icons and no element for the title. Chose: `info` by
   default; a decorative status icon per variant from the published `icon`

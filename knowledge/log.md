@@ -58,3 +58,5 @@
 - 2026-11-21 update knowledge/index.md — widen the registry-build and registry-item gotchas lines (from 2026-11-20-m-p2-59-agent-context, 2026-11-20-m-p2-05-separator)
 - 2026-11-21 update knowledge/gotchas/registry-items.md — vertical rules need `self-stretch` and a flex or grid parent (from 2026-11-20-m-p2-05-separator)
 - 2026-11-21 update knowledge/gotchas/test-harness.md — colour assertions that pass with the token unset (from 2026-11-20-m-p2-05-separator)
+- 2026-11-23 update knowledge/gotchas/registry-items.md — no Tailwind `@layer` names in SFC `<style>`; Reka Progress synthetic `aria-label` (from 2026-11-23-m-p2-09-progress)
+- 2026-11-23 update docs/sdlc/recurring-defects.md — SFC `<style>` declaring Tailwind `@layer` bundled before Preflight (from 2026-11-23-m-p2-09-progress)
