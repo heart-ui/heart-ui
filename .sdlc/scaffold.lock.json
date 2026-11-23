@@ -7,8 +7,9 @@
   "files": {
     ".github/workflows/sdlc-verify.yml": {
       "class": "seeded",
-      "sha256": "ee3692de7262d1e385f68d6c769f91dcce7b8005799eda8b18814a86c1728893",
-      "template": "builtin:ci"
+      "sha256": "deaa5d37e01d080aa3167a45ce8b858653affe6e6f71e7b7f9f57b0424668641",
+      "template": "builtin:ci",
+      "render_sha256": "8233637c31db3217b8e804ac0123941dd505f0b9ebaaa473af6fcde5254ae8c8"
     },
     ".sdlc/ci/invariants.py": {
       "class": "seeded",
