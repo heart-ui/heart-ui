@@ -12,12 +12,12 @@
     },
     ".sdlc/ci/invariants.py": {
       "class": "seeded",
-      "sha256": "2b294a8082c64f035f2b2602ea0f7a00c7414fc16ac0cd8c0afe7d9d501866b9",
+      "sha256": "a2b76a197c479b76c681cedc22efab06de149221e7fc2552a533eb59e214dfc0",
       "template": "templates/project/ci/invariants.py"
     },
     ".github/workflows/sdlc-invariants.yml": {
       "class": "seeded",
-      "sha256": "f2fe5793f191ef2cf0973510ca4e4f88eb9f0fecb68aded6ee3b4a37e4411202",
+      "sha256": "6a7839bbe969d68172b584102f6a162f6750eb6ee4505e38c86db3522c3f24e4",
       "template": "builtin:invariants"
     },
     ".claude/rules/sdlc.md": {
