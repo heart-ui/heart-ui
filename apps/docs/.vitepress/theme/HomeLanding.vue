@@ -519,6 +519,8 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   --halo-a: 0.5;
   --halo-b: 0.35;
   --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 6px 16px -4px rgba(0, 0, 0, 0.14);
+  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.12), 0 8px 20px -6px rgba(216, 42, 12, 0.5);
 
   position: relative;
   min-height: 100vh;
@@ -553,6 +555,8 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   --halo: #f5f5f7;
   --halo-a: 0.08;
   --halo-b: 0.06;
+  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 16px -4px rgba(0, 0, 0, 0.6);
+  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.2), 0 8px 24px -6px rgba(255, 107, 79, 0.45);
 }
 
 .lp a {
@@ -738,6 +742,19 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
+  transition:
+    box-shadow 0.25s var(--ease),
+    background-color 0.25s var(--ease);
+}
+/* A light lift on hover; the primary button's shadow takes its own hue. */
+.lp .btn:hover {
+  box-shadow: var(--btn-shadow);
+}
+.lp .btn-primary:hover {
+  box-shadow: var(--btn-shadow-primary);
+}
+.lp .btn-ghost:hover {
+  box-shadow: none;
 }
 .lp .btn-sm {
   margin-left: 0.5rem;
@@ -1264,7 +1281,8 @@ section {
   .site-header::before,
   .bar,
   .spot-glow,
-  .spot-grid {
+  .spot-grid,
+  .btn {
     transition: none;
   }
 }
