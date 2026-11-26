@@ -653,3 +653,13 @@ Gaps and conflicts found while building. Format in
   prop or event fails. Why: the task's made-up prop still fails, and the
   conventions' fallthrough attributes don't. Decided by the agent
   (delegated).
+
+- 2026-11-26 Themes: every preset's light-mode primary read as too dark
+  (the maintainer asked for more vibrant colours). Step 600 sits at
+  lightness 0.446, where the gamut cuts chroma, and carried white text at
+  7 to 8.5:1, far past the 4.5:1 needed. Chose: light `primary` at step
+  500, hover 600, active 700; the focus ring moves to 800 so it stays off
+  the fill and its states and still reaches 3:1 on white. Forest's chroma
+  drops from 0.15 to 0.12 so white text on its 500 passes with no moves.
+  Added a sixth preset, `rose` (hue 5). Decided by the maintainer
+  (step 500, rose) and the agent (ring step, forest chroma).

@@ -5,6 +5,7 @@ import type { Knobs } from '@heart-ui/theme'
 import defaultPreset from '../../../../registry/themes/default.json' with { type: 'json' }
 import forestPreset from '../../../../registry/themes/forest.json' with { type: 'json' }
 import graphitePreset from '../../../../registry/themes/graphite.json' with { type: 'json' }
+import rosePreset from '../../../../registry/themes/rose.json' with { type: 'json' }
 import sunsetPreset from '../../../../registry/themes/sunset.json' with { type: 'json' }
 import violetPreset from '../../../../registry/themes/violet.json' with { type: 'json' }
 import { agentsBlock, AGENTS_MARKER } from '../agents.ts'
@@ -30,6 +31,7 @@ const presets: Record<string, Knobs> = {
   default: defaultPreset as Knobs,
   forest: forestPreset as Knobs,
   graphite: graphitePreset as Knobs,
+  rose: rosePreset as Knobs,
   sunset: sunsetPreset as Knobs,
   violet: violetPreset as Knobs,
 }

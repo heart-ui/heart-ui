@@ -226,7 +226,7 @@ describe('AC-005 presets', () => {
     const c = capture(root)
     expect(await run(['init', '--yes', '--theme', 'neon'], c.io, table)).toBe(1)
     expect(c.err()).toBe(
-      'heart-ui: No theme preset "neon". Presets: default, forest, graphite, sunset, violet.\n',
+      'heart-ui: No theme preset "neon". Presets: default, forest, graphite, rose, sunset, violet.\n',
     )
     expect(listFiles(root)).toEqual(before)
   })
@@ -252,7 +252,7 @@ describe('AC-005 presets', () => {
     expect(read(root, 'src/assets/css/tokens.css')).toBe(generateTheme(forest))
     const help = capture(root)
     expect(await run(['init', '--help'], help.io, table)).toBe(0)
-    expect(help.out()).toContain('default, forest, graphite, sunset, violet')
+    expect(help.out()).toContain('default, forest, graphite, rose, sunset, violet')
   })
 })
 

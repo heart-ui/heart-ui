@@ -1,0 +1,9 @@
+{
+  "name": "rose",
+  "primary": "oklch(0.55 0.2 5)",
+  "neutral": { "hue": 5, "chroma": 0.015 },
+  "radius": 0.75,
+  "density": "default",
+  "font": { "sans": "Inter, system-ui, sans-serif", "mono": "ui-monospace, monospace" },
+  "shadow": "crisp"
+}

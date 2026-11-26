@@ -37,7 +37,8 @@ A theme is fully described by one knob file. `@heart-ui/theme` exports
 | `shadow` | enum | `none`, `soft`, `crisp` |
 
 Presets live in `registry/themes/`: `default`, `graphite`, `forest`,
-`sunset` and `violet`. Each passes every contrast pair with no moves.
+`rose`, `sunset` and `violet`. Each passes every contrast pair with no
+moves.
 `generateTheme(knobs, { scoped: true })` puts every block under
 `[data-heart-theme="<name>"]` (dark: `.dark` or `[data-theme="dark"]` on
 that element, inside it, or on an ancestor; themes don't nest);
@@ -78,21 +79,25 @@ Colors. Each row is `--h-<name>`; values name a raw step.
 | `disabled-foreground` | neutral-400 | neutral-600 | Disabled text |
 | `border` | neutral-200 | neutral-800 | Dividers, card edges |
 | `border-control` | neutral-500 | neutral-500 | Input and checkbox edges |
-| `ring` | primary-500 | primary-500 | Focus ring |
+| `ring` | primary-800 | primary-500 | Focus ring |
 | `overlay` | black at 50% | black at 70% | Scrim behind dialogs |
-| `primary` | primary-600 | primary-400 | Primary actions |
-| `primary-hover` | primary-700 | primary-300 | |
-| `primary-active` | primary-800 | primary-200 | |
+| `primary` | primary-500 | primary-400 | Primary actions |
+| `primary-hover` | primary-600 | primary-300 | |
+| `primary-active` | primary-700 | primary-200 | |
 | `primary-foreground` | white | neutral-950 | Text on `primary` |
 | `primary-subtle` | primary-50 | primary-950 | Tinted fills, selected rows |
 | `primary-subtle-foreground` | primary-700 | primary-300 | Text on `primary-subtle` |
 | `link` | primary-700 | primary-300 | Inline links |
 
-Each status (`success`, `warning`, `danger`, `info`) gets four tokens with
-the same step mapping as primary: `<s>` (600 / 400), `<s>-foreground`
-(white / neutral-950), `<s>-subtle` (50 / 950), `<s>-subtle-foreground`
-(700 / 300). `danger` also has `danger-hover` (700 / 300) and
-`danger-active` (800 / 200), the same steps as primary's.
+Light mode's `primary` is step 500, where the primary color is at full
+chroma, rather than the darker 600: every preset still carries white text
+at 4.5:1 there. The focus ring then sits at 800, off the fill and its
+hover and pressed steps (500, 600, 700).
+
+Each status (`success`, `warning`, `danger`, `info`) gets four tokens:
+`<s>` (600 / 400), `<s>-foreground` (white / neutral-950), `<s>-subtle`
+(50 / 950), `<s>-subtle-foreground` (700 / 300). `danger` also has
+`danger-hover` (700 / 300) and `danger-active` (800 / 200).
 
 Charts use `chart-1` to `chart-6`: primary-500, then the info, success,
 warning, danger, and neutral 500 steps (400 in dark mode).
