@@ -43,8 +43,56 @@ const auditLines = [
 // theme page exists.
 const customThemeLink = '/start/theming#change-a-value'
 
-// The showcase's theme; the frame applies it as data-heart-theme (presets.css).
+// The showcase's theme; the frame applies it as data-heart-theme (presets.css). The hero's swatches set it too.
 const theme = ref(data.themes[0]?.name ?? 'default')
+
+// The hero's window: what `init` prints before it writes (its real output for a Vite app), the AGENTS.md it
+// writes, and the top of a component it copies in.
+const initCommand = 'npx heart-ui init'
+const initPlan = [
+  'heart-ui init will write or edit:',
+  '  src/assets/css/theme.css',
+  '  src/assets/css/tokens.css',
+  '  src/lib/utils/utils.ts',
+  '  src/lib/icon/icon.ts',
+  '  src/lib/icon/index.ts',
+  '  src/lib/icon/sets/fluent.ts',
+  '  AGENTS.md',
+  '  src/style.css',
+  '  heart-ui.json',
+  'and install:',
+  '  clsx@2.1.1',
+  '  tailwind-merge@3.7.0',
+  '  @iconify/vue@5.0.5',
+  'Continue? (y/N)',
+]
+const files = [
+  { id: 'terminal', label: 'Terminal' },
+  { id: 'agents', label: 'AGENTS.md' },
+  { id: 'button', label: 'Button.vue' },
+] as const
+type FileId = (typeof files)[number]['id']
+const file = ref<FileId>('terminal')
+const tabRefs = ref<HTMLButtonElement[]>([])
+
+// Arrow keys, Home and End move between the tabs and select the one they land on (APG tabs pattern).
+function onTabKey(event: KeyboardEvent, at: number) {
+  const last = files.length - 1
+  const next =
+    event.key === 'ArrowRight'
+      ? (at + 1) % files.length
+      : event.key === 'ArrowLeft'
+        ? (at + last) % files.length
+        : event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? last
+            : undefined
+  if (next === undefined) return
+  event.preventDefault()
+  file.value = files[next]!.id
+  tabRefs.value[next]?.focus()
+}
 
 const icons = {
   doc: 'M6 2C4.89543 2 4 2.89543 4 4V16C4 17.1046 4.89543 18 6 18H14C15.1046 18 16 17.1046 16 16V7.41421C16 7.149 15.8946 6.89464 15.7071 6.70711L11.2929 2.29289C11.1054 2.10536 10.851 2 10.5858 2H6ZM5 4C5 3.44772 5.44772 3 6 3H10V6.5C10 7.32843 10.6716 8 11.5 8H15V16C15 16.5523 14.5523 17 14 17H6C5.44772 17 5 16.5523 5 16V4ZM14.7929 7H11.5C11.2239 7 11 6.77614 11 6.5V3.20711L14.7929 7Z',
@@ -168,9 +216,7 @@ async function copyPrompt() {
     <main>
       <section class="hero">
         <!-- The pattern and mask live in this svg: the mask's 100% sizes against the svg that holds it.
-             The lattice is the mark's own grid: the mark is drawn at 0.12 scale, where its lines are 20.78
-             apart and its rows 24 high, and the tile starts on the page's centre line (x 50%) at a point where
-             the mark's lines cross (15.84 below its top, which is the hero's top padding, a multiple of 24). -->
+             The lattice is the logo mark's own grid at 0.12 scale: lines 20.78 apart, rows 24 high. -->
         <svg class="decor" width="100%" height="100%" aria-hidden="true">
           <defs>
             <pattern
@@ -197,23 +243,86 @@ async function copyPrompt() {
           </defs>
           <rect width="100%" height="100%" fill="url(#lp-lattice)" mask="url(#lp-fade-hero)" />
         </svg>
-        <div class="wrap center">
-          <svg viewBox="140 230 744 560" width="89.28" height="67.2" aria-hidden="true">
-            <use href="#lp-mark" />
-          </svg>
-          <span class="pill">Alpha · v{{ data.version }}</span>
-          <h1 class="hero-h">The Vue UI library built for coding agents.</h1>
-          <p class="lead">
-            Rules your agent follows, source you own, and an audit that checks its work.
-          </p>
-          <div class="cta-row">
-            <a href="/start/getting-started" class="btn btn-primary btn-lg">
-              Get started
-              <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-                <path :d="icons.arrow" fill="currentColor" />
-              </svg>
-            </a>
-            <a href="/components/" class="btn btn-neutral btn-lg">Browse components</a>
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <span class="pill">Alpha · v{{ data.version }}</span>
+            <h1 class="hero-h">The Vue UI library built for coding agents.</h1>
+            <p class="lead">
+              Rules your agent follows, source you own, and an audit that checks its work.
+            </p>
+            <div class="cta-row">
+              <a href="/start/getting-started" class="btn btn-primary btn-lg">
+                Get started
+                <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+                  <path :d="icons.arrow" fill="currentColor" />
+                </svg>
+              </a>
+              <a href="/components/" class="btn btn-neutral btn-lg">Browse components</a>
+            </div>
+          </div>
+          <div class="hero-panel">
+            <div class="win">
+              <div class="win-bar">
+                <span class="dots" aria-hidden="true"><span /><span /><span /></span>
+                <div class="win-tabs" role="tablist" aria-label="What init sets up">
+                  <button
+                    v-for="(item, at) in files"
+                    :id="`lp-file-${item.id}`"
+                    :key="item.id"
+                    ref="tabRefs"
+                    type="button"
+                    role="tab"
+                    class="win-tab"
+                    :aria-selected="file === item.id"
+                    :aria-controls="`lp-panel-${item.id}`"
+                    :tabindex="file === item.id ? 0 : -1"
+                    @click="file = item.id"
+                    @keydown="onTabKey($event, at)"
+                  >
+                    {{ item.label }}
+                  </button>
+                </div>
+              </div>
+              <div
+                v-for="item in files"
+                v-show="file === item.id"
+                :id="`lp-panel-${item.id}`"
+                :key="item.id"
+                role="tabpanel"
+                class="win-panel"
+                :aria-labelledby="`lp-file-${item.id}`"
+              >
+                <pre
+                  v-if="item.id === 'terminal'"
+                  class="win-pre"
+                  tabindex="0"
+                ><span class="t-p">$</span> {{ initCommand }}
+<template v-for="line in initPlan" :key="line"><span :class="{ 't-p': line.startsWith('  ') }">{{ line }}</span>
+</template></pre>
+                <pre
+                  v-else-if="item.id === 'agents'"
+                  class="win-pre"
+                  tabindex="0"
+                ><template v-for="(line, at) in data.agents.split('\n')" :key="at"><span :class="{ 't-k': line.startsWith('#') }">{{ line }}</span>
+</template></pre>
+                <pre v-else class="win-pre" tabindex="0">{{ data.button }}</pre>
+              </div>
+            </div>
+            <div class="hero-themes" role="group" aria-label="Theme of the components below">
+              <span class="hero-themes-label" aria-hidden="true">Themes</span>
+              <button
+                v-for="item in data.themes"
+                :key="item.name"
+                type="button"
+                class="swatch"
+                :aria-pressed="theme === item.name"
+                :aria-label="item.name"
+                :title="item.name"
+                @click="theme = item.name"
+              >
+                <span :style="{ background: item.primary }" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -695,6 +804,105 @@ section {
   gap: 0.75rem;
   margin-top: 1rem;
 }
+
+/* The hero: the pitch on the left, what init sets up on the right; stacked below 1024px. */
+.hero-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: 4rem;
+}
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.75rem;
+}
+.hero-copy .hero-h {
+  font-size: 3.5rem;
+}
+.hero-copy .cta-row {
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+}
+.hero-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+.win-tabs {
+  display: flex;
+  gap: 0.25rem;
+}
+.win-tab {
+  padding: 0.25rem 0.625rem;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--lp-muted-fg);
+  font: inherit;
+  cursor: pointer;
+}
+.win-tab:hover {
+  color: var(--lp-fg);
+}
+.win-tab[aria-selected='true'] {
+  background: var(--lp-surface);
+  box-shadow: inset 0 0 0 1px var(--lp-glass-line);
+  color: var(--lp-fg);
+}
+/* One height for every file, so switching tabs doesn't move the page. */
+.win-panel .win-pre {
+  block-size: 25rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+.hero-themes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 0.375rem;
+}
+.hero-themes-label {
+  margin-right: 0.25rem;
+  color: var(--lp-muted-fg);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.swatch {
+  display: grid;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  padding: 0;
+  border: 1px solid var(--lp-glass-line);
+  border-radius: 50%;
+  background: var(--lp-surface);
+  cursor: pointer;
+}
+.swatch span {
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  border-radius: 50%;
+  /* A near-black or near-white primary still shows its edge on either background. */
+  box-shadow: inset 0 0 0 1px var(--lp-glass-line);
+}
+.swatch[aria-pressed='true'] {
+  border-color: var(--lp-fg);
+}
+@media (max-width: 1023px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+  }
+}
 .lp h2 {
   font-size: 2.75rem;
   font-weight: 700;
@@ -800,6 +1008,7 @@ section {
   width: 0.75rem;
   height: 0.75rem;
   border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--lp-glass-line);
 }
 .lp :deep(.demo-preview) {
   /* No card: the tiles sit on the page. The frame reaches past the column by the showcase's padding, which
@@ -1061,8 +1270,12 @@ section {
   .showcase-band {
     padding-top: 5.5rem;
   }
-  .hero-h {
+  .hero-h,
+  .hero-copy .hero-h {
     font-size: 2.5rem;
+  }
+  .win-panel .win-pre {
+    block-size: 20rem;
   }
   .lp h2 {
     font-size: 2rem;
