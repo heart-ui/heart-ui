@@ -3,6 +3,7 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { defineLoader } from 'vitepress'
+import { agentsBlock } from '../../../../packages/cli/src/agents.ts'
 import { docsItems } from '../../scripts/items.ts'
 
 const repo = join(import.meta.dirname, '../../../..')
@@ -13,10 +14,44 @@ export interface LandingData {
   components: number
   themes: { name: string; primary: string; radius: number; density: string; shadow: string }[]
   checks: { id: string; text: string }[]
+  /** The hero panel's files: what `init` writes into AGENTS.md, and the top of a component's source. */
+  agents: string
+  button: string
 }
 
 declare const data: LandingData
 export { data }
+
+/** AGENTS.md as `init` writes it for a Vite app with the default aliases, from the title to the rules. */
+function agents() {
+  const block = agentsBlock(
+    {
+      framework: 'vite',
+      css: 'src/style.css',
+      aliases: {
+        ui: '@/components/ui',
+        blocks: '@/components/blocks',
+        layouts: '@/components/layouts',
+        lib: '@/lib',
+      },
+      iconSet: 'fluent',
+      registries: {},
+    },
+    (alias) => alias.replace(/^@\//, 'src/'),
+  )
+  const start = block.indexOf('# Heart UI')
+  const end = block.indexOf('## Rules')
+  if (start < 0 || end < 0) throw new Error('landing: AGENTS.md block has no title or rules')
+  return block.slice(start, end).trim()
+}
+
+/** Button.vue from its first line to the end of its props. */
+function button() {
+  const source = read('registry/ui/button/Button.vue')
+  const end = source.indexOf('}\n', source.indexOf('interface ButtonProps'))
+  if (end < 0) throw new Error('landing: Button.vue has no ButtonProps')
+  return source.slice(0, end + 1)
+}
 
 /** The rows of the audit checklist table in docs/agent-support.md, with code spans kept as text. */
 function checks() {
@@ -35,6 +70,8 @@ export default defineLoader({
     '../../../../registry/themes/*.json',
     '../../../../packages/cli/package.json',
     '../../../../docs/agent-support.md',
+    '../../../../packages/cli/src/agents.ts',
+    '../../../../registry/ui/button/Button.vue',
   ],
   load(): LandingData {
     const themesDir = join(repo, 'registry/themes')
@@ -62,6 +99,8 @@ export default defineLoader({
       components: docsItems().length,
       themes,
       checks: checks(),
+      agents: agents(),
+      button: button(),
     }
   },
 })
