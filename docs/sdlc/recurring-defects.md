@@ -21,3 +21,4 @@ One line per defect: what it looks like, then the severity.
 - A size or count budget (bytes, lines, items) checked only against today's data when the plan says the data grows; size it on the planned count and test that projection: medium.
 - A component `<style>` block that declares a Tailwind layer (`@layer base|components|utilities`) and gets bundled before `@import 'tailwindcss'`, locking that layer below Preflight: high.
 - An expanding or collapsing panel that keeps `overflow-hidden` while open, clipping the focus rings of controls inside it: high.
+- A part that binds an attribute (`href`, `id`) onto an `asChild` or `as` child even when unset, replacing what a `RouterLink` or `NuxtLink` child computes: high.

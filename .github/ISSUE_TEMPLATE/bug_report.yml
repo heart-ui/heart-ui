@@ -1,0 +1,87 @@
+name: Bug report
+description: Report a bug in a Heart UI component, CLI command, theme, or docs.
+title: 'bug: '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please check existing issues first and include enough detail to reproduce the problem.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of Heart UI is affected?
+      options:
+        - Component (registry/ui)
+        - Block or Layout (registry/blocks, registry/layouts)
+        - CLI (heart-ui)
+        - Theme / Tokens (@heart-ui/theme)
+        - ESLint plugin (@heart-ui/eslint-plugin)
+        - MCP / Agent support
+        - Documentation (heart.tammai.me)
+    validations:
+      required: true
+
+  - type: input
+    id: item
+    attributes:
+      label: Component, command, or page
+      description: Name the specific component, CLI command, or doc page (if applicable).
+      placeholder: e.g. select, heart-ui update, /start/theming
+    validations:
+      required: false
+
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Framework
+      options:
+        - Vite + Vue 3
+        - Nuxt 4
+        - CLI / Node only
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide minimal steps, code snippet, or a link to a minimal reproduction.
+      placeholder: |
+        1. Run `npx heart-ui add ...`
+        2. Render ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Relevant versions (Node, Vue, Nuxt, Tailwind CSS, Reka UI, browser, OS).
+      placeholder: |
+        - Node: 22.x
+        - Vue: 3.5.x
+        - Tailwind CSS: 4.x
+        - Browser / OS:
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact checks
+      options:
+        - label: Affects accessibility (keyboard navigation, screen reader, contrast, or axe)
+        - label: Causes an SSR / hydration mismatch in Nuxt

@@ -1,9 +1,16 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
-import { defineConfig, type DefaultTheme } from 'vitepress'
+import { defineConfig, type DefaultTheme, type HeadConfig } from 'vitepress'
 import { docsItems, escapeHtml, guides, markdownTitle, sitePages } from '../scripts/items.ts'
 import { siteLinks } from './links.ts'
+
+const siteUrl = 'https://heart.tammai.me'
+const siteTitle = 'Heart UI'
+const siteDescription = 'Vue 3 components on Reka UI, copied into your project as source you own.'
+const ogImage = `${siteUrl}/og-image.png`
+const ogImageAlt =
+  'Heart UI — UI your coding agent gets right. Copy-and-own Vue & Nuxt components on Reka UI and Tailwind CSS v4.'
 
 const repo = fileURLToPath(new URL('../../../', import.meta.url))
 const registry = `${repo}registry`
@@ -48,8 +55,8 @@ const sidebar: DefaultTheme.SidebarItem[] = [
 ]
 
 export default defineConfig({
-  title: 'Heart UI',
-  description: 'Vue 3 components on Reka UI, copied into your project as source you own.',
+  title: siteTitle,
+  description: siteDescription,
   cleanUrls: true,
   head: [
     // The mark in white on a dark rounded square, at the sizes browsers and iOS ask for.
@@ -66,7 +73,37 @@ export default defineConfig({
         href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap',
       },
     ],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: siteTitle }],
+    ['meta', { property: 'og:image', content: ogImage }],
+    ['meta', { property: 'og:image:type', content: 'image/png' }],
+    ['meta', { property: 'og:image:width', content: '1280' }],
+    ['meta', { property: 'og:image:height', content: '640' }],
+    ['meta', { property: 'og:image:alt', content: ogImageAlt }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:image', content: ogImage }],
+    ['meta', { name: 'twitter:image:alt', content: ogImageAlt }],
   ],
+  transformHead({ pageData }): HeadConfig[] {
+    if (pageData.relativePath.startsWith('demo/')) {
+      return [['meta', { name: 'robots', content: 'noindex' }]]
+    }
+    const rel = pageData.relativePath.replace(/(?:^|\/)index\.md$/, '/').replace(/\.md$/, '')
+    const url = `${siteUrl}${rel.startsWith('/') ? rel : `/${rel}`}`
+    const title =
+      pageData.title && pageData.title !== siteTitle
+        ? `${pageData.title} | ${siteTitle}`
+        : siteTitle
+    const description = pageData.description || siteDescription
+    return [
+      ['link', { rel: 'canonical', href: url }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: description }],
+      ['meta', { name: 'twitter:title', content: title }],
+      ['meta', { name: 'twitter:description', content: description }],
+    ]
+  },
   themeConfig: {
     // The landing page's mark and wordmark.
     logo: { src: '/logo.svg', alt: '' },

@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose a new component, block, layout, CLI command, or improvement.
+title: 'feat: '
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before proposing a feature, please check [docs/spec.md](https://github.com/heart-ui/heart-ui/blob/main/docs/spec.md) and [docs/components/index.md](https://github.com/heart-ui/heart-ui/blob/main/docs/components/index.md) to see if it is already planned or listed under non-goals.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Component
+        - Block or Layout
+        - CLI (heart-ui)
+        - Theme / Tokens (@heart-ui/theme)
+        - MCP / Agent support
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What user or developer problem does this solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the API, component behavior, or workflow you have in mind.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any workarounds or alternative designs you considered.
+    validations:
+      required: false

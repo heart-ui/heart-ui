@@ -3,6 +3,17 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-26 P2-12: the catalog row for `breadcrumb` names the parts and
+  a `nav` with an ordered list, but not its name, the separator or how
+  links meet a router. Chose: `navLabel` (default `Breadcrumb`) names the
+  `nav`; `BreadcrumbSeparator` is a presentational, `aria-hidden` `li` with
+  a chevron that follows Reka's `ConfigProvider` direction (a slot replaces
+  it); `BreadcrumbLink` is Reka `Primitive` (`a` by default, `asChild` for
+  `RouterLink`); `BreadcrumbPage` is a `span` with `aria-current="page"`;
+  the list wraps. Why: the `*Label` rule, the APG breadcrumb pattern, and
+  the dropdown menu's way of following direction. Decided by the agent
+  (delegated).
+
 - 2026-11-26 P2-11: the catalog row for `accordion` names the parts and
   `type`, but no defaults, no heading element and no animation. Chose:
   `type` `single` and `collapsible` `true` by default (a second click

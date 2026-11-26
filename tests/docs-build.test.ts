@@ -89,6 +89,26 @@ describe('docs build', () => {
     expect(Object.values(manifest.scripts).join(' ')).not.toMatch(/wrangler|deploy/)
     expect(manifest.devDependencies).not.toHaveProperty('wrangler')
   })
+
+  it('includes Open Graph, Twitter Card and canonical metadata, and noindex on demo frames', () => {
+    expect(existsSync(join(dist, 'og-image.png'))).toBe(true)
+    for (const [page, expectedUrl] of [
+      ['index.html', 'https://heart.tammai.me/'],
+      ['components/button.html', 'https://heart.tammai.me/components/button'],
+    ] as const) {
+      const content = html(page)
+      expect(content).toContain(
+        'property="og:image" content="https://heart.tammai.me/og-image.png"',
+      )
+      expect(content).toContain('name="twitter:card" content="summary_large_image"')
+      expect(content).toContain(
+        'name="twitter:image" content="https://heart.tammai.me/og-image.png"',
+      )
+      expect(content).toContain(`rel="canonical" href="${expectedUrl}"`)
+      expect(content).toContain(`property="og:url" content="${expectedUrl}"`)
+    }
+    expect(html('demo/button.html')).toContain('name="robots" content="noindex"')
+  })
 })
 
 // Serves the built site with clean URLs, as Cloudflare Pages does.

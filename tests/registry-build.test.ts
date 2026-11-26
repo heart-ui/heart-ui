@@ -84,6 +84,7 @@ describe('registry:build', () => {
         'alert',
         'avatar',
         'badge',
+        'breadcrumb',
         'button',
         'card',
         'checkbox',
