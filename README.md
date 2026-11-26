@@ -127,8 +127,8 @@ v4 utilities:
 }
 ```
 
-Five contrast-verified presets ship in `registry/themes/`: `default`,
-`graphite`, `forest`, `sunset`, and `violet`. Light tokens bind to `:root` and
+Six contrast-verified presets ship in `registry/themes/`: `default`,
+`graphite`, `forest`, `rose`, `sunset`, and `violet`. Light tokens bind to `:root` and
 dark tokens bind to `.dark, [data-theme="dark"]`. Read
 [docs/tokens.md](docs/tokens.md) for the complete token architecture.
 
