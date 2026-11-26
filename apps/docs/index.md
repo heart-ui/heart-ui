@@ -1,18 +1,7 @@
 ---
 layout: false
 title: Heart UI
-titleTemplate: Vue components built for coding agents
-head:
-  - - link
-    - rel: preconnect
-      href: https://fonts.googleapis.com
-  - - link
-    - rel: preconnect
-      href: https://fonts.gstatic.com
-      crossorigin: ''
-  - - link
-    - rel: stylesheet
-      href: https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap
+titleTemplate: The Vue UI library built for coding agents
 ---
 
 <HomeLanding />

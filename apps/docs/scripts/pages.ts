@@ -1,6 +1,6 @@
 // Turns each registry item's `<name>.md` and demo into the docs site's Markdown pages.
 // Links in the Markdown are rewritten when it renders (.vitepress/links.ts), not here.
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import {
   type ApiComponent,
@@ -38,7 +38,7 @@ export function renderPages(registry = registryDir): DocsPages[] {
         `docs: ${item.name}/index.ts re-exports no component as default from a .vue file`,
       )
     }
-    const built = buildItemPage(item, markdown, components)
+    const built = buildItemPage(item, markdown, components, opensOverlay(item.dir))
     drift.push(...built.drift)
     return { name: item.name, item: built.page, demoPage: demoPage(item) }
   })
@@ -54,7 +54,9 @@ export function indexPage(items: Pick<DocsItem, 'name' | 'title' | 'dir'>[]) {
     }
     return `- [${escapeHtml(item.title)}](./${item.name}): ${prose(meta.description ?? '')}`
   })
-  return ['---', 'title: Components', '---', '', '# Components', '', ...rows, ''].join('\n')
+  // Generated from every item.json, so there is no one file to edit.
+  const meta = ['title: Components', 'editLink: false']
+  return ['---', ...meta, '---', '', '# Components', '', ...rows, ''].join('\n')
 }
 
 /** `guide/<name>.md`: a repo doc as written. v-pre, because VitePress compiles Markdown as a Vue template. */
@@ -79,8 +81,9 @@ export function itemPage(
   item: Pick<DocsItem, 'name' | 'title'>,
   markdown: string,
   components: ApiComponent[],
+  overlay = false,
 ) {
-  const { page, drift } = buildItemPage(item, markdown, components)
+  const { page, drift } = buildItemPage(item, markdown, components, overlay)
   if (drift.length > 0) throw driftError(drift)
   return page
 }
@@ -90,10 +93,22 @@ function driftError(drift: string[]) {
   return new Error(`docs: item specs and component types disagree:\n${lines}`)
 }
 
+/**
+ * Whether the item draws a layer outside its own box: content portalled to the body, or fixed to the window
+ * (a dialog, a menu, a toast). Its preview keeps room for that layer, which adds nothing to the frame's
+ * measured height.
+ */
+export function opensOverlay(dir: string) {
+  return readdirSync(dir)
+    .filter((file) => file.endsWith('.vue') && !file.endsWith('.demo.vue'))
+    .some((file) => /Portal\b|["' ]fixed["' ]/.test(readFileSync(join(dir, file), 'utf8')))
+}
+
 function buildItemPage(
   item: Pick<DocsItem, 'name' | 'title'>,
   markdown: string,
   components: ApiComponent[],
+  overlay: boolean,
 ) {
   const found: { section: Section; text: string }[] = []
   const label = (part: string, name: string) =>
@@ -128,7 +143,8 @@ function buildItemPage(
   for (const table of [...tables].reverse()) {
     page = `${page.slice(0, table.start)}${merged.get(table) ?? ''}${page.slice(table.end)}`
   }
-  const preview = `<DemoPreview name="${item.name}" title="${escapeHtml(item.title)}" />\n\n`
+  const room = overlay ? ' overlay' : ''
+  const preview = `<DemoPreview name="${item.name}" title="${escapeHtml(item.title)}"${room} />\n\n`
   page = insertBefore(page, (heading) => heading.level === 2, preview)
   // JSON strings are valid YAML scalars, so any title survives the frontmatter.
   return {

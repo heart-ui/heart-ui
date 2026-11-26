@@ -28,6 +28,17 @@ const row = (text: string, first: string) =>
   text.split('\n').find((line) => line.startsWith(`| ${first} |`)) ?? ''
 
 describe('docs pages', () => {
+  it('marks the preview of an item that opens an overlay, so its frame keeps room for it', () => {
+    const overlays = pages
+      .filter((entry) => /<DemoPreview [^>]* overlay \/>/.test(entry.item))
+      .map((entry) => entry.name)
+    expect(overlays).toEqual(['dialog', 'dropdown-menu', 'popover', 'select', 'toast', 'tooltip'])
+  })
+
+  it('turns the edit link off on the generated component index', () => {
+    expect(indexPage(docsItems())).toMatch(/^---\ntitle: Components\neditLink: false\n---/)
+  })
+
   it('button page: one merged table per section, types and defaults from code, notes from the spec', () => {
     const { item } = page('button')
     expect(item).toContain('# Button\n')
