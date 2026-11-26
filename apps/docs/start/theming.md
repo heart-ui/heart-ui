@@ -46,8 +46,9 @@ set a project up. The presets are listed by `npx heart-ui init --help`.
 | Preset | Primary | Radius | Density | Shadow |
 | --- | --- | --- | --- | --- |
 | `default` | blue | 0.5 rem | default | soft |
-| `graphite` | neutral gray | 0.25 rem | compact | crisp |
+| `graphite` | near black | 0.25 rem | compact | crisp |
 | `forest` | green | 0.75 rem | comfortable | soft |
+| `rose` | rose | 0.75 rem | default | crisp |
 | `sunset` | orange | 0.5 rem | default | soft |
 | `violet` | violet | 1 rem | default | none |
 

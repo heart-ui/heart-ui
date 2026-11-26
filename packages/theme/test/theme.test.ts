@@ -174,6 +174,7 @@ describe('presets', () => {
     expect(shape('forest')).toEqual({ radius: 0.75, density: 'comfortable', shadow: 'soft' })
     expect(shape('sunset')).toEqual({ radius: 0.5, density: 'default', shadow: 'soft' })
     expect(shape('violet')).toEqual({ radius: 1, density: 'default', shadow: 'none' })
+    expect(shape('rose')).toEqual({ radius: 0.75, density: 'default', shadow: 'crisp' })
     const color = (name: string) => oklch(preset(name).primary)
     expect(color('graphite').c).toBeLessThanOrEqual(0.04)
     const hue = (name: string, min: number, max: number) => {
@@ -184,12 +185,13 @@ describe('presets', () => {
     hue('forest', 130, 165)
     hue('sunset', 35, 60)
     hue('violet', 280, 310)
+    hue('rose', 0, 15)
     for (const file of presetFiles) {
       expect(preset(file.slice(0, -5)).name).toBe(file.slice(0, -5))
     }
   })
 
-  it.each(['default', 'graphite', 'forest', 'sunset', 'violet'])(
+  it.each(['default', 'graphite', 'forest', 'rose', 'sunset', 'violet'])(
     '%s passes every pair with no moves',
     (name) => {
       const report = checkContrast(preset(name))
@@ -318,6 +320,10 @@ describe('checkContrast', () => {
     expect(dark.get('danger-active')).toBe(raw('danger-200'))
     expect(dark.get('muted-active')).toBe(raw('neutral-600'))
     const light = declarations(generateTheme(defaults), ':root {')
+    expect(light.get('primary')).toBe(raw('primary-500'))
+    expect(light.get('primary-hover')).toBe(raw('primary-600'))
+    expect(light.get('primary-active')).toBe(raw('primary-700'))
+    expect(light.get('ring')).toBe(raw('primary-800'))
     expect(light.get('border-control')).toBe(raw('neutral-500'))
     expect(light.get('danger-hover')).toBe(raw('danger-700'))
     expect(light.get('danger-active')).toBe(raw('danger-800'))
@@ -367,6 +373,26 @@ describe('contrast moves', () => {
       values.dark.get(t),
     )
     expect(new Set(tokens).size).toBe(4)
+  })
+
+  it('gives a monochrome primary the darkest fill in light mode and the lightest in dark', () => {
+    const raw = (step: string) => `var(--h-raw-${step})`
+    const css = generateTheme({ ...defaults, primary: 'oklch(0.21 0.01 260)' })
+    const light = declarations(css, ':root {')
+    const dark = declarations(css, '.dark,\n[data-theme="dark"] {')
+    expect(light.get('primary')).toBe(raw('primary-900'))
+    expect(light.get('primary-hover')).toBe(raw('primary-800'))
+    expect(light.get('primary-active')).toBe(raw('primary-700'))
+    expect(light.get('ring')).toBe(raw('primary-500'))
+    expect(dark.get('primary')).toBe(raw('primary-50'))
+    expect(dark.get('primary-hover')).toBe(raw('primary-100'))
+    expect(dark.get('primary-active')).toBe(raw('primary-200'))
+    // Just above the threshold, the usual mapping holds.
+    const tinted = declarations(
+      generateTheme({ ...defaults, primary: 'oklch(0.21 0.05 260)' }),
+      ':root {',
+    )
+    expect(tinted.get('primary')).toBe(raw('primary-500'))
   })
 
   it('keeps the ring off the primary fill', () => {
