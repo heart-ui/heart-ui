@@ -558,7 +558,9 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   --halo-a: 0.08;
   --halo-b: 0.06;
   --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 4px 14px -4px rgba(0, 0, 0, 0.4);
-  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.1), 0 6px 20px -6px rgba(255, 107, 79, 0.25);
+  /* A red glow muddies on near-black: hover brightens the button and lifts it with a neutral shadow. */
+  --brand-hover: #de3412;
+  --btn-shadow-primary: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 2px 8px -2px rgba(0, 0, 0, 0.6);
 }
 
 .lp a {
