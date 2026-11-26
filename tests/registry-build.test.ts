@@ -92,6 +92,7 @@ describe('registry:build', () => {
         'icon',
         'input',
         'label',
+        'popover',
         'progress',
         'radio-group',
         'select',

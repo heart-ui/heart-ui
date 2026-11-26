@@ -1,0 +1,16 @@
+{
+  "name": "popover",
+  "type": "registry:ui",
+  "title": "Popover",
+  "description": "An interactive panel anchored to a trigger, for filters, small forms and details, with a close part.",
+  "dependencies": ["reka-ui@2.11.0"],
+  "registryDependencies": ["utils"],
+  "files": [
+    "Popover.vue",
+    "PopoverTrigger.vue",
+    "PopoverContent.vue",
+    "PopoverClose.vue",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}

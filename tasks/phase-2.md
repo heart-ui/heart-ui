@@ -124,7 +124,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-2-phase-
 | P2-07 | `skeleton` | P2-01 | review |
 | P2-08 | `alert` | P2-01 | review |
 | P2-09 | `progress` | P2-01 | review |
-| P2-10 | `popover` | P2-01 | todo |
+| P2-10 | `popover` | P2-01 | review |
 | P2-11 | `accordion` | P2-01 | todo |
 | P2-12 | `breadcrumb` | P2-01 | todo |
 | P2-13 | `pagination` | P2-01 | todo |

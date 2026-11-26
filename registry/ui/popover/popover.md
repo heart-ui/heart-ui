@@ -24,7 +24,7 @@ when the task needs the whole page's attention.
 | Part | Prop | Type | Default | Notes |
 | --- | --- | --- | --- | --- |
 | `Popover` | `open` | `boolean` | none | `v-model:open` |
-| `Popover` | `modal` | `boolean` | `false` | `true` traps focus inside and hides the rest of the page from screen readers |
+| `Popover` | `modal` | `boolean` | `false` | `true` traps focus inside, hides the rest of the page from screen readers and stops it scrolling; a click outside only closes the popover |
 | `PopoverTrigger` | `asChild` | `boolean` | `false` | Merge onto the child, such as a `Button` |
 | `PopoverTrigger` | `as` | `string \| Component` | none | Element to render; Reka renders a `button` |
 | `PopoverContent` | `side` | `top \| right \| bottom \| left` | `bottom` | Flips when there is no room |
@@ -73,14 +73,17 @@ height; 375 px.
 
 ## Accessibility
 
-- The content has `role="dialog"` and is named by its trigger. A content
-  with its own heading can pass `aria-labelledby` with the heading's `id`.
+- The content has `role="dialog"` and is always named by its trigger
+  (Reka sets `aria-labelledby` to the trigger's `id`), so give an
+  icon-only trigger an `aria-label` that names the panel too.
 - The trigger has `aria-haspopup="dialog"`, `aria-expanded`, and, while
   open, `aria-controls` pointing at the content.
 - Opening moves focus to the first focusable control in the content;
   closing returns it to the trigger.
 - A click outside or `Escape` closes a popover. A modal popover also
-  hides the rest of the page from screen readers until it closes.
+  traps focus, hides the rest of the page from screen readers and stops
+  it scrolling until it closes; its outside click closes it without
+  reaching the control under the pointer.
 - A `PopoverTrigger` or `PopoverClose` that renders its own button is
   `type="button"`, so it never submits a form.
 

@@ -3,6 +3,17 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-26 P2-10: the catalog row for `popover` names the parts and
+  Content `side` and `align`, but no defaults, root props, size or close
+  button. Chose: `Popover` with `v-model:open` and `modal` (default
+  `false`); `PopoverContent` `side` `bottom` and `align` `center` by
+  default, `w-72` on `surface-raised`, capped at Reka's available width and
+  height so it fits a 375 px screen and scrolls; no built-in close button,
+  since `PopoverClose` is its own part. The content is always named by its
+  trigger: Reka sets `aria-labelledby` after a caller's attributes. Why:
+  matches `tooltip` and `dropdown-menu` and Reka's defaults, with no token
+  change. Decided by the agent (delegated).
+
 - 2026-11-23 P2-09: the catalog row for `progress` names `size` and
   indeterminate when the value is `null`, but not the track heights, the
   Reka props to expose, Reka's synthetic `getValueLabel`, or the
