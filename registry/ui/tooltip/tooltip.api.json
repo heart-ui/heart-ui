@@ -34,7 +34,7 @@
       "props": [
         {
           "name": "side",
-          "type": "'top' | 'right' | 'bottom' | 'left'",
+          "type": "'bottom' | 'top' | 'right' | 'left'",
           "required": false,
           "default": "'top'"
         }

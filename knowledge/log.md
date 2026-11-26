@@ -60,3 +60,4 @@
 - 2026-11-21 update knowledge/gotchas/test-harness.md — colour assertions that pass with the token unset (from 2026-11-20-m-p2-05-separator)
 - 2026-11-23 update knowledge/gotchas/registry-items.md — no Tailwind `@layer` names in SFC `<style>`; Reka Progress synthetic `aria-label` (from 2026-11-23-m-p2-09-progress)
 - 2026-11-23 update docs/sdlc/recurring-defects.md — SFC `<style>` declaring Tailwind `@layer` bundled before Preflight (from 2026-11-23-m-p2-09-progress)
+- 2026-11-26 update knowledge/gotchas/registry-items.md — Reka Popover naming and modal outside clicks; why a per-item checker doesn't fix snapshot union order (from 2026-11-26-m-p2-10-popover)
