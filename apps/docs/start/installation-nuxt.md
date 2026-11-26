@@ -5,16 +5,51 @@ the `@` alias to `app/`.
 
 ## 1. Create the app
 
-```sh
+::: code-group
+
+```sh [npm]
 npm create nuxt@latest my-app
 cd my-app
 ```
 
+```sh [pnpm]
+pnpm create nuxt@latest my-app
+cd my-app
+```
+
+```sh [yarn]
+yarn create nuxt@latest my-app
+cd my-app
+```
+
+```sh [bun]
+bun create nuxt@latest my-app
+cd my-app
+```
+
+:::
+
 ## 2. Add Tailwind CSS and TypeScript
 
-```sh
+::: code-group
+
+```sh [npm]
 npm install -D tailwindcss @tailwindcss/vite typescript@6
 ```
+
+```sh [pnpm]
+pnpm add -D tailwindcss @tailwindcss/vite typescript@6
+```
+
+```sh [yarn]
+yarn add -D tailwindcss @tailwindcss/vite typescript@6
+```
+
+```sh [bun]
+bun add -d tailwindcss @tailwindcss/vite typescript@6
+```
+
+:::
 
 Heart UI's components declare their props in TypeScript, which Vue's compiler
 reads through the `typescript` package. Vue's compiler does not load

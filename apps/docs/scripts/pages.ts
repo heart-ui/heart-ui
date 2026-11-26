@@ -38,7 +38,7 @@ export function renderPages(registry = registryDir): DocsPages[] {
         `docs: ${item.name}/index.ts re-exports no component as default from a .vue file`,
       )
     }
-    const built = buildItemPage(item, markdown, components, opensOverlay(item.dir))
+    const built = buildItemPage(item, markdown, components, opensOverlay(item.dir), demoCode(item))
     drift.push(...built.drift)
     return { name: item.name, item: built.page, demoPage: demoPage(item) }
   })
@@ -109,6 +109,7 @@ function buildItemPage(
   markdown: string,
   components: ApiComponent[],
   overlay: boolean,
+  code?: string,
 ) {
   const found: { section: Section; text: string }[] = []
   const label = (part: string, name: string) =>
@@ -144,7 +145,10 @@ function buildItemPage(
     page = `${page.slice(0, table.start)}${merged.get(table) ?? ''}${page.slice(table.end)}`
   }
   const room = overlay ? ' overlay' : ''
-  const preview = `<DemoPreview name="${item.name}" title="${escapeHtml(item.title)}"${room} />\n\n`
+  const preview = demoCard(
+    `<DemoPreview name="${item.name}" title="${escapeHtml(item.title)}"${room} />`,
+    code,
+  )
   page = insertBefore(page, (heading) => heading.level === 2, preview)
   // JSON strings are valid YAML scalars, so any title survives the frontmatter.
   return {
@@ -386,6 +390,37 @@ function prose(text: string) {
         : part.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
     )
     .join('')
+}
+
+// A demo short enough to read at a glance shows its code; a longer one keeps it folded under the preview.
+const openCodeLines = 30
+
+/** The demo's code as it reads in a user's project, where the item lives under `components/ui/`. */
+function demoCode(item: DocsItem) {
+  return readFileSync(join(item.dir, item.demo), 'utf8')
+    .replaceAll(/from '\.'/g, `from '@/components/ui/${item.name}'`)
+    .trimEnd()
+}
+
+/** The preview and, under it in the same card, the demo's code. */
+function demoCard(preview: string, code?: string) {
+  if (code === undefined) return `<div class="demo-card">\n${preview}\n</div>\n\n`
+  const open = code.split('\n').length <= openCodeLines ? ' open' : ''
+  return [
+    '<div class="demo-card">',
+    preview,
+    `<details class="demo-code"${open}>`,
+    '<summary>Code</summary>',
+    '',
+    '````vue',
+    code,
+    '````',
+    '',
+    '</details>',
+    '</div>',
+    '',
+    '',
+  ].join('\n')
 }
 
 function demoPage(item: DocsItem) {
