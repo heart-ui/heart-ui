@@ -112,3 +112,204 @@
 :root:root:has(.heart-demo--bare) body {
   background-color: transparent;
 }
+
+/* Docs page chrome: one white page from the header down, the sidebar on the page itself. */
+:root {
+  --vp-sidebar-bg-color: var(--lp-bg);
+}
+
+@media (min-width: 960px) {
+  /* One rule under the whole bar, the sidebar's part included, in place of VitePress's partial one. */
+  .VPNav:has(.VPNavBar.has-sidebar) {
+    box-shadow: 0 1px 0 var(--vp-c-gutter);
+  }
+
+  .VPNavBar.has-sidebar .divider,
+  .VPNavBar.has-sidebar .title {
+    border-bottom: 0;
+  }
+
+  .VPNavBar.has-sidebar .divider-line {
+    display: none;
+  }
+}
+
+.VPSidebar .group + .group {
+  border-top: 0;
+  padding-top: 0.5rem;
+}
+
+/* Sidebar: bold group headings; each group's pages on a guide line, the current page marked on it. */
+.VPSidebarItem.level-0 > .item .text {
+  color: var(--vp-c-text-1);
+  font-weight: 600;
+}
+
+.VPSidebarItem.level-0 > .items {
+  margin-left: 0.5rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--vp-c-divider);
+}
+
+.VPSidebarItem.level-1.is-active > .item > .indicator {
+  left: -1.0625rem;
+  background-color: var(--vp-c-brand-1);
+}
+
+.VPSidebarItem.level-1.is-active > .item .text {
+  font-weight: 500;
+}
+
+/* The page's first paragraph is its lead: larger and muted, with the page's one rule under it. */
+.vp-doc h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.vp-doc h1 + p {
+  margin-top: 1rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-2);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.vp-doc h2 {
+  border-top: 0;
+  padding-top: 0;
+}
+
+/* A component's demo: the preview on top and its code under it, in one card. */
+.vp-doc .demo-card {
+  margin-block: 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0.75rem;
+}
+
+.vp-doc .demo-card .demo-preview {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.vp-doc .demo-code {
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc .demo-code > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  list-style: none;
+  color: var(--vp-c-text-2);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+}
+
+.vp-doc .demo-code > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A chevron that turns down when the code is open. */
+.vp-doc .demo-code > summary::before {
+  content: '';
+  inline-size: 0.4rem;
+  block-size: 0.4rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.2s;
+}
+
+.vp-doc .demo-code[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.vp-doc .demo-code > summary:hover {
+  color: var(--vp-c-text-1);
+}
+
+.vp-doc .demo-code > summary:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: -2px;
+}
+
+.vp-doc .demo-code[open] > summary {
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc .demo-code div[class*='language-'] {
+  margin: 0;
+  border-radius: 0;
+}
+
+/* Numbered steps (steps.ts): a marker beside each step's heading, and a line from it down to the next. */
+.vp-doc .steps {
+  counter-reset: step;
+  margin-top: 2rem;
+}
+
+.vp-doc .step {
+  position: relative;
+  padding-left: 2.75rem;
+  padding-bottom: 0.5rem;
+}
+
+.vp-doc .step::before {
+  content: '';
+  position: absolute;
+  top: 2.25rem;
+  bottom: -0.25rem;
+  left: 0.875rem;
+  inline-size: 1px;
+  background-color: var(--vp-c-divider);
+}
+
+.vp-doc .step:last-child::before {
+  display: none;
+}
+
+.vp-doc .step > h2 {
+  position: relative;
+  margin-top: 0;
+  padding-top: 0;
+  font-size: 1.25rem;
+}
+
+.vp-doc .step + .step > h2 {
+  margin-top: 1rem;
+}
+
+.vp-doc .step > h2::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  top: 0;
+  left: -2.75rem;
+  display: grid;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 50%;
+  background-color: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.vp-doc .step > h2 .header-anchor {
+  display: none;
+}
+
+/* Package-manager and file tabs: a quiet bar of labels over the code. */
+.vp-doc .vp-code-group .tabs {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
