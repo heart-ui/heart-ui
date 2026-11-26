@@ -499,6 +499,7 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   --bg: #ffffff;
   --muted: #f5f5f7;
   --card: #f5f5f7;
+  --card-hover: #fafafb;
   --surface: #ffffff;
   --tile: #f5f5f7;
   --fg: #1d1d1f;
@@ -538,6 +539,7 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   --bg: #0a0a0b;
   --muted: #121214;
   --card: #121214;
+  --card-hover: #1a1a1d;
   --surface: #1a1a1d;
   --tile: #232326;
   --fg: #f5f5f7;
@@ -783,9 +785,9 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   background: var(--card);
   color: var(--fg);
 }
-/* White on hover in light mode; the raised surface in dark, where white would hide the text. */
+/* One step lighter on hover: a paler grey in light mode, the raised surface in dark. */
 .lp .btn-card:hover {
-  background: var(--surface);
+  background: var(--card-hover);
 }
 .btn-surface {
   background: var(--surface);
