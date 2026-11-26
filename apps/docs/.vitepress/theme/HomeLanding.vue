@@ -203,38 +203,29 @@ const selectedTab = ref<'preview' | 'code'>('preview')
             d="M165.59 385.09A40 40 0 0 1 185.59 350.45L318.79 273.55A40 40 0 0 1 358.79 273.55L499.00 354.49A26 26 0 0 0 525.00 354.49L665.21 273.55A40 40 0 0 1 705.21 273.55L838.41 350.45A40 40 0 0 1 858.41 385.09L858.41 538.91A40 40 0 0 1 838.41 573.55L532.00 750.45A40 40 0 0 1 492.00 750.45L185.59 573.55A40 40 0 0 1 165.59 538.91Z"
           />
         </g>
-        <pattern id="lp-lattice" width="69.28" height="40" patternUnits="userSpaceOnUse">
-          <path
-            d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
-            fill="none"
-            stroke="var(--lattice)"
-          />
-        </pattern>
-        <pattern id="lp-lattice-inv" width="69.28" height="40" patternUnits="userSpaceOnUse">
-          <path
-            d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
-            fill="none"
-            stroke="rgba(245,245,247,.1)"
-          />
-        </pattern>
-        <radialGradient id="lp-fade-hero-g" cx="0.5" cy="0.38" r="0.5">
-          <stop offset="0" stop-color="#fff" />
-          <stop offset="1" stop-color="#fff" stop-opacity="0" />
-        </radialGradient>
-        <mask id="lp-fade-hero">
-          <rect width="100%" height="100%" fill="url(#lp-fade-hero-g)" />
-        </mask>
-        <radialGradient id="lp-fade-cli-g" cx="0.78" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#fff" />
-          <stop offset="1" stop-color="#fff" stop-opacity="0" />
-        </radialGradient>
-        <mask id="lp-fade-cli"><rect width="100%" height="100%" fill="url(#lp-fade-cli-g)" /></mask>
       </defs>
     </svg>
 
     <main>
       <section class="hero">
+        <!-- The pattern and mask live in this svg: the mask's 100% sizes against the svg that holds it. -->
         <svg class="decor" width="100%" height="100%" aria-hidden="true">
+          <defs>
+            <pattern id="lp-lattice" width="69.28" height="40" patternUnits="userSpaceOnUse">
+              <path
+                d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
+                fill="none"
+                stroke="var(--lattice)"
+              />
+            </pattern>
+            <radialGradient id="lp-fade-hero-g" cx="0.5" cy="0.38" r="0.5">
+              <stop offset="0" stop-color="#fff" />
+              <stop offset="1" stop-color="#fff" stop-opacity="0" />
+            </radialGradient>
+            <mask id="lp-fade-hero">
+              <rect width="100%" height="100%" fill="url(#lp-fade-hero-g)" />
+            </mask>
+          </defs>
           <rect width="100%" height="100%" fill="url(#lp-lattice)" mask="url(#lp-fade-hero)" />
         </svg>
         <div class="wrap center">
@@ -342,6 +333,22 @@ const selectedTab = ref<'preview' | 'code'>('preview')
 
       <section class="band inv">
         <svg class="decor" width="100%" height="100%" aria-hidden="true">
+          <defs>
+            <pattern id="lp-lattice-inv" width="69.28" height="40" patternUnits="userSpaceOnUse">
+              <path
+                d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
+                fill="none"
+                stroke="rgba(245,245,247,.1)"
+              />
+            </pattern>
+            <radialGradient id="lp-fade-cli-g" cx="0.78" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#fff" />
+              <stop offset="1" stop-color="#fff" stop-opacity="0" />
+            </radialGradient>
+            <mask id="lp-fade-cli">
+              <rect width="100%" height="100%" fill="url(#lp-fade-cli-g)" />
+            </mask>
+          </defs>
           <rect width="100%" height="100%" fill="url(#lp-lattice-inv)" mask="url(#lp-fade-cli)" />
         </svg>
         <div class="wrap cli-grid">
