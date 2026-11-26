@@ -21,9 +21,25 @@ You need:
 
 In your project folder, run:
 
-```sh
+::: code-group
+
+```sh [npm]
 npx heart-ui init
 ```
+
+```sh [pnpm]
+pnpm dlx heart-ui init
+```
+
+```sh [yarn]
+yarn dlx heart-ui init
+```
+
+```sh [bun]
+bunx heart-ui init
+```
+
+:::
 
 `init` checks your versions, lists what it will write, and asks before writing:
 
@@ -39,9 +55,25 @@ skip the question, or `--theme <preset>` to pick a theme.
 
 ## 2. Add a component
 
-```sh
+::: code-group
+
+```sh [npm]
 npx heart-ui add button
 ```
+
+```sh [pnpm]
+pnpm dlx heart-ui add button
+```
+
+```sh [yarn]
+yarn dlx heart-ui add button
+```
+
+```sh [bun]
+bunx heart-ui add button
+```
+
+:::
 
 `add` writes the button to `components/ui/button/` under your source folder,
 with anything it depends on, installs the packages it needs, and records what

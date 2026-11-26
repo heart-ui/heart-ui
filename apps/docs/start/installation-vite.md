@@ -5,17 +5,55 @@ Tailwind CSS 4 and the `@` alias.
 
 ## 1. Create the app
 
-```sh
+::: code-group
+
+```sh [npm]
 npm create vite@latest my-app -- --template vue-ts
 cd my-app
 npm install
 ```
 
+```sh [pnpm]
+pnpm create vite my-app --template vue-ts
+cd my-app
+pnpm install
+```
+
+```sh [yarn]
+yarn create vite my-app --template vue-ts
+cd my-app
+yarn
+```
+
+```sh [bun]
+bun create vite my-app --template vue-ts
+cd my-app
+bun install
+```
+
+:::
+
 ## 2. Add Tailwind CSS
 
-```sh
+::: code-group
+
+```sh [npm]
 npm install -D tailwindcss @tailwindcss/vite @types/node
 ```
+
+```sh [pnpm]
+pnpm add -D tailwindcss @tailwindcss/vite @types/node
+```
+
+```sh [yarn]
+yarn add -D tailwindcss @tailwindcss/vite @types/node
+```
+
+```sh [bun]
+bun add -d tailwindcss @tailwindcss/vite @types/node
+```
+
+:::
 
 Replace the contents of `src/style.css` with:
 

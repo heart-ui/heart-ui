@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, type DefaultTheme, type HeadConfig } from 'vitepress'
 import { docsItems, escapeHtml, guides, markdownTitle, sitePages } from '../scripts/items.ts'
 import { siteLinks } from './links.ts'
+import { steps } from './steps.ts'
 
 const siteUrl = 'https://heart.tammai.me'
 const siteTitle = 'Heart UI'
@@ -116,6 +117,7 @@ export default defineConfig({
     ],
     sidebar: { '/start/': sidebar, '/components/': sidebar, '/guide/': sidebar },
     search: { provider: 'local' },
+    outline: { level: [2, 3], label: 'On this page' },
     socialLinks: [{ icon: 'github', link: github, ariaLabel: 'Heart UI on GitHub' }],
     // Component and guide pages are generated, so the link goes to the file they are generated from.
     // VitePress sends this function to the browser as source, so it names nothing outside itself.
@@ -137,7 +139,7 @@ export default defineConfig({
   markdown: {
     // The high-contrast pair keeps every token at 4.5:1 or more on the code background.
     theme: { light: 'github-light-high-contrast', dark: 'github-dark-high-contrast' },
-    config: (md) => md.use(siteLinks, { pages: sitePages(items) }),
+    config: (md) => md.use(siteLinks, { pages: sitePages(items) }).use(steps),
   },
   vite: {
     plugins: [tailwindcss()],
