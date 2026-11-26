@@ -33,7 +33,9 @@ only one panel shows at a time and every heading fits on one row, and
 | `AccordionItem` | `disabled` | `boolean` | `false` | The item can't open or close |
 
 `Accordion`, `AccordionItem`, `AccordionTrigger` and `AccordionContent`
-take `class`, merged last.
+take `class`, merged last. On `AccordionContent` it goes on the inner box
+that holds the padding, not the element that opens and closes.
+`collapsible` is read once, when the accordion mounts.
 
 ## Slots
 
@@ -78,9 +80,10 @@ content; RTL.
   `aria-controls` pointing at its content.
 - Each open content has `role="region"` named by its trigger.
 - A disabled item's trigger is `disabled` and stays out of the way of
-  arrow keys.
-- The heading is `h3`. Put an accordion under an `h2`, or wrap it so
-  heading levels don't skip.
+  arrow keys. An open item that can't close (`single` with `collapsible` `false`)
+  has `aria-disabled="true"`.
+- The heading is always `h3`, so put an accordion under an `h2`
+  heading.
 
 ## Do
 

@@ -1,0 +1,96 @@
+{
+  "name": "accordion",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Accordion",
+      "props": [
+        {
+          "name": "type",
+          "type": "'single' | 'multiple'",
+          "required": false,
+          "default": "'single'",
+          "description": "`multiple` lets several items stay open."
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "`false` keeps one item open in `single`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[]",
+          "required": false,
+          "description": "The open item or items at first, without `v-model`."
+        },
+        {
+          "name": "modelValue",
+          "type": "string | string[]",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string | string[] | undefined"
+        }
+      ]
+    },
+    {
+      "name": "AccordionContent",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "AccordionItem",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "description": "Names the item in `v-model`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "AccordionTrigger",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}
