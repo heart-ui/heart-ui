@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://heart.tammai.me
+    about: Read guides, component specs, and theming docs at heart.tammai.me.
+  - name: Component roadmap
+    url: https://github.com/heart-ui/heart-ui/blob/main/docs/components/index.md
+    about: Check the planned 45-component catalog before requesting a component.
+  - name: Security vulnerability
+    url: https://github.com/heart-ui/heart-ui/blob/main/SECURITY.md
+    about: Report security issues privately instead of opening a public issue.
