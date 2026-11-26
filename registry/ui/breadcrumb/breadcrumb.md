@@ -23,11 +23,12 @@ and can step back up. Use it on pages two or more levels deep; use
 | Part | Prop | Type | Default | Notes |
 | --- | --- | --- | --- | --- |
 | `Breadcrumb` | `navLabel` | `string` | `Breadcrumb` | The landmark's accessible name |
+| `BreadcrumbLink` | `href` | `string` | none | The ancestor page's address; ignored with `asChild` |
 | `BreadcrumbLink` | `asChild` | `boolean` | `false` | Merge onto the child, such as a `RouterLink` |
 | `BreadcrumbLink` | `as` | `string \| Component` | `a` | Element to render |
 
-Every part takes `class`, merged last. `BreadcrumbLink` passes `href`
-and other attributes to the link.
+Every part takes `class`, merged last. `BreadcrumbLink` passes other
+attributes to the link.
 
 ## Slots
 
@@ -68,7 +69,8 @@ a link through `asChild`; a long trail that wraps at 375 px; RTL.
 - The current page has `aria-current="page"` and isn't a link.
 - Separators are hidden from screen readers (`aria-hidden`,
   `role="presentation"`). The default chevron points the reading way:
-  left in RTL, through Reka's `ConfigProvider` `dir`.
+  left in RTL. It reads the direction from Reka's `ConfigProvider`, so an
+  RTL app sets `<ConfigProvider dir="rtl">`, not only `dir` on `html`.
 
 ## Do
 

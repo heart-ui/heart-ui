@@ -63,3 +63,5 @@
 - 2026-11-26 update knowledge/gotchas/registry-items.md — Reka Popover naming and modal outside clicks; why a per-item checker doesn't fix snapshot union order (from 2026-11-26-m-p2-10-popover)
 - 2026-11-26 update knowledge/gotchas/registry-items.md — Reka Accordion content id, trigger id and collapsible; clipping only while animating (from 2026-11-26-m-p2-11-accordion)
 - 2026-11-26 update docs/sdlc/recurring-defects.md — expanding panel with permanent overflow-hidden clips focus rings (from 2026-11-26-m-p2-11-accordion)
+- 2026-11-26 update knowledge/gotchas/registry-items.md — router-link href overwritten through asChild (from 2026-11-26-m-p2-12-breadcrumb)
+- 2026-11-26 update docs/sdlc/recurring-defects.md — an undefined attribute bound over an asChild child's computed one (from 2026-11-26-m-p2-12-breadcrumb)

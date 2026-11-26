@@ -1,0 +1,17 @@
+{
+  "name": "breadcrumb",
+  "type": "registry:ui",
+  "title": "Breadcrumb",
+  "description": "The trail of pages above the current one, as a nav landmark with an ordered list.",
+  "dependencies": ["reka-ui@2.11.0"],
+  "registryDependencies": ["utils", "icon"],
+  "files": [
+    "Breadcrumb.vue",
+    "BreadcrumbItem.vue",
+    "BreadcrumbLink.vue",
+    "BreadcrumbPage.vue",
+    "BreadcrumbSeparator.vue",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}

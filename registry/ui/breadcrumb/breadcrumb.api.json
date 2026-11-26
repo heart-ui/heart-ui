@@ -1,0 +1,85 @@
+{
+  "name": "breadcrumb",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Breadcrumb",
+      "props": [
+        {
+          "name": "navLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Breadcrumb'",
+          "description": "The landmark's accessible name."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "BreadcrumbItem",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "BreadcrumbLink",
+      "props": [
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "The ancestor page's address. Ignored with `asChild`: the child's link applies."
+        },
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Change the default rendered element for the one passed as a child, merging their props and behavior.\n\nRead our [Composition](https://www.reka-ui.com/docs/guides/composition) guide for more details."
+        },
+        {
+          "name": "as",
+          "type": "AsTag | Component",
+          "required": false,
+          "default": "'a'",
+          "description": "The element or component this component should render as. Can be overwritten by `asChild`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "BreadcrumbPage",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "BreadcrumbSeparator",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}
