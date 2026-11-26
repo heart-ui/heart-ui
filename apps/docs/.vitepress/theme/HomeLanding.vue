@@ -519,8 +519,8 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   --halo-a: 0.5;
   --halo-b: 0.35;
   --ease: cubic-bezier(0.32, 0.72, 0, 1);
-  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 6px 16px -4px rgba(0, 0, 0, 0.14);
-  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.12), 0 8px 20px -6px rgba(216, 42, 12, 0.5);
+  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 14px -4px rgba(0, 0, 0, 0.08);
+  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.06), 0 6px 18px -6px rgba(216, 42, 12, 0.28);
 
   position: relative;
   min-height: 100vh;
@@ -555,8 +555,8 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   --halo: #f5f5f7;
   --halo-a: 0.08;
   --halo-b: 0.06;
-  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 16px -4px rgba(0, 0, 0, 0.6);
-  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.2), 0 8px 24px -6px rgba(255, 107, 79, 0.45);
+  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 4px 14px -4px rgba(0, 0, 0, 0.4);
+  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.1), 0 6px 20px -6px rgba(255, 107, 79, 0.25);
 }
 
 .lp a {
@@ -782,6 +782,10 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
 .lp .btn-card:hover {
   background: var(--card);
   color: var(--fg);
+}
+/* White on hover in light mode; the raised surface in dark, where white would hide the text. */
+.lp .btn-card:hover {
+  background: var(--surface);
 }
 .btn-surface {
   background: var(--surface);
