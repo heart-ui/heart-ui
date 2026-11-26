@@ -1,7 +1,7 @@
 ---
 layout: false
 title: Heart UI
-titleTemplate: Components you own, for Vue and Nuxt
+titleTemplate: Vue components built for coding agents
 head:
   - - link
     - rel: preconnect

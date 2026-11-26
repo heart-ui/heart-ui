@@ -47,30 +47,29 @@ const footer = [
   },
 ]
 
+// Only what ships today (docs/agent-support.md): AGENTS.md from init, per-item docs with type-checked
+// examples, and `heart-ui audit`. The MCP server and benchmark join this list when they land.
 const features = [
   {
-    icon: 'copy',
-    title: "Copy, don't install",
-    text: 'Components live in your source, not in node_modules. Change anything you want.',
+    icon: 'doc',
+    title: 'Rules in AGENTS.md',
+    text: 'heart-ui init writes the screen workflow and the hard rules into AGENTS.md, so your agent has them from the first prompt.',
   },
   {
-    icon: 'palette',
-    title: 'Theme with CSS variables',
-    text: 'Change a few tokens and every component follows. Light and dark share one structure.',
+    icon: 'code',
+    title: 'APIs it can’t misread',
+    text: 'Every component has Markdown docs that say when to use it, with examples type-checked against its real props.',
   },
   {
-    icon: 'terminal',
-    title: 'Add with one command',
-    text: 'The CLI copies just the files you need into your Vue or Nuxt project.',
+    icon: 'check',
+    title: 'Checked, not trusted',
+    text: 'heart-ui audit flags raw values, extra primary actions, missing states and unnamed controls in what your agent writes.',
   },
 ] as const
 
 const icons = {
+  doc: 'M6 2C4.89543 2 4 2.89543 4 4V16C4 17.1046 4.89543 18 6 18H14C15.1046 18 16 17.1046 16 16V7.41421C16 7.149 15.8946 6.89464 15.7071 6.70711L11.2929 2.29289C11.1054 2.10536 10.851 2 10.5858 2H6ZM5 4C5 3.44772 5.44772 3 6 3H10V6.5C10 7.32843 10.6716 8 11.5 8H15V16C15 16.5523 14.5523 17 14 17H6C5.44772 17 5 16.5523 5 16V4ZM14.7929 7H11.5C11.2239 7 11 6.77614 11 6.5V3.20711L14.7929 7Z',
   copy: 'M7 7H5C3.89543 7 3 7.89543 3 9V15C3 16.1046 3.89543 17 5 17H9C10.1046 17 11 16.1046 11 15H12C12 16.6569 10.6569 18 9 18H5C3.34315 18 2 16.6569 2 15V9C2 7.34315 3.34315 6 5 6H7V7ZM15 2C16.6569 2 18 3.34315 18 5V11C18 12.6569 16.6569 14 15 14H11C9.34315 14 8 12.6569 8 11V5C8 3.34315 9.34315 2 11 2H15ZM11 3C9.89543 3 9 3.89543 9 5V11C9 12.1046 9.89543 13 11 13H15C16.1046 13 17 12.1046 17 11V5C17 3.89543 16.1046 3 15 3H11Z',
-  palette:
-    'M9.99996 2C14.4182 2 18 5.58173 18 10C18 13.2082 16.1114 15.9741 13.3877 17.249C12.3007 17.7578 11.0605 17.6889 10.0966 17.1904C9.12346 16.687 8.40063 15.7227 8.44917 14.459C8.4663 14.0135 8.53067 13.592 8.59175 13.2158C8.65461 12.8288 8.71038 12.5037 8.72847 12.2012C8.74623 11.9042 8.72409 11.6683 8.65035 11.4688C8.57958 11.2775 8.4499 11.0878 8.20015 10.9004C7.88697 10.6655 7.62033 10.6251 7.35542 10.6631C7.05528 10.7063 6.74111 10.851 6.34077 11.0498C5.60615 11.4146 4.56546 11.9918 3.36714 11.3818C2.2647 10.8204 1.94335 9.51441 2.14741 8.46485C2.86366 4.78107 6.10643 2.00004 9.99996 2ZM9.99996 3C6.59431 3.00004 3.75564 5.43264 3.12886 8.65528C2.97577 9.44267 3.25524 10.2023 3.82026 10.4902C4.50381 10.8384 5.07128 10.564 5.89644 10.1543C6.27582 9.96593 6.72982 9.74237 7.21382 9.67286C7.73308 9.59834 8.26777 9.70076 8.79976 10.0996C9.18977 10.3921 9.44461 10.7342 9.58785 11.1211C9.72795 11.4998 9.74968 11.8895 9.72749 12.2608C9.70561 12.6266 9.63805 13.0137 9.57906 13.377C9.51833 13.7509 9.46276 14.1187 9.4482 14.4971C9.417 15.3092 9.86669 15.9449 10.5566 16.3018C11.2559 16.6634 12.1694 16.7156 12.9638 16.3438C15.3492 15.2272 17 12.8057 17 10C17 6.13401 13.866 3 9.99996 3ZM12.5 13C13.0522 13 13.5 13.4477 13.5 14C13.5 14.5523 13.0522 15 12.5 15C11.9477 15 11.5 14.5523 11.5 14C11.5 13.4478 11.9477 13.0001 12.5 13ZM14.5 10.5C15.0522 10.5 15.5 10.9477 15.5 11.5C15.5 12.0523 15.0522 12.5 14.5 12.5C13.9477 12.5 13.5 12.0523 13.5 11.5C13.5 10.9478 13.9477 10.5001 14.5 10.5ZM14.5 7.50001C15.0522 7.50001 15.5 7.94772 15.5 8.50001C15.5 9.05229 15.0522 9.50001 14.5 9.50001C13.9477 9.49996 13.5 9.05227 13.5 8.50001C13.5 7.94775 13.9477 7.50005 14.5 7.50001ZM12.5 5C13.0522 5 13.5 5.44772 13.5 6C13.5 6.55229 13.0522 7.00001 12.5 7.00001C11.9477 6.99996 11.5 6.55226 11.5 6C11.5 5.44775 11.9477 5.00005 12.5 5ZM9.49996 4.5C10.0522 4.5 10.5 4.94772 10.5 5.5C10.5 6.05229 10.0522 6.50001 9.49996 6.50001C8.94771 6.49996 8.49995 6.05226 8.49995 5.5C8.49995 4.94775 8.94771 4.50005 9.49996 4.5Z',
-  terminal:
-    'M5.64645 9.14645C5.84171 8.95118 6.15829 8.95118 6.35355 9.14645L8.35355 11.1464C8.44732 11.2402 8.5 11.3674 8.5 11.5C8.5 11.6326 8.44732 11.7598 8.35355 11.8536L6.35355 13.8536C6.15829 14.0488 5.84171 14.0488 5.64645 13.8536C5.45118 13.6583 5.45118 13.3417 5.64645 13.1464L7.29289 11.5L5.64645 9.85355C5.45118 9.65829 5.45118 9.34171 5.64645 9.14645ZM14.5 13H9.5C9.22386 13 9 13.2239 9 13.5C9 13.7761 9.22386 14 9.5 14H14.5C14.7761 14 15 13.7761 15 13.5C15 13.2239 14.7761 13 14.5 13ZM2.99609 5.5C2.99609 4.11929 4.11538 3 5.49609 3H14.4961C15.8768 3 16.9961 4.11929 16.9961 5.5V6H16.999V7H16.9961V14.5C16.9961 15.8807 15.8768 17 14.4961 17H5.49609C4.11538 17 2.99609 15.8807 2.99609 14.5V5.5ZM15.9961 6V5.5C15.9961 4.67157 15.3245 4 14.4961 4H5.49609C4.66767 4 3.99609 4.67157 3.99609 5.5V6H15.9961ZM3.99609 7V14.5C3.99609 15.3284 4.66767 16 5.49609 16H14.4961C15.3245 16 15.9961 15.3284 15.9961 14.5V7H3.99609Z',
   code: 'M12.6406 1.02073C12.9053 1.09864 13.0571 1.37606 12.9795 1.64084L7.97947 18.6408C7.90151 18.9055 7.62407 19.0573 7.35935 18.9797C7.09464 18.9018 6.94295 18.6243 7.02048 18.3596L12.0205 1.35959C12.0984 1.09481 12.3758 0.943089 12.6406 1.02073ZM5.12595 5.16819C5.30934 4.9619 5.62562 4.94297 5.83201 5.12619C6.03822 5.30959 6.05718 5.62588 5.874 5.83225L2.16892 10.0002L5.874 14.1682C6.05712 14.3746 6.03825 14.6909 5.83201 14.8742C5.62564 15.0573 5.30931 15.0384 5.12595 14.8322L1.12595 10.3322C0.95789 10.1429 0.95798 9.85755 1.12595 9.66819L5.12595 5.16819ZM14.1679 5.12619C14.3743 4.943 14.6906 4.96189 14.874 5.16819L18.874 9.66819C19.042 9.85754 19.0421 10.1429 18.874 10.3322L14.874 14.8322C14.6906 15.0384 14.3743 15.0573 14.1679 14.8742C13.9617 14.6909 13.9429 14.3746 14.126 14.1682L17.831 10.0002L14.126 5.83225C13.9428 5.6259 13.9618 5.3096 14.1679 5.12619Z',
   arrow:
     'M10.8371 3.13074C10.6332 2.94456 10.3169 2.95895 10.1307 3.16289C9.94456 3.36683 9.95895 3.68309 10.1629 3.86927L16.3307 9.5H2.5C2.22386 9.5 2 9.72386 2 10C2 10.2761 2.22386 10.5 2.5 10.5H16.3279L10.1629 16.1281C9.95895 16.3143 9.94456 16.6305 10.1307 16.8345C10.3169 17.0384 10.6332 17.0528 10.8371 16.8666L17.7535 10.5526C17.8934 10.4248 17.9732 10.2573 17.993 10.0841C17.9976 10.0568 18 10.0287 18 10C18 9.97313 17.9979 9.94675 17.9938 9.92103C17.9756 9.74512 17.8955 9.57446 17.7535 9.44478L10.8371 3.13074Z',
@@ -242,11 +241,11 @@ const selectedTab = ref<'preview' | 'code'>('preview')
           <svg viewBox="140 230 744 560" width="88" height="66" aria-hidden="true">
             <use href="#lp-mark" />
           </svg>
-          <span class="pill">Vue 3 · Nuxt</span>
-          <h1 class="hero-h">Components you own, not depend on.</h1>
+          <span class="pill">Vue 3 · Nuxt · Agent-ready</span>
+          <h1 class="hero-h">UI your coding agent gets right.</h1>
           <p class="lead">
-            A UI collection for Vue and Nuxt in the spirit of shadcn/ui. Pick a component, copy it
-            into your project, make it yours.
+            Vue and Nuxt components copied into your project as source you own, with the rules,
+            typed APIs and checks an agent needs to build screens without guessing.
           </p>
           <div class="cta-row">
             <a href="/start/getting-started" class="btn btn-primary btn-lg">
@@ -279,8 +278,8 @@ const selectedTab = ref<'preview' | 'code'>('preview')
       <section class="band muted-bg">
         <div class="wrap stack">
           <div class="heading">
-            <p class="eyebrow">HOW IT WORKS</p>
-            <h2>Your code, every line of it.</h2>
+            <p class="eyebrow">BUILT FOR AGENTS</p>
+            <h2>Nothing left to guess.</h2>
           </div>
           <div class="grid3">
             <div v-for="feature in features" :key="feature.title" class="card surface">
@@ -300,7 +299,7 @@ const selectedTab = ref<'preview' | 'code'>('preview')
         <div class="wrap stack">
           <div class="heading">
             <p class="eyebrow">COMPONENTS</p>
-            <h2>Minimal by default.</h2>
+            <h2>Source your agent can read.</h2>
           </div>
           <div class="grid3">
             <div class="card showcase">
@@ -351,38 +350,44 @@ const selectedTab = ref<'preview' | 'code'>('preview')
               <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
                 <path :d="icons.code" fill="currentColor" />
               </svg>
-              CLI
+              WORKFLOW
             </p>
-            <h2>Add a component. Edit it in place.</h2>
+            <h2>Your agent builds. The audit checks.</h2>
             <p class="cli-lead">
-              Files land straight in <code>components/ui</code>.
-              <a href="/start/getting-started">Read the CLI docs</a>
+              Rules land in <code>AGENTS.md</code>, components in <code>components/ui</code>, and
+              every screen passes <code>heart-ui audit</code> before you review it.
+              <a href="/start/getting-started">Read the getting started guide</a>
             </p>
           </div>
           <div class="windows">
             <div class="halo halo-a" aria-hidden="true" />
             <div class="halo halo-b" aria-hidden="true" />
-            <div class="win win-editor" role="img" aria-label="App.vue in a code editor">
+            <div class="win win-editor" role="img" aria-label="AGENTS.md in a code editor">
               <div class="win-bar">
                 <span class="dots" aria-hidden="true"><span /><span /><span /></span>
-                <span>App.vue</span>
+                <span>AGENTS.md</span>
               </div>
-              <pre
-                class="editor-pre"
-              ><span class="t-p">&lt;</span><span class="t-k">script</span> <span class="t-p">setup</span><span class="t-p">&gt;</span>
-<span class="t-p">import</span> { <span class="t-k">Button</span> } <span class="t-p">from</span> '@/components/ui/button'
-<span class="t-p">&lt;/</span><span class="t-k">script</span><span class="t-p">&gt;</span>
+              <pre class="editor-pre"><span class="t-k">## Rules</span>
 
-<span class="t-p">&lt;</span><span class="t-k">template</span><span class="t-p">&gt;</span>
-  <span class="t-p">&lt;</span><span class="t-k">Button</span><span class="t-p">&gt;</span>Get started<span class="t-p">&lt;/</span><span class="t-k">Button</span><span class="t-p">&gt;</span>
-<span class="t-p">&lt;/</span><span class="t-k">template</span><span class="t-p">&gt;</span></pre>
+<span class="t-p">-</span> Semantic token utilities only.
+<span class="t-p">-</span> No raw values: no hex, no px.
+<span class="t-p">-</span> One primary action per view.
+<span class="t-p">-</span> Every data region handles empty,
+  loading, error and long content.
+
+<span class="t-k">## Verify</span>
+
+Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
             </div>
             <div class="win win-term" role="img" aria-label="Terminal">
               <div class="win-bar">
                 <span class="dots" aria-hidden="true"><span /><span /><span /></span>
                 <span>Terminal</span>
               </div>
-              <pre class="term-pre"><span class="t-p">$</span> npx heart-ui@latest add button</pre>
+              <pre
+                class="term-pre"
+              ><span class="t-p">$</span> npx heart-ui audit src/pages/Settings.vue
+<span class="t-p">No failures in 1 file.</span></pre>
             </div>
           </div>
         </div>
@@ -390,8 +395,8 @@ const selectedTab = ref<'preview' | 'code'>('preview')
 
       <section class="band final">
         <div class="wrap center">
-          <h2 class="final-h">Start building.</h2>
-          <p class="lead-sm">One command, one component, code you own.</p>
+          <h2 class="final-h">Hand it to your agent.</h2>
+          <p class="lead-sm">One command sets up the components, the rules and the checks.</p>
           <a href="/start/getting-started" class="btn btn-primary btn-lg">
             Get started
             <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
@@ -412,7 +417,7 @@ const selectedTab = ref<'preview' | 'code'>('preview')
               </svg>
               <span>heart-ui</span>
             </a>
-            <p>Components you own, for Vue and Nuxt.</p>
+            <p>Vue and Nuxt components you own, built for coding agents.</p>
           </div>
           <nav v-for="group in footer" :key="group.title" :aria-label="group.title" class="ft-col">
             <p class="ft-title">{{ group.title }}</p>
@@ -1048,7 +1053,7 @@ section {
   white-space: pre;
 }
 .editor-pre {
-  padding: 1.125rem 1.375rem 3.25rem;
+  padding: 1.125rem 1.375rem 5rem;
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.2);
 }
