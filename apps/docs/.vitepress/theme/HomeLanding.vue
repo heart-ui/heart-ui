@@ -9,7 +9,6 @@ import { data } from './landing.data.ts'
 const { isDark } = useData()
 
 const github = 'https://github.com/heart-ui/heart-ui'
-const command = 'npx heart-ui init'
 
 const nav = [
   { text: 'Docs', link: '/start/getting-started' },
@@ -18,54 +17,26 @@ const nav = [
   { text: 'GitHub', link: github },
 ]
 
-const footer = [
+// The agent quick start: one prompt to paste, then the three commands the agent runs.
+const prompt =
+  'Set up Heart UI in this project with npx heart-ui init, then build the UI as AGENTS.md says.'
+const steps = [
   {
-    title: 'Product',
-    links: [
-      { text: 'Components', link: '/components/' },
-      { text: 'Themes', link: '/start/theming' },
-      { text: 'Dark mode', link: '/start/dark-mode' },
-      { text: 'Releases', link: `${github}/releases` },
-    ],
+    command: 'npx heart-ui init',
+    text: 'Sets up the theme and writes AGENTS.md: the workflow and rules.',
   },
   {
-    title: 'Docs',
-    links: [
-      { text: 'Getting started', link: '/start/getting-started' },
-      { text: 'Vite', link: '/start/installation-vite' },
-      { text: 'Nuxt', link: '/start/installation-nuxt' },
-      { text: 'Tokens', link: '/guide/tokens' },
-    ],
+    command: 'npx heart-ui add button dialog',
+    text: 'Adds components to components/ui/ as source you own.',
   },
   {
-    title: 'Community',
-    links: [
-      { text: 'GitHub', link: github },
-      { text: 'Issues', link: `${github}/issues` },
-      { text: 'Pull requests', link: `${github}/pulls` },
-      { text: 'License', link: `${github}/blob/main/LICENSE` },
-    ],
+    command: 'npx heart-ui audit <files>',
+    text: `Checks each screen against ${data.checks.length} rules, so the agent fixes its own work.`,
   },
 ]
 
-// What the alpha gives an agent (docs/agent-support.md). The MCP server and the benchmark are not in it yet.
-const features = [
-  {
-    icon: 'doc',
-    title: 'AGENTS.md',
-    text: 'heart-ui init writes it: where the components live, a step-by-step screen workflow, and the rules, such as token utilities only and one primary action per view.',
-  },
-  {
-    icon: 'code',
-    title: 'A Markdown spec per component',
-    text: 'When to use it, its props, slots, events, keyboard and accessibility. The examples in it are type-checked against the component.',
-  },
-  {
-    icon: 'check',
-    title: 'heart-ui audit',
-    text: 'Reads screen files without running them and reports each break of the checklist below, so an agent can fix its own work.',
-  },
-] as const
+// The showcase's theme; the frame applies it as data-heart-theme (presets.css).
+const theme = ref(data.themes[0]?.name ?? 'default')
 
 const icons = {
   doc: 'M6 2C4.89543 2 4 2.89543 4 4V16C4 17.1046 4.89543 18 6 18H14C15.1046 18 16 17.1046 16 16V7.41421C16 7.149 15.8946 6.89464 15.7071 6.70711L11.2929 2.29289C11.1054 2.10536 10.851 2 10.5858 2H6ZM5 4C5 3.44772 5.44772 3 6 3H10V6.5C10 7.32843 10.6716 8 11.5 8H15V16C15 16.5523 14.5523 17 14 17H6C5.44772 17 5 16.5523 5 16V4ZM14.7929 7H11.5C11.2239 7 11 6.77614 11 6.5V3.20711L14.7929 7Z',
@@ -81,8 +52,6 @@ const icons = {
   close:
     'M4.14645 4.14645C4.34171 3.95118 4.65829 3.95118 4.85355 4.14645L10 9.293L15.1464 4.14645C15.3417 3.95118 15.6583 3.95118 15.8536 4.14645C16.0488 4.34171 16.0488 4.65829 15.8536 4.85355L10.707 10L15.8536 15.1464C16.0488 15.3417 16.0488 15.6583 15.8536 15.8536C15.6583 16.0488 15.3417 16.0488 15.1464 15.8536L10 10.707L4.85355 15.8536C4.65829 16.0488 4.34171 16.0488 4.14645 15.8536C3.95118 15.6583 3.95118 15.3417 4.14645 15.1464L9.293 10L4.14645 4.85355C3.95118 4.65829 3.95118 4.34171 4.14645 4.14645Z',
 } as const
-
-const isExternal = (link: string) => link.startsWith('http')
 
 const scrolled = ref(false)
 const menuOpen = ref(false)
@@ -116,9 +85,9 @@ function toggleTheme() {
   isDark.value = !isDark.value
 }
 
-async function copyCommand() {
+async function copyPrompt() {
   try {
-    await navigator.clipboard.writeText(command)
+    await navigator.clipboard.writeText(prompt)
   } catch {
     return
   }
@@ -126,32 +95,6 @@ async function copyCommand() {
   clearTimeout(copiedTimer)
   copiedTimer = setTimeout(() => (copied.value = false), 2000)
 }
-
-// Workflow band: a glow and a brighter patch of lattice follow a mouse or pen. The position goes straight
-// into CSS variables once per frame, so moving the pointer never re-renders the component.
-const workflow = ref<HTMLElement>()
-const spotOn = ref(false)
-let spotFrame = 0
-
-function moveSpot(event: PointerEvent) {
-  if (event.pointerType === 'touch') return
-  spotOn.value = true
-  const { clientX, clientY } = event
-  cancelAnimationFrame(spotFrame)
-  spotFrame = requestAnimationFrame(() => {
-    const el = workflow.value
-    if (!el) return
-    const box = el.getBoundingClientRect()
-    el.style.setProperty('--mx', `${clientX - box.left}px`)
-    el.style.setProperty('--my', `${clientY - box.top}px`)
-  })
-}
-
-function leaveSpot() {
-  spotOn.value = false
-}
-
-onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
 </script>
 
 <template>
@@ -270,158 +213,66 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
             </a>
             <a href="/components/" class="btn btn-outline btn-lg">Browse components</a>
           </div>
-          <div class="command">
-            <code>{{ command }}</code>
-            <button
-              type="button"
-              class="icon-btn muted"
-              :aria-label="copied ? 'Copied' : 'Copy command'"
-              @click="copyCommand"
-            >
-              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-                <path :d="copied ? icons.check : icons.copy" fill="currentColor" />
-              </svg>
-            </button>
-            <span class="sr-only" aria-live="polite">{{
-              copied ? 'Copied to clipboard' : ''
-            }}</span>
-          </div>
         </div>
       </section>
 
-      <section class="band" aria-labelledby="lp-components">
-        <div class="wrap stack">
-          <div class="heading">
-            <h2 id="lp-components">{{ data.components.length }} components</h2>
-            <p class="intro">
-              Each is a Vue file in <code>components/ui/</code> that you read and change like your
-              own code. Its page has a live demo, its props, slots and events, its tokens and its
-              keyboard support.
-            </p>
-          </div>
-          <ul class="comp-grid">
-            <li v-for="item in data.components" :key="item.name">
-              <a :href="`/components/${item.name}`">{{ item.title }}</a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="band muted-bg" aria-labelledby="lp-themes">
-        <div class="wrap stack">
-          <div class="heading">
-            <h2 id="lp-themes">{{ data.themes.length }} themes</h2>
-            <p class="intro">
-              Pick one with <code>npx heart-ui init --theme &lt;name&gt;</code>. A theme sets the
-              primary colour, the neutral tint, the corner radius, the density and the shadow.
-              <a href="/start/theming">Theming</a>
-            </p>
-          </div>
-          <ul class="theme-grid">
-            <li v-for="theme in data.themes" :key="theme.name" class="theme-card">
-              <span
-                class="swatch"
-                :style="{ background: theme.primary, borderRadius: `${theme.radius}rem` }"
-                aria-hidden="true"
-              />
-              <span class="theme-name">{{ theme.name }}</span>
-              <span class="meta">{{ theme.radius }}rem radius</span>
-              <span class="meta">{{ theme.density }} density</span>
-              <span class="meta">{{ theme.shadow === 'none' ? 'no' : theme.shadow }} shadow</span>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="band" aria-labelledby="lp-agents">
-        <div class="wrap stack">
-          <div class="heading">
-            <h2 id="lp-agents">For coding agents</h2>
-            <p class="intro">
-              Three things in the alpha are written for an agent to read and follow.
-            </p>
-          </div>
-          <div class="grid3">
-            <div v-for="feature in features" :key="feature.title" class="card">
-              <div class="tile">
-                <svg width="24" height="24" viewBox="0 0 20 20" aria-hidden="true">
-                  <path :d="icons[feature.icon]" fill="currentColor" />
-                </svg>
-              </div>
-              <h3>{{ feature.title }}</h3>
-              <p class="body">{{ feature.text }}</p>
+      <section class="showcase-band" aria-label="Showcase">
+        <div class="wrap showcase-stack">
+          <div class="showcase-bar">
+            <div class="theme-chips" role="group" aria-label="Theme">
+              <button
+                v-for="item in data.themes"
+                :key="item.name"
+                type="button"
+                class="theme-chip"
+                :aria-pressed="theme === item.name"
+                @click="theme = item.name"
+              >
+                <span class="chip-dot" :style="{ background: item.primary }" aria-hidden="true" />
+                {{ item.name }}
+              </button>
             </div>
           </div>
-          <div class="checklist">
-            <h3>What <code>heart-ui audit</code> checks</h3>
-            <ol>
-              <li v-for="check in data.checks" :key="check.id">
-                <span class="check-id">{{ check.id }}</span>
-                <span>{{ check.text }}</span>
-              </li>
-            </ol>
-          </div>
+          <DemoPreview
+            name="showcase"
+            title="Heart UI components"
+            path="/showcase/components"
+            :theme="theme"
+            overlay
+          />
         </div>
       </section>
 
-      <section
-        ref="workflow"
-        class="band inv"
-        :class="{ 'spot-on': spotOn }"
-        @pointermove="moveSpot"
-        @pointerleave="leaveSpot"
-      >
-        <svg class="decor" width="100%" height="100%" aria-hidden="true">
-          <defs>
-            <pattern id="lp-lattice-inv" width="69.28" height="40" patternUnits="userSpaceOnUse">
-              <path
-                d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
-                fill="none"
-                stroke="rgba(245,245,247,.1)"
-              />
-            </pattern>
-            <radialGradient id="lp-fade-cli-g" cx="0.78" cy="0.5" r="0.5">
-              <stop offset="0" stop-color="#fff" />
-              <stop offset="1" stop-color="#fff" stop-opacity="0" />
-            </radialGradient>
-            <mask id="lp-fade-cli">
-              <rect width="100%" height="100%" fill="url(#lp-fade-cli-g)" />
-            </mask>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#lp-lattice-inv)" mask="url(#lp-fade-cli)" />
-        </svg>
-        <div class="spot-glow" aria-hidden="true" />
-        <svg class="decor spot-grid" width="100%" height="100%" aria-hidden="true">
-          <defs>
-            <pattern id="lp-lattice-hi" width="69.28" height="40" patternUnits="userSpaceOnUse">
-              <path
-                d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
-                fill="none"
-                stroke="rgba(255,107,79,.45)"
-              />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#lp-lattice-hi)" />
-        </svg>
+      <section class="band" aria-labelledby="lp-quick-start">
         <div class="wrap cli-grid">
           <div class="cli-copy">
-            <h2>{{ data.commands.length }} commands</h2>
-            <p class="cli-lead">Run them with <code>npx heart-ui</code> in a Vite or Nuxt 4 app.</p>
-            <dl class="cmd-list">
-              <div v-for="cmd in data.commands" :key="cmd.name">
-                <dt>
-                  <code>{{ cmd.name }}</code>
-                </dt>
-                <dd>{{ cmd.summary }}</dd>
-              </div>
-            </dl>
-            <p class="cli-lead">
-              <a href="/start/getting-started">Read the getting started guide</a>
-            </p>
+            <h2 id="lp-quick-start">Quick start for agents</h2>
+            <p class="cli-lead">Paste this into your coding agent.</p>
+            <div class="prompt">
+              <code>{{ prompt }}</code>
+              <button
+                type="button"
+                class="icon-btn"
+                :aria-label="copied ? 'Copied' : 'Copy prompt'"
+                @click="copyPrompt"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                  <path :d="copied ? icons.check : icons.copy" fill="currentColor" />
+                </svg>
+              </button>
+              <span class="sr-only" aria-live="polite">{{
+                copied ? 'Copied to clipboard' : ''
+              }}</span>
+            </div>
+            <ol class="steps">
+              <li v-for="step in steps" :key="step.command">
+                <code>{{ step.command }}</code>
+                <span>{{ step.text }}</span>
+              </li>
+            </ol>
+            <p class="needs">Needs Node 22.18+, Tailwind CSS 4 and a Vite or Nuxt 4 app.</p>
           </div>
           <div class="windows">
-            <div class="halo halo-a" aria-hidden="true" />
-            <div class="halo halo-b" aria-hidden="true" />
             <div class="win win-editor" role="img" aria-label="The rules section of AGENTS.md">
               <div class="win-bar">
                 <span class="dots" aria-hidden="true"><span /><span /><span /></span>
@@ -440,108 +291,17 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
 Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span> on every
 screen you change.</pre>
             </div>
-            <div class="win win-term" role="img" aria-label="A terminal running heart-ui commands">
-              <div class="win-bar">
-                <span class="dots" aria-hidden="true"><span /><span /><span /></span>
-                <span>Terminal</span>
-              </div>
-              <pre class="term-pre"><span class="t-p">$</span> npx heart-ui init
-<span class="t-p">$</span> npx heart-ui add button dialog
-<span class="t-p">$</span> npx heart-ui audit src/pages/Settings.vue</pre>
-            </div>
           </div>
-        </div>
-      </section>
-
-      <section class="band muted-bg" aria-labelledby="lp-status">
-        <div class="wrap stack">
-          <div class="heading">
-            <h2 id="lp-status">Status</h2>
-            <p class="intro">
-              Heart UI is in alpha. APIs can change before the first stable release.
-            </p>
-          </div>
-          <div class="grid3">
-            <div class="card surface">
-              <h3>In v{{ data.version }}</h3>
-              <ul class="facts">
-                <li>{{ data.components.length }} components</li>
-                <li>{{ data.themes.length }} theme presets and dark mode</li>
-                <li>The heart-ui CLI: {{ data.commands.map((cmd) => cmd.name).join(', ') }}</li>
-                <li>AGENTS.md, written by <code>init</code></li>
-                <li>@heart-ui/theme, the tokens as CSS</li>
-              </ul>
-            </div>
-            <div class="card surface">
-              <h3>Not yet</h3>
-              <ul class="facts">
-                <li>
-                  Layouts. Audit check A1 looks for one, so it fails on every screen until they
-                  ship.
-                </li>
-                <li>Blocks</li>
-                <li>The MCP server</li>
-                <li>The ESLint plugin as a package</li>
-                <li>Charts</li>
-              </ul>
-            </div>
-            <div class="card surface">
-              <h3>Requirements</h3>
-              <ul class="facts">
-                <li>Node 22.18 or later</li>
-                <li>Vue 3.5 or later, TypeScript 6</li>
-                <li>Tailwind CSS 4</li>
-                <li>A Vite or Nuxt 4 app</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="band final">
-        <div class="wrap center">
-          <h2 class="final-h">Try the alpha.</h2>
-          <p class="lead-sm">Set up a Vite or Nuxt 4 app, then add the components you need.</p>
-          <a href="/start/getting-started" class="btn btn-primary btn-lg">
-            Get started
-            <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-              <path :d="icons.arrow" fill="currentColor" />
-            </svg>
-          </a>
         </div>
       </section>
     </main>
 
     <footer class="ft">
-      <div class="wrap ft-stack">
-        <div class="ft-grid">
-          <div class="ft-brand">
-            <a href="/" class="brand">
-              <svg viewBox="140 230 744 560" width="28" height="21" aria-hidden="true">
-                <use href="#lp-mark" />
-              </svg>
-              <span>heart-ui</span>
-            </a>
-            <p>Vue and Nuxt components you own, built for coding agents.</p>
-          </div>
-          <nav v-for="group in footer" :key="group.title" :aria-label="group.title" class="ft-col">
-            <p class="ft-title">{{ group.title }}</p>
-            <a
-              v-for="link in group.links"
-              :key="link.text"
-              :href="link.link"
-              :target="isExternal(link.link) ? '_blank' : undefined"
-              :rel="isExternal(link.link) ? 'noreferrer' : undefined"
-            >
-              {{ link.text }}
-            </a>
-          </nav>
-        </div>
-        <div class="ft-bottom">
-          <span>© 2026 heart-ui · MIT License</span>
-          <span>Made with love by Tam Mai</span>
-        </div>
-      </div>
+      <p class="wrap ft-note">
+        Built by Tam Mai. Released under the
+        <a :href="`${github}/blob/main/LICENSE`">MIT License</a>. The source is on
+        <a :href="github">GitHub</a>.
+      </p>
     </footer>
   </div>
 </template>
@@ -723,9 +483,6 @@ screen you change.</pre>
   color: var(--lp-fg);
   cursor: pointer;
 }
-.icon-btn.muted {
-  color: var(--lp-muted-fg);
-}
 .lp .btn {
   display: inline-flex;
   align-items: center;
@@ -750,9 +507,6 @@ screen you change.</pre>
 }
 .lp .btn-primary:hover {
   box-shadow: var(--lp-btn-shadow-primary);
-}
-.lp .btn-ghost:hover {
-  box-shadow: none;
 }
 .lp .btn-sm {
   margin-left: 0.5rem;
@@ -798,14 +552,6 @@ screen you change.</pre>
 .lp .btn-outline:hover {
   background: var(--lp-muted);
 }
-.btn-surface {
-  background: var(--lp-surface);
-  color: var(--lp-fg);
-}
-.btn-ghost {
-  background: transparent;
-  color: var(--lp-fg);
-}
 
 /* Sections */
 section {
@@ -822,13 +568,7 @@ section {
   padding: 9rem 0 8rem;
 }
 .band {
-  padding: 8rem 0;
-}
-.muted-bg {
-  background: var(--lp-muted);
-}
-.final {
-  padding: 9rem 0;
+  padding: 0 0 8rem;
 }
 .center {
   display: flex;
@@ -836,17 +576,6 @@ section {
   align-items: center;
   gap: 2rem;
   text-align: center;
-}
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: 4.5rem;
-}
-.heading {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 40rem;
 }
 .pill {
   padding: 0.25rem 0.625rem;
@@ -869,10 +598,6 @@ section {
   font-size: 1.25rem;
   line-height: 1.6;
 }
-.lead-sm {
-  color: var(--lp-muted-fg);
-  font-size: 1.25rem;
-}
 .cta-row {
   display: flex;
   flex-wrap: wrap;
@@ -880,232 +605,144 @@ section {
   gap: 0.75rem;
   margin-top: 1rem;
 }
-.command {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  padding: 0 0.25rem 0 1.25rem;
-  border-radius: 10px;
-  background: var(--lp-card);
-}
-.command code {
-  color: var(--lp-fg);
-  font-family: var(--lp-font-mono);
-  font-size: 0.9375rem;
-}
 .lp h2 {
   font-size: 2.75rem;
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
-.lp .final-h {
-  font-size: 3rem;
+
+/* Showcase: the real components, under the hero, with the theme chips that restyle them. */
+.showcase-band {
+  padding: 0 0 8rem;
 }
-.grid3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-.card {
+.showcase-stack {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 2.25rem;
-  border-radius: 16px;
-  background: var(--lp-card);
+  gap: 1.25rem;
 }
-.card.surface {
+.showcase-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.theme-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.theme-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--lp-glass-line);
+  border-radius: 999px;
+  background: var(--lp-surface);
+  color: var(--lp-muted-fg);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition:
+    color 0.2s var(--lp-ease),
+    border-color 0.2s var(--lp-ease);
+}
+.theme-chip:hover {
+  color: var(--lp-fg);
+}
+.theme-chip[aria-pressed='true'] {
+  border-color: var(--lp-fg);
+  color: var(--lp-fg);
+}
+.chip-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+}
+.lp :deep(.demo-preview) {
+  margin: 0;
+  border-radius: 20px;
+  box-shadow: var(--lp-btn-shadow);
+}
+
+/* Quick start for agents: the prompt to paste, then the commands the agent runs. */
+.prompt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 0.5rem 1rem 1.25rem;
+  border: 1px solid var(--lp-glass-line);
+  border-radius: 14px;
   background: var(--lp-surface);
 }
-.card h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
+.prompt code {
+  flex: 1;
+  color: var(--lp-fg);
+  font-family: var(--lp-font-mono);
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
-.body {
+.prompt .icon-btn {
   color: var(--lp-muted-fg);
-  font-size: 1rem;
-  line-height: 1.65;
 }
-.tile {
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.steps li {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 0.25rem 0.75rem;
+  counter-increment: step;
+}
+.steps li::before {
+  content: counter(step);
+  grid-row: span 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  margin-bottom: 1.25rem;
-  border-radius: 10px;
-  background: var(--lp-tile);
-}
-
-/* Section intros and the lists that carry the facts. */
-.intro {
-  color: var(--lp-muted-fg);
-  font-size: 1.125rem;
-  line-height: 1.6;
-}
-.intro code,
-.facts code,
-.checklist code {
-  font-family: var(--lp-font-mono);
-  font-size: 0.9em;
-  white-space: nowrap;
-}
-.lp .intro a {
-  margin-left: 0.25rem;
-  font-weight: 500;
-}
-.comp-grid,
-.theme-grid,
-.facts,
-.checklist ol {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.comp-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
-  gap: 0.75rem;
-}
-.lp .comp-grid a {
-  display: flex;
-  align-items: center;
-  min-height: 3.25rem;
-  padding: 0 1.25rem;
-  border-radius: 10px;
-  background: var(--lp-card);
-  color: var(--lp-fg);
-  font-weight: 500;
-  text-decoration: none;
-  transition: background-color 0.2s var(--lp-ease);
-}
-.lp .comp-grid a:hover {
-  background: var(--lp-tile);
-  color: var(--lp-fg);
-}
-.theme-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: 1rem;
-}
-.theme-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-  padding: 1.5rem;
-  border-radius: 16px;
-  background: var(--lp-surface);
-}
-.swatch {
-  width: 2.5rem;
-  height: 2.5rem;
-  margin-bottom: 1rem;
-}
-.theme-name {
-  margin-bottom: 0.25rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-.meta {
-  color: var(--lp-muted-fg);
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-.checklist {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-.checklist h3 {
-  font-size: 1.25rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--lp-brand) 12%, transparent);
+  color: var(--lp-link);
+  font-size: 0.8125rem;
   font-weight: 600;
 }
-.checklist ol {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
-  gap: 0 3rem;
+.steps code {
+  color: var(--lp-fg);
+  font-family: var(--lp-font-mono);
+  font-size: 0.9375rem;
 }
-.checklist li {
-  display: flex;
-  gap: 1rem;
-  padding: 0.875rem 0;
-  border-bottom: 1px solid var(--lp-glass-line);
+.steps span {
+  color: var(--lp-muted-fg);
   line-height: 1.5;
 }
-.check-id {
-  flex: none;
-  width: 2rem;
+.needs {
   color: var(--lp-muted-fg);
-  font-family: var(--lp-font-mono);
   font-size: 0.875rem;
-  line-height: 1.7;
-}
-.facts {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  color: var(--lp-muted-fg);
-  line-height: 1.55;
-}
-.cmd-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: 0.5rem 0;
-}
-.cmd-list div {
-  display: grid;
-  grid-template-columns: 4rem 1fr;
-  gap: 1rem;
-}
-.cmd-list dt code {
-  color: #ff6b4f;
-  font-family: var(--lp-font-mono);
-}
-.cmd-list dd {
-  margin: 0;
-  color: #a1a1a6;
-  line-height: 1.55;
 }
 
-/* CLI band: dark in both modes. */
-.inv {
-  background: var(--lp-inverse);
-  color: #f5f5f7;
+.ft-note {
+  color: var(--lp-muted-fg);
+  font-size: 0.875rem;
+  text-align: center;
 }
-.lp .inv a {
-  color: #ff6b4f;
+.lp .ft-note a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
-.lp .inv a:hover {
-  color: #ff8a73;
-}
-.spot-glow,
-.spot-grid {
-  opacity: 0;
-  transition: opacity 0.5s var(--lp-ease);
-}
-.spot-glow {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    40rem circle at var(--mx, 70%) var(--my, 50%),
-    rgba(255, 107, 79, 0.16),
-    rgba(216, 42, 12, 0.06) 35%,
-    transparent 65%
-  );
-}
-.spot-grid {
-  mask-image: radial-gradient(16rem circle at var(--mx, 70%) var(--my, 50%), #000, transparent);
-}
-.spot-on .spot-glow,
-.spot-on .spot-grid {
-  opacity: 1;
-}
+
 .cli-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
@@ -1118,40 +755,13 @@ section {
   gap: 1.25rem;
 }
 .cli-lead {
-  color: #a1a1a6;
+  color: var(--lp-muted-fg);
   font-size: 1.125rem;
   line-height: 1.55;
-}
-.cli-lead code {
-  color: #f5f5f7;
-  font-family: var(--lp-font-mono);
 }
 .windows {
   position: relative;
   min-width: 0;
-  padding-bottom: 4.5rem;
-}
-.halo {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--lp-halo);
-  pointer-events: none;
-}
-.halo-a {
-  top: 0;
-  left: 2%;
-  width: 96%;
-  height: 96%;
-  filter: blur(96px);
-  opacity: var(--lp-halo-a);
-}
-.halo-b {
-  top: 38%;
-  left: 42%;
-  width: 56%;
-  height: 56%;
-  filter: blur(84px);
-  opacity: var(--lp-halo-b);
 }
 .win {
   padding: 6px;
@@ -1159,37 +769,17 @@ section {
 }
 .win-editor {
   position: relative;
-  margin-right: 2.5rem;
-  border: 1px solid rgba(245, 245, 247, 0.1);
+  border: 1px solid var(--lp-glass-line);
   border-radius: 20px;
-  background: rgba(245, 245, 247, 0.03);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 2px 6px rgba(0, 0, 0, 0.25),
-    0 24px 48px -12px rgba(0, 0, 0, 0.55),
-    0 48px 96px -24px rgba(0, 0, 0, 0.45);
-}
-.win-term {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: calc(100% - 4rem);
-  border: 1px solid rgba(245, 245, 247, 0.16);
-  border-radius: 18px;
-  background: rgba(44, 44, 48, 0.28);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.3),
-    0 28px 56px -12px rgba(0, 0, 0, 0.65),
-    0 60px 120px -30px rgba(0, 0, 0, 0.55);
-  backdrop-filter: saturate(150%) blur(18px);
+  background: var(--lp-muted);
+  box-shadow: var(--lp-btn-shadow);
 }
 .win-bar {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.625rem 0.75rem 0.625rem 0.875rem;
-  color: #a1a1a6;
+  color: var(--lp-muted-fg);
   font-size: 0.8125rem;
   font-weight: 500;
 }
@@ -1201,85 +791,34 @@ section {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(245, 245, 247, 0.18);
+  background: var(--lp-input);
 }
 .win pre {
   margin: 0;
   overflow-x: auto;
-  color: #f5f5f7;
+  color: var(--lp-fg);
   font-family: var(--lp-font-mono);
   font-size: 0.9375rem;
   line-height: 1.75;
   white-space: pre;
 }
 .editor-pre {
-  padding: 1.125rem 1.375rem 5rem;
+  padding: 1.125rem 1.375rem 1.375rem;
+  border: 1px solid var(--lp-glass-line);
   border-radius: 14px;
-  background: rgba(0, 0, 0, 0.2);
-}
-.term-pre {
-  padding: 0.5rem 1rem 1rem;
+  background: var(--lp-surface);
 }
 .t-p {
-  color: #a1a1a6;
+  color: var(--lp-muted-fg);
 }
 .t-k {
-  color: #ff6b4f;
+  color: var(--lp-link);
 }
 
-/* Footer */
+/* Footer: one line of credit, on the page's own background. */
 .ft {
-  padding: 4.5rem 0 2.5rem;
-  background: var(--lp-muted);
-}
-.ft-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
-}
-.ft-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 2.5rem 2rem;
-}
-.ft-brand {
-  display: flex;
-  flex-direction: column;
-  grid-column: span 2;
-  gap: 1rem;
-}
-.ft-brand p {
-  max-width: 18rem;
-  color: var(--lp-muted-fg);
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
-.ft-col {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.ft-title {
-  margin-bottom: 0.25rem !important;
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
-.lp .ft-col a {
-  color: var(--lp-muted-fg);
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-.lp .ft-col a:hover {
-  color: var(--lp-fg);
-}
-.ft-bottom {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem 1.5rem;
-  color: var(--lp-muted-fg);
-  font-size: 0.8125rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--lp-glass-line);
 }
 
 /* Color mode: VitePress sets html.dark before the page paints. */
@@ -1291,14 +830,6 @@ section {
 /* Responsive */
 .show-sm {
   display: none !important;
-}
-@media (max-width: 900px) {
-  .ft-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .ft-brand {
-    grid-column: 1 / -1;
-  }
 }
 @media (min-width: 761px) {
   .mobile-nav {
@@ -1313,23 +844,16 @@ section {
   .show-sm {
     display: inline-flex !important;
   }
-  .hero,
-  .band,
-  .final {
+  .hero {
     padding-top: 5.5rem;
     padding-bottom: 5.5rem;
   }
-  .grid3 {
-    grid-template-columns: 1fr;
+  .showcase-band,
+  .band {
+    padding-bottom: 5.5rem;
   }
   .hero-h {
     font-size: 2.5rem;
-  }
-  .win-editor {
-    margin-right: 0.75rem;
-  }
-  .win-term {
-    width: calc(100% - 1.25rem);
   }
   .win pre {
     font-size: 0.8125rem;
@@ -1337,17 +861,10 @@ section {
     overflow-wrap: anywhere;
   }
 }
-@media (max-width: 480px) {
-  .ft-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .site-header::before,
   .bar,
-  .spot-glow,
-  .spot-grid,
   .btn {
     transition: none;
   }

@@ -1,7 +1,7 @@
 ---
 layout: false
 title: Heart UI
-titleTemplate: Vue components built for coding agents
+titleTemplate: The Vue UI library built for coding agents
 ---
 
 <HomeLanding />

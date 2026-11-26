@@ -1,6 +1,9 @@
 @import '@heart-ui/theme/theme.css';
+@import '@heart-ui/theme/presets.css';
 @import './landing-tokens.css';
 @source '../../../../registry';
+/* The landing page's showcase uses Heart UI utilities too. */
+@source './ComponentShowcase.vue';
 
 /* The docs pages wear the landing page's tokens (landing-tokens.css): one palette, one type, one brand across
    the site. Only the demos inside the frames use the Heart UI theme, because that is what they show. */

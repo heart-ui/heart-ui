@@ -4,7 +4,6 @@ import { createServer, type Server } from 'node:http'
 import { extname, join, normalize } from 'node:path'
 import { chromium, type Browser, type Page } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { docsItems } from '../apps/docs/scripts/items.ts'
 
 // Builds the docs site the way the task's check does: `pnpm --filter docs build`.
 const root = join(import.meta.dirname, '..')
@@ -36,9 +35,8 @@ describe('docs build', () => {
     for (const name of Object.keys(demoText)) expect(index).toContain(`href="/components/${name}"`)
   })
 
-  it('landing page: its counts, version and component links come from the repo', () => {
+  it('landing page: its version, counts and themes come from the repo, and its showcase is framed', () => {
     const page = html('index.html')
-    const items = docsItems()
     const themes = readdirSync(join(root, 'registry/themes')).filter((file) =>
       file.endsWith('.json'),
     )
@@ -47,11 +45,11 @@ describe('docs build', () => {
         version: string
       }
     ).version
-    expect(page).toContain(`${items.length} components`)
-    expect(page).toContain(`${themes.length} themes`)
     expect(page).toContain(`v${version}`)
-    for (const item of items) expect(page).toContain(`href="/components/${item.name}"`)
-    for (const id of ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8']) expect(page).toContain(id)
+    // One theme chip per preset in registry/themes.
+    expect(page.match(/class="theme-chip"/g)?.length).toBe(themes.length)
+    expect(page).toMatch(/<iframe[^>]+src="\/showcase\/components"/)
+    expect(page).toContain('npx heart-ui init')
   })
 
   it('guide pages: layout rules and tokens, linked from the nav, the sidebar and item pages', () => {

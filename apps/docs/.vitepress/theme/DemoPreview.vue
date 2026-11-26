@@ -4,7 +4,15 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 // The demo runs in a frame so a dialog it opens, or anything it portals, stays inside the preview.
 // `overlay`: the demo opens a layer outside its own box (a dialog, a menu), so the frame keeps room for it.
-const props = defineProps<{ name: string; title: string; overlay?: boolean }>()
+// `path`: a page to show instead of the item's demo page (the landing page's showcase).
+// `theme`: a theme preset applied inside the frame as `data-heart-theme` (presets.css).
+const props = defineProps<{
+  name: string
+  title: string
+  overlay?: boolean
+  path?: string
+  theme?: string
+}>()
 
 const { isDark } = useData()
 const frame = ref<HTMLIFrameElement>()
@@ -53,7 +61,11 @@ function frameWindow() {
 }
 
 function syncMode() {
-  frameWindow()?.document.documentElement.classList.toggle('dark', isDark.value)
+  const root = frameWindow()?.document.documentElement
+  if (!root) return
+  root.classList.toggle('dark', isDark.value)
+  if (props.theme) root.setAttribute('data-heart-theme', props.theme)
+  else root.removeAttribute('data-heart-theme')
 }
 
 function connect() {
@@ -84,7 +96,7 @@ onMounted(() => {
   document.addEventListener('keyup', onPageKey, { capture: true })
   if (frameWindow()?.document.readyState === 'complete') connect()
 })
-watch(isDark, syncMode)
+watch([isDark, () => props.theme], syncMode)
 onBeforeUnmount(() => {
   observer?.disconnect()
   document.removeEventListener('focusin', onPageFocus)
@@ -99,7 +111,7 @@ onBeforeUnmount(() => {
     class="demo-preview"
     :class="{ 'demo-preview--overlay': props.overlay }"
     loading="lazy"
-    :src="withBase(`/demo/${props.name}`)"
+    :src="withBase(props.path ?? `/demo/${props.name}`)"
     :title="`${props.title} preview`"
     :style="height ? { blockSize: `${height}px` } : undefined"
     @load="connect"
