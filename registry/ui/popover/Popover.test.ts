@@ -21,7 +21,8 @@ function filters(content: Record<string, unknown> = {}, root: Record<string, unk
   const open = ref(false)
   const changes: boolean[] = []
   render(() =>
-    h('div', { class: 'flex justify-center p-24' }, [
+    // Centred in the frame, so a panel fits on every side of the trigger without flipping.
+    h('div', { class: 'flex min-h-screen items-center justify-center' }, [
       h(
         Popover,
         {
