@@ -1,13 +1,18 @@
 ---
-layout: home
-hero:
-  name: Heart UI
-  tagline: Vue 3 components on Reka UI, copied into your project as source you own.
-  actions:
-    - theme: brand
-      text: Get started
-      link: /start/getting-started
-    - theme: alt
-      text: Components
-      link: /components/
+layout: false
+title: Heart UI
+titleTemplate: Components you own, for Vue and Nuxt
+head:
+  - - link
+    - rel: preconnect
+      href: https://fonts.googleapis.com
+  - - link
+    - rel: preconnect
+      href: https://fonts.gstatic.com
+      crossorigin: ''
+  - - link
+    - rel: stylesheet
+      href: https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap
 ---
+
+<HomeLanding />
