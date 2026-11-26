@@ -1,5 +1,12 @@
 import { format, parseColor } from './color'
-import { buildScales, resolveSemantic, scaleNames, steps, type ContrastReport } from './semantic'
+import {
+  buildScales,
+  monochromeChroma,
+  resolveSemantic,
+  scaleNames,
+  steps,
+  type ContrastReport,
+} from './semantic'
 
 export type { Adjustment, ContrastCheck, ContrastReport } from './semantic'
 
@@ -77,7 +84,7 @@ const rem = (value: number) => `${Number(value.toFixed(4))}rem`
 function resolve(knobs: Knobs) {
   const primary = check(knobs)
   const scales = buildScales(primary, knobs.neutral)
-  return { scales, ...resolveSemantic(scales) }
+  return { scales, ...resolveSemantic(scales, { monochrome: primary.c <= monochromeChroma }) }
 }
 
 /** Checks every foreground against its backgrounds in light and dark, after the generator's moves. */

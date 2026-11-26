@@ -37,7 +37,13 @@ function expectTokenUtilities(css: string) {
 }
 
 // Each preset's tokens sit under its own `[data-heart-theme]` selector, so `?theme=` renders it.
-const presetRadius = { forest: '.75rem', graphite: '.25rem', sunset: '.5rem', violet: '1rem' }
+const presetRadius = {
+  forest: '.75rem',
+  graphite: '.25rem',
+  rose: '.75rem',
+  sunset: '.5rem',
+  violet: '1rem',
+}
 function expectScopedPresets(css: string) {
   for (const [theme, radius] of Object.entries(presetRadius)) {
     const scope = new RegExp(`\\[data-heart-theme=(["']?)${theme}\\1\\]\\{([^}]*)\\}`, 'g')

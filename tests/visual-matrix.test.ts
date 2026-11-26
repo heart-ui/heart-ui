@@ -9,8 +9,15 @@ import { baselineName, demoFiles, demoStates, themeNames, visualWidths } from '.
 const visual = join(import.meta.dirname, '../apps/playground-vite/visual')
 
 describe('visual matrix covers every theme', () => {
-  it('lists the five presets', () => {
-    expect(themeNames().sort()).toEqual(['default', 'forest', 'graphite', 'sunset', 'violet'])
+  it('lists the six presets', () => {
+    expect(themeNames().sort()).toEqual([
+      'default',
+      'forest',
+      'graphite',
+      'rose',
+      'sunset',
+      'violet',
+    ])
   })
 
   it('has a baseline per demo, state, theme, mode and width', () => {
