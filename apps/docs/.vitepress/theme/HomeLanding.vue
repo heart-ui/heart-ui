@@ -128,6 +128,32 @@ async function copyCommand() {
 }
 
 const selectedTab = ref<'preview' | 'code'>('preview')
+
+// Workflow band: a glow and a brighter patch of lattice follow a mouse or pen. The position goes straight
+// into CSS variables once per frame, so moving the pointer never re-renders the component.
+const workflow = ref<HTMLElement>()
+const spotOn = ref(false)
+let spotFrame = 0
+
+function moveSpot(event: PointerEvent) {
+  if (event.pointerType === 'touch') return
+  spotOn.value = true
+  const { clientX, clientY } = event
+  cancelAnimationFrame(spotFrame)
+  spotFrame = requestAnimationFrame(() => {
+    const el = workflow.value
+    if (!el) return
+    const box = el.getBoundingClientRect()
+    el.style.setProperty('--mx', `${clientX - box.left}px`)
+    el.style.setProperty('--my', `${clientY - box.top}px`)
+  })
+}
+
+function leaveSpot() {
+  spotOn.value = false
+}
+
+onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
 </script>
 
 <template>
@@ -331,7 +357,13 @@ const selectedTab = ref<'preview' | 'code'>('preview')
         </div>
       </section>
 
-      <section class="band inv">
+      <section
+        ref="workflow"
+        class="band inv"
+        :class="{ 'spot-on': spotOn }"
+        @pointermove="moveSpot"
+        @pointerleave="leaveSpot"
+      >
         <svg class="decor" width="100%" height="100%" aria-hidden="true">
           <defs>
             <pattern id="lp-lattice-inv" width="69.28" height="40" patternUnits="userSpaceOnUse">
@@ -350,6 +382,19 @@ const selectedTab = ref<'preview' | 'code'>('preview')
             </mask>
           </defs>
           <rect width="100%" height="100%" fill="url(#lp-lattice-inv)" mask="url(#lp-fade-cli)" />
+        </svg>
+        <div class="spot-glow" aria-hidden="true" />
+        <svg class="decor spot-grid" width="100%" height="100%" aria-hidden="true">
+          <defs>
+            <pattern id="lp-lattice-hi" width="69.28" height="40" patternUnits="userSpaceOnUse">
+              <path
+                d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
+                fill="none"
+                stroke="rgba(255,107,79,.45)"
+              />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#lp-lattice-hi)" />
         </svg>
         <div class="wrap cli-grid">
           <div class="cli-copy">
@@ -946,6 +991,30 @@ section {
 .lp .inv a:hover {
   color: #ff8a73;
 }
+.spot-glow,
+.spot-grid {
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+.spot-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    40rem circle at var(--mx, 70%) var(--my, 50%),
+    rgba(255, 107, 79, 0.16),
+    rgba(216, 42, 12, 0.06) 35%,
+    transparent 65%
+  );
+}
+.spot-grid {
+  mask-image: radial-gradient(16rem circle at var(--mx, 70%) var(--my, 50%), #000, transparent);
+}
+.spot-on .spot-glow,
+.spot-on .spot-grid {
+  opacity: 1;
+}
 .inv-muted {
   color: #a1a1a6;
 }
@@ -1193,7 +1262,9 @@ section {
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .site-header::before,
-  .bar {
+  .bar,
+  .spot-glow,
+  .spot-grid {
     transition: none;
   }
 }
