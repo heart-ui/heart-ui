@@ -1,71 +1,50 @@
 <script setup lang="ts">
-import { useData } from 'vitepress'
+// The docs' own appearance switches (aliased in config.ts), so color mode toggles exactly as in the docs.
+import VPNavScreenAppearance from 'vitepress-appearance/screen'
+import VPSwitchAppearance from 'vitepress-appearance/switch'
+import { type DefaultTheme, useData } from 'vitepress'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { data } from './landing.data.ts'
 
-// The landing page draws its own header and footer (index.md sets `layout: false`), and shares VitePress's
-// appearance setting, so the color mode chosen here is the one the docs pages open in. The server renders
-// before the mode is known, so markup that differs by mode is switched in CSS, never by `isDark`.
-const { isDark } = useData()
+// The landing page draws its own header and footer (index.md sets `layout: false`) and shares VitePress's
+// appearance setting, so the color mode chosen here is the one the docs pages open in.
 
 const github = 'https://github.com/heart-ui/heart-ui'
-const command = 'npx heart-ui@latest init'
+// The GitHub mark (simple-icons), as the docs header shows it.
+const githubMark =
+  'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'
 
-const nav = [
-  { text: 'Docs', link: '/start/getting-started' },
-  { text: 'Components', link: '/components/' },
-  { text: 'Themes', link: '/start/theming' },
-  { text: 'GitHub', link: github },
-]
+// The docs header's links (config.ts), so the landing page and the docs pages list the same ones.
+const { theme: site } = useData<DefaultTheme.Config>()
+const nav = (site.value.nav ?? []).flatMap((item) =>
+  'link' in item ? [{ text: item.text, link: item.link }] : [],
+)
 
-const footer = [
+// The first section's prompt for a coding agent: paste it and the agent runs the rest.
+const prompt =
+  'Set up Heart UI in this project with npx heart-ui init, then build the UI as AGENTS.md says.'
+// The audit card shows what the CLI prints for a screen in the Settings layout with a raw class and two
+// primary buttons.
+const auditCommand = 'npx heart-ui audit pages/Settings.vue'
+const auditLines = [
   {
-    title: 'Product',
-    links: [
-      { text: 'Components', link: '/components/' },
-      { text: 'Themes', link: '/start/theming' },
-      { text: 'Dark mode', link: '/start/dark-mode' },
-      { text: 'Releases', link: `${github}/releases` },
-    ],
+    at: 'pages/Settings.vue:6',
+    id: 'A2',
+    text: 'Arbitrary-value class: use a token utility instead.',
   },
   {
-    title: 'Docs',
-    links: [
-      { text: 'Getting started', link: '/start/getting-started' },
-      { text: 'Vite', link: '/start/installation-vite' },
-      { text: 'Nuxt', link: '/start/installation-nuxt' },
-      { text: 'Tokens', link: '/guide/tokens' },
-    ],
-  },
-  {
-    title: 'Community',
-    links: [
-      { text: 'GitHub', link: github },
-      { text: 'Issues', link: `${github}/issues` },
-      { text: 'Pull requests', link: `${github}/pulls` },
-      { text: 'License', link: `${github}/blob/main/LICENSE` },
-    ],
+    at: 'pages/Settings.vue:8',
+    id: 'A4',
+    text: '2 primary buttons in one view: keep one and make the rest secondary or ghost.',
   },
 ]
 
-// Only what ships today (docs/agent-support.md): AGENTS.md from init, per-item docs with type-checked
-// examples, and `heart-ui audit`. The MCP server and benchmark join this list when they land.
-const features = [
-  {
-    icon: 'doc',
-    title: 'Rules in AGENTS.md',
-    text: 'heart-ui init writes the screen workflow and the hard rules into AGENTS.md, so your agent has them from the first prompt.',
-  },
-  {
-    icon: 'code',
-    title: 'APIs it can’t misread',
-    text: 'Every component has Markdown docs that say when to use it, with examples type-checked against its real props.',
-  },
-  {
-    icon: 'check',
-    title: 'Checked, not trusted',
-    text: 'heart-ui audit flags raw values, extra primary actions, missing states and unnamed controls in what your agent writes.',
-  },
-] as const
+// Where "Create your own theme" goes: the theming guide's section on changing values, until the custom
+// theme page exists.
+const customThemeLink = '/start/theming#change-a-value'
+
+// The showcase's theme; the frame applies it as data-heart-theme (presets.css).
+const theme = ref(data.themes[0]?.name ?? 'default')
 
 const icons = {
   doc: 'M6 2C4.89543 2 4 2.89543 4 4V16C4 17.1046 4.89543 18 6 18H14C15.1046 18 16 17.1046 16 16V7.41421C16 7.149 15.8946 6.89464 15.7071 6.70711L11.2929 2.29289C11.1054 2.10536 10.851 2 10.5858 2H6ZM5 4C5 3.44772 5.44772 3 6 3H10V6.5C10 7.32843 10.6716 8 11.5 8H15V16C15 16.5523 14.5523 17 14 17H6C5.44772 17 5 16.5523 5 16V4ZM14.7929 7H11.5C11.2239 7 11 6.77614 11 6.5V3.20711L14.7929 7Z',
@@ -75,14 +54,10 @@ const icons = {
     'M10.8371 3.13074C10.6332 2.94456 10.3169 2.95895 10.1307 3.16289C9.94456 3.36683 9.95895 3.68309 10.1629 3.86927L16.3307 9.5H2.5C2.22386 9.5 2 9.72386 2 10C2 10.2761 2.22386 10.5 2.5 10.5H16.3279L10.1629 16.1281C9.95895 16.3143 9.94456 16.6305 10.1307 16.8345C10.3169 17.0384 10.6332 17.0528 10.8371 16.8666L17.7535 10.5526C17.8934 10.4248 17.9732 10.2573 17.993 10.0841C17.9976 10.0568 18 10.0287 18 10C18 9.97313 17.9979 9.94675 17.9938 9.92103C17.9756 9.74512 17.8955 9.57446 17.7535 9.44478L10.8371 3.13074Z',
   check:
     'M16.8536 5.14645C17.0488 5.34171 17.0488 5.65829 16.8536 5.85355L7.85355 14.8536C7.65829 15.0488 7.34171 15.0488 7.14645 14.8536L3.14645 10.8536C2.95118 10.6583 2.95118 10.3417 3.14645 10.1464C3.34171 9.95118 3.65829 9.95118 3.85355 10.1464L7.5 13.7929L16.1464 5.14645C16.3417 4.95118 16.6583 4.95118 16.8536 5.14645Z',
-  moon: 'M15.4932 13.4967C13.5653 16.8358 9.2957 17.9798 5.95663 16.052C5.20013 15.6152 4.54451 15.0515 4.01047 14.3887C6.8412 13.3015 8.56844 11.9681 9.60339 9.99249C10.651 7.99273 10.9395 5.83183 10.3628 3.08319C11.2605 3.20148 12.1328 3.49537 12.9378 3.96018C16.2769 5.88799 17.421 10.1576 15.4932 13.4967ZM5.45663 16.918C9.27399 19.122 14.1552 17.8141 16.3592 13.9967C18.5631 10.1793 17.2552 5.2981 13.4378 3.09415C12.3371 2.45863 11.1233 2.10173 9.88082 2.03507C9.4801 2.01357 9.17217 2.38477 9.26732 2.77462C9.95545 5.59395 9.70125 7.65076 8.71759 9.52844C7.78322 11.312 6.17301 12.559 3.16661 13.635C2.79667 13.7674 2.65251 14.2143 2.87537 14.538C3.54192 15.5059 4.41706 16.3178 5.45663 16.918Z',
-  sun: 'M10 2C10.2761 2 10.5 2.22386 10.5 2.5V3.5C10.5 3.77614 10.2761 4 10 4C9.72386 4 9.5 3.77614 9.5 3.5V2.5C9.5 2.22386 9.72386 2 10 2ZM10 14C12.2091 14 14 12.2091 14 10C14 7.79086 12.2091 6 10 6C7.79086 6 6 7.79086 6 10C6 12.2091 7.79086 14 10 14ZM10 13C8.34315 13 7 11.6569 7 10C7 8.34315 8.34315 7 10 7C11.6569 7 13 8.34315 13 10C13 11.6569 11.6569 13 10 13ZM17.5 10.5C17.7761 10.5 18 10.2761 18 10C18 9.72386 17.7761 9.5 17.5 9.5H16.5C16.2239 9.5 16 9.72386 16 10C16 10.2761 16.2239 10.5 16.5 10.5H17.5ZM10 16C10.2761 16 10.5 16.2239 10.5 16.5V17.5C10.5 17.7761 10.2761 18 10 18C9.72386 18 9.5 17.7761 9.5 17.5V16.5C9.5 16.2239 9.72386 16 10 16ZM3.5 10.5C3.77614 10.5 4 10.2761 4 10C4 9.72386 3.77614 9.5 3.5 9.5H2.46289C2.18675 9.5 1.96289 9.72386 1.96289 10C1.96289 10.2761 2.18675 10.5 2.46289 10.5H3.5ZM4.14645 4.14645C4.34171 3.95118 4.65829 3.95118 4.85355 4.14645L5.85355 5.14645C6.04882 5.34171 6.04882 5.65829 5.85355 5.85355C5.65829 6.04882 5.34171 6.04882 5.14645 5.85355L4.14645 4.85355C3.95118 4.65829 3.95118 4.34171 4.14645 4.14645ZM4.85355 15.8536C4.65829 16.0488 4.34171 16.0488 4.14645 15.8536C3.95118 15.6583 3.95118 15.3417 4.14645 15.1464L5.14645 14.1464C5.34171 13.9512 5.65829 13.9512 5.85355 14.1464C6.04882 14.3417 6.04882 14.6583 5.85355 14.8536L4.85355 15.8536ZM15.8536 4.14645C15.6583 3.95118 15.3417 3.95118 15.1464 4.14645L14.1464 5.14645C13.9512 5.34171 13.9512 5.65829 14.1464 5.85355C14.3417 6.04882 14.6583 6.04882 14.8536 5.85355L15.8536 4.85355C16.0488 4.65829 16.0488 4.34171 15.8536 4.14645ZM15.1464 15.8536C15.3417 16.0488 15.6583 16.0488 15.8536 15.8536C16.0488 15.6583 16.0488 15.3417 15.8536 15.1464L14.8536 14.1464C14.6583 13.9512 14.3417 13.9512 14.1464 14.1464C13.9512 14.3417 13.9512 14.6583 14.1464 14.8536L15.1464 15.8536Z',
   menu: 'M2 4.5C2 4.22386 2.22386 4 2.5 4H17.5C17.7761 4 18 4.22386 18 4.5C18 4.77614 17.7761 5 17.5 5H2.5C2.22386 5 2 4.77614 2 4.5ZM2 9.5C2 9.22386 2.22386 9 2.5 9H17.5C17.7761 9 18 9.22386 18 9.5C18 9.77614 17.7761 10 17.5 10H2.5C2.22386 10 2 9.77614 2 9.5ZM2.5 14C2.22386 14 2 14.2239 2 14.5C2 14.7761 2.22386 15 2.5 15H17.5C17.7761 15 18 14.7761 18 14.5C18 14.2239 17.7761 14 17.5 14H2.5Z',
   close:
     'M4.14645 4.14645C4.34171 3.95118 4.65829 3.95118 4.85355 4.14645L10 9.293L15.1464 4.14645C15.3417 3.95118 15.6583 3.95118 15.8536 4.14645C16.0488 4.34171 16.0488 4.65829 15.8536 4.85355L10.707 10L15.8536 15.1464C16.0488 15.3417 16.0488 15.6583 15.8536 15.8536C15.6583 16.0488 15.3417 16.0488 15.1464 15.8536L10 10.707L4.85355 15.8536C4.65829 16.0488 4.34171 16.0488 4.14645 15.8536C3.95118 15.6583 3.95118 15.3417 4.14645 15.1464L9.293 10L4.14645 4.85355C3.95118 4.65829 3.95118 4.34171 4.14645 4.14645Z',
 } as const
-
-const isExternal = (link: string) => link.startsWith('http')
 
 const scrolled = ref(false)
 const menuOpen = ref(false)
@@ -112,13 +87,9 @@ onBeforeUnmount(() => {
   clearTimeout(copiedTimer)
 })
 
-function toggleTheme() {
-  isDark.value = !isDark.value
-}
-
-async function copyCommand() {
+async function copyPrompt() {
   try {
-    await navigator.clipboard.writeText(command)
+    await navigator.clipboard.writeText(prompt)
   } catch {
     return
   }
@@ -126,34 +97,6 @@ async function copyCommand() {
   clearTimeout(copiedTimer)
   copiedTimer = setTimeout(() => (copied.value = false), 2000)
 }
-
-const selectedTab = ref<'preview' | 'code'>('preview')
-
-// Workflow band: a glow and a brighter patch of lattice follow a mouse or pen. The position goes straight
-// into CSS variables once per frame, so moving the pointer never re-renders the component.
-const workflow = ref<HTMLElement>()
-const spotOn = ref(false)
-let spotFrame = 0
-
-function moveSpot(event: PointerEvent) {
-  if (event.pointerType === 'touch') return
-  spotOn.value = true
-  const { clientX, clientY } = event
-  cancelAnimationFrame(spotFrame)
-  spotFrame = requestAnimationFrame(() => {
-    const el = workflow.value
-    if (!el) return
-    const box = el.getBoundingClientRect()
-    el.style.setProperty('--mx', `${clientX - box.left}px`)
-    el.style.setProperty('--my', `${clientY - box.top}px`)
-  })
-}
-
-function leaveSpot() {
-  spotOn.value = false
-}
-
-onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
 </script>
 
 <template>
@@ -172,17 +115,12 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
           <a v-for="item in nav" :key="item.text" :href="item.link">{{ item.text }}</a>
         </nav>
         <div class="actions">
-          <button
-            type="button"
-            class="icon-btn hide-sm"
-            aria-label="Toggle color mode"
-            @click="toggleTheme"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-              <path class="if-light" :d="icons.moon" fill="currentColor" />
-              <path class="if-dark" :d="icons.sun" fill="currentColor" />
+          <VPSwitchAppearance class="hide-sm appearance" />
+          <a :href="github" class="icon-btn hide-sm" aria-label="Heart UI on GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <path :d="githubMark" fill="currentColor" />
             </svg>
-          </button>
+          </a>
           <a href="/start/getting-started" class="btn btn-inverse btn-sm hide-sm">Get started</a>
           <button
             type="button"
@@ -202,14 +140,9 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
         <a v-for="item in nav" :key="item.text" :href="item.link" @click="menuOpen = false">{{
           item.text
         }}</a>
+        <a :href="github">GitHub</a>
         <div class="mobile-actions">
-          <button type="button" class="btn btn-card btn-lg mobile-theme" @click="toggleTheme">
-            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-              <path class="if-light" :d="icons.moon" fill="currentColor" />
-              <path class="if-dark" :d="icons.sun" fill="currentColor" />
-            </svg>
-            <span class="if-light">Dark mode</span><span class="if-dark">Light mode</span>
-          </button>
+          <VPNavScreenAppearance />
           <a href="/start/getting-started" class="btn btn-inverse btn-lg">Get started</a>
         </div>
       </nav>
@@ -234,14 +167,24 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
 
     <main>
       <section class="hero">
-        <!-- The pattern and mask live in this svg: the mask's 100% sizes against the svg that holds it. -->
+        <!-- The pattern and mask live in this svg: the mask's 100% sizes against the svg that holds it.
+             The lattice is the mark's own grid: the mark is drawn at 0.12 scale, where its lines are 20.78
+             apart and its rows 24 high, and the tile starts on the page's centre line (x 50%) at a point where
+             the mark's lines cross (15.84 below its top, which is the hero's top padding, a multiple of 24). -->
         <svg class="decor" width="100%" height="100%" aria-hidden="true">
           <defs>
-            <pattern id="lp-lattice" width="69.28" height="40" patternUnits="userSpaceOnUse">
+            <pattern
+              id="lp-lattice"
+              x="50%"
+              y="15.84"
+              width="41.569"
+              height="24"
+              patternUnits="userSpaceOnUse"
+            >
               <path
-                d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
+                d="M0 0V24M20.785 0V24M0 0L41.569 24M0 24L41.569 0"
                 fill="none"
-                stroke="var(--lattice)"
+                stroke="var(--lp-lattice)"
               />
             </pattern>
             <radialGradient id="lp-fade-hero-g" cx="0.5" cy="0.38" r="0.5">
@@ -255,14 +198,13 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
           <rect width="100%" height="100%" fill="url(#lp-lattice)" mask="url(#lp-fade-hero)" />
         </svg>
         <div class="wrap center">
-          <svg viewBox="140 230 744 560" width="88" height="66" aria-hidden="true">
+          <svg viewBox="140 230 744 560" width="89.28" height="67.2" aria-hidden="true">
             <use href="#lp-mark" />
           </svg>
-          <span class="pill">Vue 3 · Nuxt · Agent-ready</span>
-          <h1 class="hero-h">UI your coding agent gets right.</h1>
+          <span class="pill">Alpha · v{{ data.version }}</span>
+          <h1 class="hero-h">The Vue UI library built for coding agents.</h1>
           <p class="lead">
-            Vue and Nuxt components copied into your project as source you own, with the rules,
-            typed APIs and checks an agent needs to build screens without guessing.
+            Rules your agent follows, source you own, and an audit that checks its work.
           </p>
           <div class="cta-row">
             <a href="/start/getting-started" class="btn btn-primary btn-lg">
@@ -271,184 +213,162 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
                 <path :d="icons.arrow" fill="currentColor" />
               </svg>
             </a>
-            <a href="/components/" class="btn btn-card btn-lg">Browse components</a>
+            <a href="/components/" class="btn btn-neutral btn-lg">Browse components</a>
           </div>
-          <div class="command">
-            <code>{{ command }}</code>
-            <button
-              type="button"
-              class="icon-btn muted"
-              :aria-label="copied ? 'Copied' : 'Copy command'"
-              @click="copyCommand"
-            >
-              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+        </div>
+      </section>
+
+      <section class="prompt-band" aria-labelledby="lp-prompt">
+        <div class="wrap quick-stack">
+          <div class="section-head center-head">
+            <p class="eyebrow">Quick start for agents</p>
+            <h2 id="lp-prompt">One prompt sets it up.</h2>
+            <p class="section-lead">Paste it into your coding agent. It runs the rest.</p>
+          </div>
+          <!-- The whole box copies the prompt; the icon on the right shows whether it has. -->
+          <button type="button" class="prompt" @click="copyPrompt">
+            <span class="prompt-tip" aria-hidden="true">{{
+              copied ? 'Copied' : 'Click to copy'
+            }}</span>
+            <span class="sr-only">Copy the prompt: </span>
+            <code>{{ prompt }}</code>
+            <span class="copy-mark" :class="{ 'is-copied': copied }" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 20 20">
                 <path :d="copied ? icons.check : icons.copy" fill="currentColor" />
               </svg>
-            </button>
-            <span class="sr-only" aria-live="polite">{{
-              copied ? 'Copied to clipboard' : ''
-            }}</span>
-          </div>
+            </span>
+          </button>
+          <span class="sr-only" aria-live="polite">{{ copied ? 'Copied to clipboard' : '' }}</span>
         </div>
       </section>
 
-      <section class="band muted-bg">
-        <div class="wrap stack">
-          <div class="heading">
-            <p class="eyebrow">BUILT FOR AGENTS</p>
-            <h2>Nothing left to guess.</h2>
+      <section class="showcase-band" aria-labelledby="lp-showcase">
+        <div class="wrap showcase-stack">
+          <div class="section-head">
+            <p class="eyebrow">Components</p>
+            <h2 id="lp-showcase">
+              {{ data.components }} components. {{ data.themes.length }} themes.
+            </h2>
           </div>
-          <div class="grid3">
-            <div v-for="feature in features" :key="feature.title" class="card surface">
-              <div class="tile">
-                <svg width="24" height="24" viewBox="0 0 20 20" aria-hidden="true">
-                  <path :d="icons[feature.icon]" fill="currentColor" />
-                </svg>
-              </div>
-              <h3>{{ feature.title }}</h3>
-              <p class="body">{{ feature.text }}</p>
+          <div class="theme-bar">
+            <div class="theme-chips" role="group" aria-label="Theme">
+              <button
+                v-for="item in data.themes"
+                :key="item.name"
+                type="button"
+                class="theme-chip"
+                :aria-pressed="theme === item.name"
+                @click="theme = item.name"
+              >
+                <span class="chip-dot" :style="{ background: item.primary }" aria-hidden="true" />
+                {{ item.name }}
+              </button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="band">
-        <div class="wrap stack">
-          <div class="heading">
-            <p class="eyebrow">COMPONENTS</p>
-            <h2>Source your agent can read.</h2>
-          </div>
-          <div class="grid3">
-            <div class="card showcase">
-              <p class="eyebrow">BUTTON</p>
-              <div class="row">
-                <button type="button" class="btn btn-primary">Primary</button>
-                <button type="button" class="btn btn-surface">Secondary</button>
-                <button type="button" class="btn btn-ghost">Ghost</button>
-              </div>
-            </div>
-            <div class="card showcase">
-              <p class="eyebrow">INPUT</p>
-              <label for="lp-email" class="label">Email</label>
-              <input id="lp-email" type="email" placeholder="you@example.com" class="input" />
-            </div>
-            <div class="card showcase">
-              <p class="eyebrow">BADGE · TABS</p>
-              <div class="row">
-                <span class="badge">Default</span>
-                <span class="badge badge-primary">New</span>
-                <span class="badge badge-inverse">Beta</span>
-              </div>
-              <div role="tablist" aria-label="Example tabs" class="tabs">
-                <button
-                  v-for="tab in ['preview', 'code'] as const"
-                  :key="tab"
-                  type="button"
-                  role="tab"
-                  :aria-selected="selectedTab === tab"
-                  class="tab"
-                  @click="selectedTab = tab"
-                >
-                  {{ tab === 'preview' ? 'Preview' : 'Code' }}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        ref="workflow"
-        class="band inv"
-        :class="{ 'spot-on': spotOn }"
-        @pointermove="moveSpot"
-        @pointerleave="leaveSpot"
-      >
-        <svg class="decor" width="100%" height="100%" aria-hidden="true">
-          <defs>
-            <pattern id="lp-lattice-inv" width="69.28" height="40" patternUnits="userSpaceOnUse">
-              <path
-                d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
-                fill="none"
-                stroke="rgba(245,245,247,.1)"
-              />
-            </pattern>
-            <radialGradient id="lp-fade-cli-g" cx="0.78" cy="0.5" r="0.5">
-              <stop offset="0" stop-color="#fff" />
-              <stop offset="1" stop-color="#fff" stop-opacity="0" />
-            </radialGradient>
-            <mask id="lp-fade-cli">
-              <rect width="100%" height="100%" fill="url(#lp-fade-cli-g)" />
-            </mask>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#lp-lattice-inv)" mask="url(#lp-fade-cli)" />
-        </svg>
-        <div class="spot-glow" aria-hidden="true" />
-        <svg class="decor spot-grid" width="100%" height="100%" aria-hidden="true">
-          <defs>
-            <pattern id="lp-lattice-hi" width="69.28" height="40" patternUnits="userSpaceOnUse">
-              <path
-                d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
-                fill="none"
-                stroke="rgba(255,107,79,.45)"
-              />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#lp-lattice-hi)" />
-        </svg>
-        <div class="wrap cli-grid">
-          <div class="cli-copy">
-            <p class="eyebrow inv-muted with-icon">
-              <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-                <path :d="icons.code" fill="currentColor" />
+            <a :href="customThemeLink" class="more">
+              Create your own theme
+              <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
+                <path :d="icons.arrow" fill="currentColor" />
               </svg>
-              WORKFLOW
-            </p>
-            <h2>Your agent builds. The audit checks.</h2>
-            <p class="cli-lead">
-              Rules land in <code>AGENTS.md</code>, components in <code>components/ui</code>, and
-              every screen passes <code>heart-ui audit</code> before you review it.
-              <a href="/start/getting-started">Read the getting started guide</a>
-            </p>
+            </a>
           </div>
-          <div class="windows">
-            <div class="halo halo-a" aria-hidden="true" />
-            <div class="halo halo-b" aria-hidden="true" />
-            <div class="win win-editor" role="img" aria-label="AGENTS.md in a code editor">
-              <div class="win-bar">
-                <span class="dots" aria-hidden="true"><span /><span /><span /></span>
-                <span>AGENTS.md</span>
+          <DemoPreview
+            name="showcase"
+            title="Heart UI components"
+            path="/showcase/components"
+            :theme="theme"
+            overlay
+          />
+        </div>
+      </section>
+
+      <section class="band" aria-labelledby="lp-loop">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">How it works</p>
+            <h2 id="lp-loop">Made for the agent loop.</h2>
+          </div>
+          <div class="loop-grid">
+            <article class="feature">
+              <div class="feature-copy">
+                <code class="feature-cmd">heart-ui init</code>
+                <h3>Rules your agent follows</h3>
+                <p>AGENTS.md gives the agent the workflow and the rules for every screen.</p>
               </div>
-              <pre class="editor-pre"><span class="t-k">## Rules</span>
+              <div class="win" role="img" aria-label="The rules section of AGENTS.md">
+                <div class="win-bar">
+                  <span class="dots" aria-hidden="true"><span /><span /><span /></span>
+                  <span>AGENTS.md</span>
+                </div>
+                <pre class="win-pre"><span class="t-k">## Rules</span>
 
 <span class="t-p">-</span> Semantic token utilities only.
-<span class="t-p">-</span> No raw values: no hex, no px.
-<span class="t-p">-</span> One primary action per view.
-<span class="t-p">-</span> Every data region handles empty,
-  loading, error and long content.
-
-<span class="t-k">## Verify</span>
-
-Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
-            </div>
-            <div class="win win-term" role="img" aria-label="Terminal">
-              <div class="win-bar">
-                <span class="dots" aria-hidden="true"><span /><span /><span /></span>
-                <span>Terminal</span>
+<span class="t-p">-</span> No raw values.
+<span class="t-p">-</span> One primary action per view.</pre>
               </div>
-              <pre
-                class="term-pre"
-              ><span class="t-p">$</span> npx heart-ui audit src/pages/Settings.vue
-<span class="t-p">No failures in 1 file.</span></pre>
-            </div>
+            </article>
+            <article class="feature">
+              <div class="feature-copy">
+                <code class="feature-cmd">heart-ui add</code>
+                <h3>Source you own</h3>
+                <p>Components land in your project as plain Vue files the agent reads and edits.</p>
+              </div>
+              <div
+                class="win"
+                role="img"
+                aria-label="components/ui with the button files and a dialog folder"
+              >
+                <div class="win-bar">
+                  <span class="dots" aria-hidden="true"><span /><span /><span /></span>
+                  <span>components/ui</span>
+                </div>
+                <pre class="win-pre"><span class="t-p">├─</span> button/
+<span class="t-p">│  ├─</span> Button.vue
+<span class="t-p">│  ├─</span> button.variants.ts
+<span class="t-p">│  └─</span> index.ts
+<span class="t-p">└─</span> dialog/</pre>
+              </div>
+            </article>
+            <article class="feature feature-wide">
+              <div class="feature-copy">
+                <code class="feature-cmd">heart-ui audit</code>
+                <h3>An audit that checks its work</h3>
+                <p>
+                  {{ data.checks.length }} rules run on each screen. Every finding names a line and
+                  a fix, so the agent corrects itself.
+                </p>
+              </div>
+              <div
+                class="win"
+                role="img"
+                aria-label="Audit output: two failures, each with a line, a rule and a fix"
+              >
+                <div class="win-bar">
+                  <span class="dots" aria-hidden="true"><span /><span /><span /></span>
+                  <span>Terminal</span>
+                </div>
+                <div class="term">
+                  <div class="term-line full"><span class="t-p">$</span> {{ auditCommand }}</div>
+                  <div v-for="line in auditLines" :key="line.id" class="term-line">
+                    <span class="t-p">{{ line.at }}</span>
+                    <span class="t-k">{{ line.id }}</span>
+                    <span>{{ line.text }}</span>
+                  </div>
+                  <div class="term-line full">2 failures in 1 of 1 file.</div>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      <section class="band final">
-        <div class="wrap center">
-          <h2 class="final-h">Hand it to your agent.</h2>
-          <p class="lead-sm">One command sets up the components, the rules and the checks.</p>
+      <section class="band quick" aria-labelledby="lp-start">
+        <div class="wrap quick-stack">
+          <div class="section-head center-head">
+            <h2 id="lp-start">Try it in your next project.</h2>
+            <p class="section-lead">
+              Add it to your Vite or Nuxt 4 app with one command. It's free and open source.
+            </p>
+          </div>
           <a href="/start/getting-started" class="btn btn-primary btn-lg">
             Get started
             <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
@@ -460,117 +380,36 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
     </main>
 
     <footer class="ft">
-      <div class="wrap ft-stack">
-        <div class="ft-grid">
-          <div class="ft-brand">
-            <a href="/" class="brand">
-              <svg viewBox="140 230 744 560" width="28" height="21" aria-hidden="true">
-                <use href="#lp-mark" />
-              </svg>
-              <span>heart-ui</span>
-            </a>
-            <p>Vue and Nuxt components you own, built for coding agents.</p>
-          </div>
-          <nav v-for="group in footer" :key="group.title" :aria-label="group.title" class="ft-col">
-            <p class="ft-title">{{ group.title }}</p>
-            <a
-              v-for="link in group.links"
-              :key="link.text"
-              :href="link.link"
-              :target="isExternal(link.link) ? '_blank' : undefined"
-              :rel="isExternal(link.link) ? 'noreferrer' : undefined"
-            >
-              {{ link.text }}
-            </a>
-          </nav>
-        </div>
-        <div class="ft-bottom">
-          <span>© 2026 heart-ui · MIT License</span>
-          <span>Made with love by Tam Mai</span>
-        </div>
+      <div class="wrap">
+        <p class="ft-note">
+          Built by Tam Mai. Released under the
+          <a :href="`${github}/blob/main/LICENSE`">MIT License</a>. The source is on
+          <a :href="github">GitHub</a>.
+        </p>
       </div>
     </footer>
   </div>
 </template>
 
 <style scoped>
-/* The landing page's own palette, from its design; the docs pages keep VitePress's. */
+/* The palette is in landing-tokens.css, shared with the docs pages. */
 .lp {
-  --bg: #ffffff;
-  --muted: #f5f5f7;
-  --card: #f5f5f7;
-  --card-hover: #fafafb;
-  --surface: #ffffff;
-  --tile: #f5f5f7;
-  --fg: #1d1d1f;
-  --on-fg: #f5f5f7;
-  --muted-fg: #6e6e73;
-  --input: #86868b;
-  --input-bg: #ffffff;
-  --brand: #d82a0c;
-  --brand-hover: #c4250a;
-  --link: #d82a0c;
-  --link-hover: #c4250a;
-  --inverse: #1d1d1f;
-  --glass: rgba(255, 255, 255, 0.72);
-  --glass-solid: rgba(255, 255, 255, 0.88);
-  --glass-line: rgba(0, 0, 0, 0.06);
-  --lattice: rgba(29, 29, 31, 0.07);
-  --halo: #000000;
-  --halo-a: 0.5;
-  --halo-b: 0.35;
-  --ease: cubic-bezier(0.32, 0.72, 0, 1);
-  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 14px -4px rgba(0, 0, 0, 0.08);
-  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.06), 0 6px 18px -6px rgba(216, 42, 12, 0.28);
-
   position: relative;
   min-height: 100vh;
-  background: var(--bg);
-  color: var(--fg);
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
+  background: var(--lp-bg);
+  color: var(--lp-fg);
+  font-family: var(--lp-font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-:root.dark .lp {
-  --bg: #0a0a0b;
-  --muted: #121214;
-  --card: #121214;
-  --card-hover: #1a1a1d;
-  --surface: #1a1a1d;
-  --tile: #232326;
-  --fg: #f5f5f7;
-  --on-fg: #0a0a0b;
-  --muted-fg: #a1a1a6;
-  --input: #6e6e73;
-  --input-bg: #0a0a0b;
-  --link: #ff6b4f;
-  --link-hover: #ff8a73;
-  --inverse: #000000;
-  --glass: rgba(10, 10, 11, 0.72);
-  --glass-solid: rgba(10, 10, 11, 0.88);
-  --glass-line: rgba(255, 255, 255, 0.08);
-  --lattice: rgba(245, 245, 247, 0.06);
-  --halo: #f5f5f7;
-  --halo-a: 0.08;
-  --halo-b: 0.06;
-  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 4px 14px -4px rgba(0, 0, 0, 0.4);
-  /* A red glow muddies on near-black: hover brightens the button and lifts it with a neutral shadow. */
-  --brand-hover: #de3412;
-  --btn-shadow-primary: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 2px 8px -2px rgba(0, 0, 0, 0.6);
-}
-
 .lp a {
-  color: var(--link);
+  color: var(--lp-link);
 }
 .lp a:hover {
-  color: var(--link-hover);
+  color: var(--lp-link-hover);
 }
 .lp :focus-visible {
-  outline: 2px solid var(--link);
+  outline: 2px solid var(--lp-link);
   outline-offset: 2px;
 }
 .lp h1,
@@ -616,36 +455,36 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   margin-bottom: -6rem;
   border-bottom: 1px solid transparent;
   transition:
-    border-color 0.5s var(--ease),
-    margin-bottom 0.5s var(--ease);
+    border-color 0.5s var(--lp-ease),
+    margin-bottom 0.5s var(--lp-ease);
 }
 .site-header::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-color: var(--glass);
+  background-color: var(--lp-glass);
   backdrop-filter: saturate(140%) blur(20px);
   opacity: 0;
   transition:
-    opacity 0.5s var(--ease),
-    background-color 0.5s var(--ease);
+    opacity 0.5s var(--lp-ease),
+    background-color 0.5s var(--lp-ease);
 }
 .site-header.is-scrolled,
 .site-header.menu-open {
   margin-bottom: -4rem;
-  border-bottom-color: var(--glass-line);
+  border-bottom-color: var(--lp-glass-line);
 }
 .site-header.is-scrolled::before,
 .site-header.menu-open::before {
   opacity: 1;
 }
 .site-header.menu-open::before {
-  background-color: var(--glass-solid);
+  background-color: var(--lp-glass-solid);
 }
 @supports not (backdrop-filter: blur(1px)) {
   .site-header::before {
-    background-color: var(--glass-solid);
+    background-color: var(--lp-glass-solid);
   }
 }
 .bar {
@@ -654,7 +493,7 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   justify-content: space-between;
   gap: 1rem;
   height: 6rem;
-  transition: height 0.5s var(--ease);
+  transition: height 0.5s var(--lp-ease);
 }
 .is-scrolled .bar,
 .menu-open .bar {
@@ -667,7 +506,7 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  color: var(--fg);
+  color: var(--lp-fg);
   font-weight: 600;
   text-decoration: none;
 }
@@ -677,16 +516,22 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   font-size: 0.875rem;
 }
 .lp .nav-links a {
-  color: var(--fg);
+  color: var(--lp-fg);
   text-decoration: none;
 }
 .lp .nav-links a:hover {
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
 }
 .actions {
   display: flex;
+  flex: 1 1 0;
   align-items: center;
+  justify-content: flex-end;
   gap: 0.25rem;
+}
+/* The brand and the actions share the spare width equally, so the links sit at the page's true centre. */
+.bar > .brand {
+  flex: 1 1 0;
 }
 .mobile-nav {
   position: relative;
@@ -703,7 +548,7 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: var(--fg);
+  color: var(--lp-fg);
   text-decoration: none;
 }
 .mobile-actions {
@@ -712,8 +557,13 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   gap: 0.75rem;
   margin-top: 1.25rem;
 }
-.mobile-theme {
-  justify-content: flex-start;
+/* The docs' own appearance switch, with the room the icon button had beside it. */
+.appearance {
+  margin: 0 0.5rem 0 0.75rem;
+}
+.lp .actions a.icon-btn,
+.lp .actions a.icon-btn:hover {
+  color: var(--lp-fg);
 }
 
 /* Controls */
@@ -726,11 +576,8 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   border: 0;
   border-radius: 10px;
   background: transparent;
-  color: var(--fg);
+  color: var(--lp-fg);
   cursor: pointer;
-}
-.icon-btn.muted {
-  color: var(--muted-fg);
 }
 .lp .btn {
   display: inline-flex;
@@ -747,18 +594,15 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   text-decoration: none;
   cursor: pointer;
   transition:
-    box-shadow 0.25s var(--ease),
-    background-color 0.25s var(--ease);
+    box-shadow 0.25s var(--lp-ease),
+    background-color 0.25s var(--lp-ease);
 }
 /* A light lift on hover; the primary button's shadow takes its own hue. */
 .lp .btn:hover {
-  box-shadow: var(--btn-shadow);
+  box-shadow: var(--lp-btn-shadow);
 }
 .lp .btn-primary:hover {
-  box-shadow: var(--btn-shadow-primary);
-}
-.lp .btn-ghost:hover {
-  box-shadow: none;
+  box-shadow: var(--lp-btn-shadow-primary);
 }
 .lp .btn-sm {
   margin-left: 0.5rem;
@@ -771,33 +615,39 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
 }
 .lp .btn-primary,
 .lp .btn-primary:hover {
-  background: var(--brand);
-  color: #ffffff;
+  background: var(--lp-brand);
+  color: var(--lp-on-brand);
 }
 .lp .btn-primary:hover {
-  background: var(--brand-hover);
+  background: var(--lp-brand-hover);
 }
 .lp .btn-inverse,
 .lp .btn-inverse:hover {
-  background: var(--fg);
-  color: var(--on-fg);
+  background: var(--lp-fg);
+  color: var(--lp-on-fg);
 }
-.lp .btn-card,
-.lp .btn-card:hover {
-  background: var(--card);
-  color: var(--fg);
+/* The secondary action: white with a hairline edge and no shadow (the lift comes on hover) in light mode, light grey in dark mode (as the header's
+   Get started), a shade deeper on hover. The edge is an inset shadow, so the button keeps its size. */
+.lp .btn-neutral,
+.lp .btn-neutral:hover {
+  background: var(--lp-surface);
+  color: var(--lp-fg);
+  box-shadow: inset 0 0 0 1px var(--lp-glass-line);
 }
-/* One step lighter on hover: a paler grey in light mode, the raised surface in dark. */
-.lp .btn-card:hover {
-  background: var(--card-hover);
+.lp .btn-neutral:hover {
+  background: var(--lp-muted);
+  box-shadow:
+    inset 0 0 0 1px var(--lp-glass-line),
+    var(--lp-btn-shadow);
 }
-.btn-surface {
-  background: var(--surface);
-  color: var(--fg);
+:root.dark .lp .btn-neutral,
+:root.dark .lp .btn-neutral:hover {
+  background: var(--lp-fg);
+  color: var(--lp-on-fg);
+  box-shadow: none;
 }
-.btn-ghost {
-  background: transparent;
-  color: var(--fg);
+:root.dark .lp .btn-neutral:hover {
+  background: color-mix(in srgb, var(--lp-fg) 88%, var(--lp-bg));
 }
 
 /* Sections */
@@ -812,16 +662,10 @@ section {
   pointer-events: none;
 }
 .hero {
-  padding: 9rem 0 8rem;
+  padding: 9rem 0 7rem;
 }
 .band {
-  padding: 8rem 0;
-}
-.muted-bg {
-  background: var(--muted);
-}
-.final {
-  padding: 9rem 0;
+  padding: 0 0 8rem;
 }
 .center {
   display: flex;
@@ -830,21 +674,10 @@ section {
   gap: 2rem;
   text-align: center;
 }
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: 4.5rem;
-}
-.heading {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 40rem;
-}
 .pill {
   padding: 0.25rem 0.625rem;
   border-radius: 6px;
-  background: var(--card);
+  background: var(--lp-card);
   font-size: 0.8125rem;
   font-weight: 500;
 }
@@ -858,13 +691,9 @@ section {
 }
 .lead {
   max-width: 38rem;
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
   font-size: 1.25rem;
   line-height: 1.6;
-}
-.lead-sm {
-  color: var(--muted-fg);
-  font-size: 1.25rem;
 }
 .cta-row {
   display: flex;
@@ -873,265 +702,183 @@ section {
   gap: 0.75rem;
   margin-top: 1rem;
 }
-.command {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  padding: 0 0.25rem 0 1.25rem;
-  border-radius: 10px;
-  background: var(--card);
-}
-.command code {
-  color: var(--fg);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.9375rem;
-}
-.eyebrow {
-  color: var(--muted-fg);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
 .lp h2 {
   font-size: 2.75rem;
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
-.lp .final-h {
-  font-size: 3rem;
+.lp h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
-.grid3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-.card {
+
+/* Section heads: a small label over the heading. */
+.section-head {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding: 2.25rem;
-  border-radius: 16px;
-  background: var(--card);
+  margin-bottom: 2.5rem;
 }
-.card.surface {
-  background: var(--surface);
+.center-head {
+  align-items: center;
+  text-align: center;
 }
-.card h3 {
-  font-size: 1.25rem;
+.eyebrow {
+  color: var(--lp-link);
+  font-size: 0.875rem;
   font-weight: 600;
 }
-.body {
-  color: var(--muted-fg);
-  font-size: 1rem;
-  line-height: 1.65;
-}
-.tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  margin-bottom: 1.25rem;
-  border-radius: 10px;
-  background: var(--tile);
+.section-lead {
+  max-width: 34rem;
+  color: var(--lp-muted-fg);
+  font-size: 1.125rem;
+  line-height: 1.55;
 }
 
-/* Component showcase */
-.showcase {
-  gap: 1.25rem;
+/* Showcase: the real components, with the theme chips that restyle them. */
+.showcase-band {
+  padding: 8rem 0;
 }
-.row {
+.showcase-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+.showcase-stack .section-head {
+  margin-bottom: 0;
+}
+/* The chips on the left, the call to make a theme on the right. */
+.theme-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+.lp .more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+.lp .more:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.theme-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-.label {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-.input {
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.625rem 0.875rem;
-  border: 1px solid var(--input);
-  border-radius: 10px;
-  background: var(--input-bg);
-  color: var(--fg);
-  font: inherit;
-  font-size: 0.9375rem;
-}
-.input::placeholder {
-  color: var(--muted-fg);
-}
-.badge {
-  padding: 0.25rem 0.625rem;
-  border-radius: 6px;
-  background: var(--surface);
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-.badge-primary {
-  background: var(--brand);
-  color: #ffffff;
-}
-.badge-inverse {
-  background: var(--fg);
-  color: var(--on-fg);
-}
-.tabs {
-  display: flex;
-  gap: 0.25rem;
-  padding: 0.25rem;
-  border-radius: 10px;
-  background: var(--surface);
-}
-.tab {
-  flex: 1;
-  min-height: 2.75rem;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--muted-fg);
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-}
-.tab[aria-selected='true'] {
-  background: var(--fg);
-  color: var(--on-fg);
-}
-
-/* CLI band: dark in both modes. */
-.inv {
-  background: var(--inverse);
-  color: #f5f5f7;
-}
-.lp .inv a {
-  color: #ff6b4f;
-}
-.lp .inv a:hover {
-  color: #ff8a73;
-}
-.spot-glow,
-.spot-grid {
-  opacity: 0;
-  transition: opacity 0.5s var(--ease);
-}
-.spot-glow {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    40rem circle at var(--mx, 70%) var(--my, 50%),
-    rgba(255, 107, 79, 0.16),
-    rgba(216, 42, 12, 0.06) 35%,
-    transparent 65%
-  );
-}
-.spot-grid {
-  mask-image: radial-gradient(16rem circle at var(--mx, 70%) var(--my, 50%), #000, transparent);
-}
-.spot-on .spot-glow,
-.spot-on .spot-grid {
-  opacity: 1;
-}
-.inv-muted {
-  color: #a1a1a6;
-}
-.with-icon {
-  display: flex;
+.theme-chip {
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--lp-glass-line);
+  border-radius: 999px;
+  background: var(--lp-surface);
+  color: var(--lp-muted-fg);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition:
+    color 0.2s var(--lp-ease),
+    border-color 0.2s var(--lp-ease),
+    box-shadow 0.25s var(--lp-ease);
 }
-.cli-grid {
+.theme-chip:hover {
+  color: var(--lp-fg);
+  box-shadow: var(--lp-btn-shadow);
+}
+.theme-chip[aria-pressed='true'] {
+  border-color: var(--lp-fg);
+  color: var(--lp-fg);
+}
+.chip-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+}
+.lp :deep(.demo-preview) {
+  /* No card: the tiles sit on the page. The frame reaches past the column by the showcase's padding, which
+     is only room for focus rings, so the tiles line up with the heading. */
+  inline-size: calc(100% + 0.5rem);
+  margin: 0 -0.25rem;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+/* The agent loop: three tiles, the audit across the full width. */
+.loop-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
-  align-items: center;
-  gap: 4.5rem;
-}
-.cli-copy {
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
 }
-.cli-lead {
-  color: #a1a1a6;
-  font-size: 1.125rem;
+.feature {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 2rem;
+  border: 1px solid var(--lp-glass-line);
+  border-radius: 20px;
+  background: var(--lp-muted);
+}
+.feature-wide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: center;
+  gap: 2.5rem;
+}
+.feature-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+}
+.feature-copy p {
+  color: var(--lp-muted-fg);
   line-height: 1.55;
 }
-.cli-lead code {
-  color: #f5f5f7;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+.feature-cmd {
+  margin-bottom: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--lp-glass-line);
+  background: var(--lp-surface);
+  color: var(--lp-fg);
+  font-family: var(--lp-font-mono);
+  font-size: 0.8125rem;
 }
-.windows {
-  position: relative;
-  min-width: 0;
-  padding-bottom: 4.5rem;
+.feature > .win {
+  margin-top: auto;
 }
-.halo {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--halo);
-  pointer-events: none;
-}
-.halo-a {
-  top: 0;
-  left: 2%;
-  width: 96%;
-  height: 96%;
-  filter: blur(96px);
-  opacity: var(--halo-a);
-}
-.halo-b {
-  top: 38%;
-  left: 42%;
-  width: 56%;
-  height: 56%;
-  filter: blur(84px);
-  opacity: var(--halo-b);
-}
+
+/* A window: a title bar over a code panel. */
 .win {
+  min-width: 0;
   padding: 6px;
-  backdrop-filter: saturate(140%) blur(16px);
-}
-.win-editor {
-  position: relative;
-  margin-right: 2.5rem;
-  border: 1px solid rgba(245, 245, 247, 0.1);
-  border-radius: 20px;
-  background: rgba(245, 245, 247, 0.03);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 2px 6px rgba(0, 0, 0, 0.25),
-    0 24px 48px -12px rgba(0, 0, 0, 0.55),
-    0 48px 96px -24px rgba(0, 0, 0, 0.45);
-}
-.win-term {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: calc(100% - 4rem);
-  border: 1px solid rgba(245, 245, 247, 0.16);
-  border-radius: 18px;
-  background: rgba(44, 44, 48, 0.28);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.3),
-    0 28px 56px -12px rgba(0, 0, 0, 0.65),
-    0 60px 120px -30px rgba(0, 0, 0, 0.55);
-  backdrop-filter: saturate(150%) blur(18px);
+  border: 1px solid var(--lp-glass-line);
+  border-radius: 16px;
+  background: var(--lp-card-hover);
+  box-shadow: var(--lp-btn-shadow);
 }
 .win-bar {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.625rem 0.75rem 0.625rem 0.875rem;
-  color: #a1a1a6;
+  padding: 0.375rem 0.625rem 0.625rem;
+  color: var(--lp-muted-fg);
   font-size: 0.8125rem;
   font-weight: 500;
 }
@@ -1143,104 +890,155 @@ section {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(245, 245, 247, 0.18);
+  background: var(--lp-input);
 }
-.win pre {
+.win-pre,
+.term {
   margin: 0;
+  padding: 1rem 1.25rem;
   overflow-x: auto;
-  color: #f5f5f7;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.9375rem;
+  border: 1px solid var(--lp-glass-line);
+  border-radius: 11px;
+  background: var(--lp-surface);
+  color: var(--lp-fg);
+  font-family: var(--lp-font-mono);
+  font-size: 0.875rem;
   line-height: 1.75;
   white-space: pre;
 }
-.editor-pre {
-  padding: 1.125rem 1.375rem 5rem;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.2);
+.term {
+  overflow: visible;
+  white-space: normal;
 }
-.term-pre {
-  padding: 0.5rem 1rem 1rem;
+/* A finding: where, which rule, then the message, which wraps under itself. */
+.term-line {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 0 0.75rem;
+}
+.term-line.full {
+  display: block;
 }
 .t-p {
-  color: #a1a1a6;
+  color: var(--lp-muted-fg);
 }
 .t-k {
-  color: #ff6b4f;
+  color: var(--lp-link);
 }
 
-/* Footer */
-.ft {
-  padding: 4.5rem 0 2.5rem;
-  background: var(--muted);
+/* The first section: the prompt to paste into a coding agent, on a light grey band. */
+.prompt-band {
+  padding: 6rem 0;
+  background: var(--lp-muted);
 }
-.ft-stack {
+
+/* The closing call to action. */
+.quick-stack {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  align-items: center;
+  gap: 2.5rem;
 }
-.ft-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 2.5rem 2rem;
+.quick-stack .section-head {
+  margin-bottom: 0;
 }
-.ft-brand {
+.prompt {
   display: flex;
-  flex-direction: column;
-  grid-column: span 2;
+  align-items: center;
   gap: 1rem;
+  width: 100%;
+  max-width: 46rem;
+  padding: 1rem 1rem 1rem 1.5rem;
+  text-align: left;
+  border: 1px solid var(--lp-glass-line);
+  position: relative;
+  border-radius: 16px;
+  background: var(--lp-surface);
+  font: inherit;
+  cursor: pointer;
+  box-shadow: var(--lp-btn-shadow);
+  transition:
+    box-shadow 0.3s var(--lp-ease),
+    border-color 0.3s var(--lp-ease);
 }
-.ft-brand p {
-  max-width: 18rem;
-  color: var(--muted-fg);
-  font-size: 0.875rem;
+/* On hover (or keyboard focus): a soft brand glow round the box, and a tooltip above it. */
+.prompt:hover,
+.prompt:focus-visible {
+  border-color: color-mix(in srgb, var(--lp-brand) 35%, transparent);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--lp-brand) 8%, transparent),
+    0 12px 40px -8px color-mix(in srgb, var(--lp-brand) 35%, transparent);
+}
+.prompt-tip {
+  position: absolute;
+  bottom: calc(100% + 0.625rem);
+  left: 50%;
+  padding: 0.375rem 0.625rem;
+  border-radius: 8px;
+  background: var(--lp-fg);
+  color: var(--lp-on-fg);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 0.25rem);
+  transition:
+    opacity 0.2s var(--lp-ease),
+    transform 0.2s var(--lp-ease);
+}
+.prompt:hover .prompt-tip,
+.prompt:focus-visible .prompt-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.prompt code {
+  flex: 1;
+  color: var(--lp-fg);
+  font-family: var(--lp-font-mono);
+  font-size: 0.9375rem;
   line-height: 1.6;
 }
-.ft-col {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.ft-title {
-  margin-bottom: 0.25rem !important;
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
-.lp .ft-col a {
-  color: var(--muted-fg);
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-.lp .ft-col a:hover {
-  color: var(--fg);
-}
-.ft-bottom {
-  display: flex;
-  flex-wrap: wrap;
+/* The copy state: a copy icon, then a check in brand red once the prompt is on the clipboard. */
+.copy-mark {
+  display: inline-flex;
+  flex: none;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem 1.5rem;
-  color: var(--muted-fg);
-  font-size: 0.8125rem;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 10px;
+  background: var(--lp-tile);
+  color: var(--lp-muted-fg);
+  transition:
+    color 0.2s var(--lp-ease),
+    background-color 0.2s var(--lp-ease);
+}
+.prompt:hover .copy-mark {
+  color: var(--lp-fg);
+}
+.prompt .copy-mark.is-copied {
+  background: color-mix(in srgb, var(--lp-brand) 12%, transparent);
+  color: var(--lp-link);
 }
 
-/* Color mode: VitePress sets html.dark before the page paints. */
-:root.dark .if-light,
-:root:not(.dark) .if-dark {
-  display: none;
+/* Footer: one line of credit, on the content column's left edge. */
+.ft {
+  padding: 2rem 0;
+  border-top: 1px solid var(--lp-glass-line);
+}
+.ft-note {
+  color: var(--lp-muted-fg);
+  font-size: 0.875rem;
+}
+.lp .ft-note a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* Responsive */
 .show-sm {
   display: none !important;
-}
-@media (max-width: 900px) {
-  .ft-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .ft-brand {
-    grid-column: 1 / -1;
-  }
 }
 @media (min-width: 761px) {
   .mobile-nav {
@@ -1255,42 +1053,59 @@ section {
   .show-sm {
     display: inline-flex !important;
   }
-  .hero,
-  .band,
-  .final {
-    padding-top: 5.5rem;
+  /* A whole number of lattice rows (24px), so the lattice still meets the mark. */
+  .hero {
+    padding-top: 6rem;
     padding-bottom: 5.5rem;
   }
-  .grid3 {
-    grid-template-columns: 1fr;
+  .showcase-band,
+  .band {
+    padding-bottom: 5.5rem;
+  }
+  .prompt-band {
+    padding: 4rem 0;
+  }
+  .showcase-band {
+    padding-top: 5.5rem;
   }
   .hero-h {
     font-size: 2.5rem;
   }
-  .win-editor {
-    margin-right: 0.75rem;
+  .lp h2 {
+    font-size: 2rem;
   }
-  .win-term {
-    width: calc(100% - 1.25rem);
+  .loop-grid,
+  .feature-wide {
+    grid-template-columns: minmax(0, 1fr);
   }
-  .win pre {
+  .feature {
+    padding: 1.5rem;
+  }
+  .win-pre,
+  .term {
     font-size: 0.8125rem;
+  }
+  .win-pre {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
-}
-@media (max-width: 480px) {
-  .ft-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .term {
+    overflow-wrap: anywhere;
+  }
+  .term-line {
+    display: block;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .site-header::before,
   .bar,
-  .spot-glow,
-  .spot-grid,
-  .btn {
+  .btn,
+  .theme-chip {
+    transition: none;
+  }
+  .prompt,
+  .prompt-tip {
     transition: none;
   }
 }
