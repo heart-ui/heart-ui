@@ -628,6 +628,8 @@ async function copyPrompt() {
 }
 /* The secondary action: white with a hairline edge and no shadow (the lift comes on hover) in light mode, light grey in dark mode (as the header's
    Get started), a shade deeper on hover. The edge is an inset shadow, so the button keeps its size. */
+/* The secondary button follows the page: a white surface in light mode, a dark one in dark mode, with a
+   hairline edge, tinting toward the text color on hover. */
 .lp .btn-neutral,
 .lp .btn-neutral:hover {
   background: var(--lp-surface);
@@ -635,19 +637,10 @@ async function copyPrompt() {
   box-shadow: inset 0 0 0 1px var(--lp-glass-line);
 }
 .lp .btn-neutral:hover {
-  background: var(--lp-muted);
+  background: color-mix(in srgb, var(--lp-surface) 92%, var(--lp-fg));
   box-shadow:
     inset 0 0 0 1px var(--lp-glass-line),
     var(--lp-btn-shadow);
-}
-:root.dark .lp .btn-neutral,
-:root.dark .lp .btn-neutral:hover {
-  background: var(--lp-fg);
-  color: var(--lp-on-fg);
-  box-shadow: none;
-}
-:root.dark .lp .btn-neutral:hover {
-  background: color-mix(in srgb, var(--lp-fg) 88%, var(--lp-bg));
 }
 
 /* Sections */
