@@ -7,4 +7,4 @@ search: false
 import Demo from '../.vitepress/theme/ComponentShowcase.vue'
 </script>
 
-<div class="heart-demo"><Demo /></div>
+<div class="heart-demo heart-demo--bare"><Demo /></div>

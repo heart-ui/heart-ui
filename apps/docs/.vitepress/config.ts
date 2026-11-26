@@ -9,6 +9,9 @@ const repo = fileURLToPath(new URL('../../../', import.meta.url))
 const registry = `${repo}registry`
 const items = docsItems()
 const github = 'https://github.com/heart-ui/heart-ui'
+// VitePress exports its dist files but doesn't re-export these components from vitepress/theme.
+const appearance = (name: string) =>
+  fileURLToPath(import.meta.resolve(`vitepress/dist/client/theme-default/components/${name}.vue`))
 const guideTitle = (name: string) =>
   markdownTitle(readFileSync(`${repo}docs/${name}.md`, 'utf8')) ?? name
 
@@ -68,8 +71,9 @@ export default defineConfig({
     // The landing page's mark and wordmark.
     logo: { src: '/logo.svg', alt: '' },
     siteTitle: 'heart-ui',
+    // The landing page's header reads these too, so the two headers list the same links.
     nav: [
-      { text: 'Get started', link: '/start/getting-started', activeMatch: '^/start/' },
+      { text: 'Docs', link: '/start/getting-started', activeMatch: '^/start/' },
       { text: 'Guides', link: `/guide/${guides[0]}`, activeMatch: '^/guide/' },
       { text: 'Components', link: '/components/', activeMatch: '^/components/' },
     ],
@@ -106,6 +110,9 @@ export default defineConfig({
         // Registry items import shared code as the CLI writes it: `@/lib/...`, `@/components/ui/...`.
         '@/lib': `${registry}/lib`,
         '@/components/ui': `${registry}/ui`,
+        // The docs' appearance switches, for the landing page's header (theme/appearance.d.ts types them).
+        'vitepress-appearance/switch': appearance('VPSwitchAppearance'),
+        'vitepress-appearance/screen': appearance('VPNavScreenAppearance'),
       },
       // registry/ resolves vue from the root node_modules; dedupe keeps one copy if versions drift.
       dedupe: ['vue'],

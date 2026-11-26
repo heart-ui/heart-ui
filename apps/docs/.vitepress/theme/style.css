@@ -106,3 +106,9 @@
   background-color: var(--h-background);
   color: var(--h-foreground);
 }
+
+/* The landing page's showcase sits on the landing page itself: no surface of its own. */
+:root:root:has(.heart-demo--bare),
+:root:root:has(.heart-demo--bare) body {
+  background-color: transparent;
+}

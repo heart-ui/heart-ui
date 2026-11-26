@@ -39,7 +39,7 @@ const pending = [
 <template>
   <!-- A bento grid: a large form tile, a wide settings tile, two small tiles, then a wide tabs tile and an
        alert. One column on a phone. -->
-  <div class="grid grid-flow-dense grid-cols-1 gap-gap-lg p-6 md:grid-cols-4">
+  <div class="grid grid-flow-dense grid-cols-1 gap-gap-lg p-1 md:grid-cols-4">
     <Card as="section" aria-labelledby="sc-invite" class="md:col-span-2 md:row-span-2">
       <CardHeader>
         <CardTitle id="sc-invite" as="h2">Invite a teammate</CardTitle>

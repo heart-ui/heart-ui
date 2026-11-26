@@ -1,14 +1,16 @@
 // What the landing page states about the library, read from the repo at build time so it matches what ships:
-// the theme presets, the CLI's version and the audit checklist.
+// the number of published components, the theme presets, the CLI's version and the audit checklist.
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { defineLoader } from 'vitepress'
+import { docsItems } from '../../scripts/items.ts'
 
 const repo = join(import.meta.dirname, '../../../..')
 const read = (...path: string[]) => readFileSync(join(repo, ...path), 'utf8')
 
 export interface LandingData {
   version: string
+  components: number
   themes: { name: string; primary: string; radius: number; density: string; shadow: string }[]
   checks: { id: string; text: string }[]
 }
@@ -29,6 +31,7 @@ function checks() {
 
 export default defineLoader({
   watch: [
+    '../../../../registry/ui/*/item.json',
     '../../../../registry/themes/*.json',
     '../../../../packages/cli/package.json',
     '../../../../docs/agent-support.md',
@@ -56,6 +59,7 @@ export default defineLoader({
       }))
     return {
       version: (JSON.parse(read('packages/cli/package.json')) as { version: string }).version,
+      components: docsItems().length,
       themes,
       checks: checks(),
     }
