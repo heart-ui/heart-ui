@@ -1,0 +1,16 @@
+{
+  "name": "accordion",
+  "type": "registry:ui",
+  "title": "Accordion",
+  "description": "Headed sections that show and hide their content, one or several open at a time.",
+  "dependencies": ["reka-ui@2.11.0"],
+  "registryDependencies": ["utils", "icon"],
+  "files": [
+    "Accordion.vue",
+    "AccordionItem.vue",
+    "AccordionTrigger.vue",
+    "AccordionContent.vue",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}

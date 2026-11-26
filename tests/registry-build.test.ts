@@ -80,6 +80,7 @@ describe('registry:build', () => {
       expect(validateIndex(index), JSON.stringify(validateIndex.errors)).toBe(true)
       const names = (index.items as { name: string }[]).map((entry) => entry.name).sort()
       expect(names).toEqual([
+        'accordion',
         'alert',
         'avatar',
         'badge',

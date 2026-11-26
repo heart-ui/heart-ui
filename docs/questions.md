@@ -3,6 +3,17 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-26 P2-11: the catalog row for `accordion` names the parts and
+  `type`, but no defaults, no heading element and no animation. Chose:
+  `type` `single` and `collapsible` `true` by default (a second click
+  closes the open item), plus `disabled`, `defaultValue` and `v-model`;
+  `AccordionTrigger` renders Reka's `h3` header with a turning
+  `chevron-down`; the content animates its height from a keyframe in a
+  private `@layer heart-accordion`, timed by `--h-duration-normal` (0 ms
+  under reduced motion). Why: matches what people expect from an FAQ,
+  keeps to three parts as the catalog lists, and needs no token or
+  `theme.css` change. Decided by the agent (delegated).
+
 - 2026-11-26 P2-10: the catalog row for `popover` names the parts and
   Content `side` and `align`, but no defaults, root props, size or close
   button. Chose: `Popover` with `v-model:open` and `modal` (default
