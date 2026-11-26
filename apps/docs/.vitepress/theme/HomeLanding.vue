@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useData } from 'vitepress'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { data } from './landing.data.ts'
 
 // The landing page draws its own header and footer (index.md sets `layout: false`), and shares VitePress's
 // appearance setting, so the color mode chosen here is the one the docs pages open in. The server renders
@@ -8,7 +9,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 const { isDark } = useData()
 
 const github = 'https://github.com/heart-ui/heart-ui'
-const command = 'npx heart-ui@latest init'
+const command = 'npx heart-ui init'
 
 const nav = [
   { text: 'Docs', link: '/start/getting-started' },
@@ -47,23 +48,22 @@ const footer = [
   },
 ]
 
-// Only what ships today (docs/agent-support.md): AGENTS.md from init, per-item docs with type-checked
-// examples, and `heart-ui audit`. The MCP server and benchmark join this list when they land.
+// What the alpha gives an agent (docs/agent-support.md). The MCP server and the benchmark are not in it yet.
 const features = [
   {
     icon: 'doc',
-    title: 'Rules in AGENTS.md',
-    text: 'heart-ui init writes the screen workflow and the hard rules into AGENTS.md, so your agent has them from the first prompt.',
+    title: 'AGENTS.md',
+    text: 'heart-ui init writes it: where the components live, a step-by-step screen workflow, and the rules, such as token utilities only and one primary action per view.',
   },
   {
     icon: 'code',
-    title: 'APIs it can’t misread',
-    text: 'Every component has Markdown docs that say when to use it, with examples type-checked against its real props.',
+    title: 'A Markdown spec per component',
+    text: 'When to use it, its props, slots, events, keyboard and accessibility. The examples in it are type-checked against the component.',
   },
   {
     icon: 'check',
-    title: 'Checked, not trusted',
-    text: 'heart-ui audit flags raw values, extra primary actions, missing states and unnamed controls in what your agent writes.',
+    title: 'heart-ui audit',
+    text: 'Reads screen files without running them and reports each break of the checklist below, so an agent can fix its own work.',
   },
 ] as const
 
@@ -126,8 +126,6 @@ async function copyCommand() {
   clearTimeout(copiedTimer)
   copiedTimer = setTimeout(() => (copied.value = false), 2000)
 }
-
-const selectedTab = ref<'preview' | 'code'>('preview')
 
 // Workflow band: a glow and a brighter patch of lattice follow a mouse or pen. The position goes straight
 // into CSS variables once per frame, so moving the pointer never re-renders the component.
@@ -241,7 +239,7 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
               <path
                 d="M0 0V40M34.64 0V40M0 0L69.28 40M0 40L69.28 0"
                 fill="none"
-                stroke="var(--lattice)"
+                stroke="var(--lp-lattice)"
               />
             </pattern>
             <radialGradient id="lp-fade-hero-g" cx="0.5" cy="0.38" r="0.5">
@@ -258,11 +256,10 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
           <svg viewBox="140 230 744 560" width="88" height="66" aria-hidden="true">
             <use href="#lp-mark" />
           </svg>
-          <span class="pill">Vue 3 · Nuxt · Agent-ready</span>
-          <h1 class="hero-h">UI your coding agent gets right.</h1>
+          <span class="pill">Alpha · v{{ data.version }}</span>
+          <h1 class="hero-h">The Vue UI library built for coding agents.</h1>
           <p class="lead">
-            Vue and Nuxt components copied into your project as source you own, with the rules,
-            typed APIs and checks an agent needs to build screens without guessing.
+            Source you own, rules your agent follows, and an audit that checks its work.
           </p>
           <div class="cta-row">
             <a href="/start/getting-started" class="btn btn-primary btn-lg">
@@ -271,7 +268,7 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
                 <path :d="icons.arrow" fill="currentColor" />
               </svg>
             </a>
-            <a href="/components/" class="btn btn-card btn-lg">Browse components</a>
+            <a href="/components/" class="btn btn-outline btn-lg">Browse components</a>
           </div>
           <div class="command">
             <code>{{ command }}</code>
@@ -292,14 +289,60 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
         </div>
       </section>
 
-      <section class="band muted-bg">
+      <section class="band" aria-labelledby="lp-components">
         <div class="wrap stack">
           <div class="heading">
-            <p class="eyebrow">BUILT FOR AGENTS</p>
-            <h2>Nothing left to guess.</h2>
+            <h2 id="lp-components">{{ data.components.length }} components</h2>
+            <p class="intro">
+              Each is a Vue file in <code>components/ui/</code> that you read and change like your
+              own code. Its page has a live demo, its props, slots and events, its tokens and its
+              keyboard support.
+            </p>
+          </div>
+          <ul class="comp-grid">
+            <li v-for="item in data.components" :key="item.name">
+              <a :href="`/components/${item.name}`">{{ item.title }}</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="band muted-bg" aria-labelledby="lp-themes">
+        <div class="wrap stack">
+          <div class="heading">
+            <h2 id="lp-themes">{{ data.themes.length }} themes</h2>
+            <p class="intro">
+              Pick one with <code>npx heart-ui init --theme &lt;name&gt;</code>. A theme sets the
+              primary colour, the neutral tint, the corner radius, the density and the shadow.
+              <a href="/start/theming">Theming</a>
+            </p>
+          </div>
+          <ul class="theme-grid">
+            <li v-for="theme in data.themes" :key="theme.name" class="theme-card">
+              <span
+                class="swatch"
+                :style="{ background: theme.primary, borderRadius: `${theme.radius}rem` }"
+                aria-hidden="true"
+              />
+              <span class="theme-name">{{ theme.name }}</span>
+              <span class="meta">{{ theme.radius }}rem radius</span>
+              <span class="meta">{{ theme.density }} density</span>
+              <span class="meta">{{ theme.shadow === 'none' ? 'no' : theme.shadow }} shadow</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="band" aria-labelledby="lp-agents">
+        <div class="wrap stack">
+          <div class="heading">
+            <h2 id="lp-agents">For coding agents</h2>
+            <p class="intro">
+              Three things in the alpha are written for an agent to read and follow.
+            </p>
           </div>
           <div class="grid3">
-            <div v-for="feature in features" :key="feature.title" class="card surface">
+            <div v-for="feature in features" :key="feature.title" class="card">
               <div class="tile">
                 <svg width="24" height="24" viewBox="0 0 20 20" aria-hidden="true">
                   <path :d="icons[feature.icon]" fill="currentColor" />
@@ -309,50 +352,14 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
               <p class="body">{{ feature.text }}</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section class="band">
-        <div class="wrap stack">
-          <div class="heading">
-            <p class="eyebrow">COMPONENTS</p>
-            <h2>Source your agent can read.</h2>
-          </div>
-          <div class="grid3">
-            <div class="card showcase">
-              <p class="eyebrow">BUTTON</p>
-              <div class="row">
-                <button type="button" class="btn btn-primary">Primary</button>
-                <button type="button" class="btn btn-surface">Secondary</button>
-                <button type="button" class="btn btn-ghost">Ghost</button>
-              </div>
-            </div>
-            <div class="card showcase">
-              <p class="eyebrow">INPUT</p>
-              <label for="lp-email" class="label">Email</label>
-              <input id="lp-email" type="email" placeholder="you@example.com" class="input" />
-            </div>
-            <div class="card showcase">
-              <p class="eyebrow">BADGE · TABS</p>
-              <div class="row">
-                <span class="badge">Default</span>
-                <span class="badge badge-primary">New</span>
-                <span class="badge badge-inverse">Beta</span>
-              </div>
-              <div role="tablist" aria-label="Example tabs" class="tabs">
-                <button
-                  v-for="tab in ['preview', 'code'] as const"
-                  :key="tab"
-                  type="button"
-                  role="tab"
-                  :aria-selected="selectedTab === tab"
-                  class="tab"
-                  @click="selectedTab = tab"
-                >
-                  {{ tab === 'preview' ? 'Preview' : 'Code' }}
-                </button>
-              </div>
-            </div>
+          <div class="checklist">
+            <h3>What <code>heart-ui audit</code> checks</h3>
+            <ol>
+              <li v-for="check in data.checks" :key="check.id">
+                <span class="check-id">{{ check.id }}</span>
+                <span>{{ check.text }}</span>
+              </li>
+            </ol>
           </div>
         </div>
       </section>
@@ -398,23 +405,24 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
         </svg>
         <div class="wrap cli-grid">
           <div class="cli-copy">
-            <p class="eyebrow inv-muted with-icon">
-              <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-                <path :d="icons.code" fill="currentColor" />
-              </svg>
-              WORKFLOW
-            </p>
-            <h2>Your agent builds. The audit checks.</h2>
+            <h2>{{ data.commands.length }} commands</h2>
+            <p class="cli-lead">Run them with <code>npx heart-ui</code> in a Vite or Nuxt 4 app.</p>
+            <dl class="cmd-list">
+              <div v-for="cmd in data.commands" :key="cmd.name">
+                <dt>
+                  <code>{{ cmd.name }}</code>
+                </dt>
+                <dd>{{ cmd.summary }}</dd>
+              </div>
+            </dl>
             <p class="cli-lead">
-              Rules land in <code>AGENTS.md</code>, components in <code>components/ui</code>, and
-              every screen passes <code>heart-ui audit</code> before you review it.
               <a href="/start/getting-started">Read the getting started guide</a>
             </p>
           </div>
           <div class="windows">
             <div class="halo halo-a" aria-hidden="true" />
             <div class="halo halo-b" aria-hidden="true" />
-            <div class="win win-editor" role="img" aria-label="AGENTS.md in a code editor">
+            <div class="win win-editor" role="img" aria-label="The rules section of AGENTS.md">
               <div class="win-bar">
                 <span class="dots" aria-hidden="true"><span /><span /><span /></span>
                 <span>AGENTS.md</span>
@@ -422,24 +430,69 @@ onBeforeUnmount(() => cancelAnimationFrame(spotFrame))
               <pre class="editor-pre"><span class="t-k">## Rules</span>
 
 <span class="t-p">-</span> Semantic token utilities only.
-<span class="t-p">-</span> No raw values: no hex, no px.
+<span class="t-p">-</span> No raw values.
 <span class="t-p">-</span> One primary action per view.
 <span class="t-p">-</span> Every data region handles empty,
-  loading, error and long content.
+  loading, error, and long content.
 
 <span class="t-k">## Verify</span>
 
-Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
+Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span> on every
+screen you change.</pre>
             </div>
-            <div class="win win-term" role="img" aria-label="Terminal">
+            <div class="win win-term" role="img" aria-label="A terminal running heart-ui commands">
               <div class="win-bar">
                 <span class="dots" aria-hidden="true"><span /><span /><span /></span>
                 <span>Terminal</span>
               </div>
-              <pre
-                class="term-pre"
-              ><span class="t-p">$</span> npx heart-ui audit src/pages/Settings.vue
-<span class="t-p">No failures in 1 file.</span></pre>
+              <pre class="term-pre"><span class="t-p">$</span> npx heart-ui init
+<span class="t-p">$</span> npx heart-ui add button dialog
+<span class="t-p">$</span> npx heart-ui audit src/pages/Settings.vue</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="band muted-bg" aria-labelledby="lp-status">
+        <div class="wrap stack">
+          <div class="heading">
+            <h2 id="lp-status">Status</h2>
+            <p class="intro">
+              Heart UI is in alpha. APIs can change before the first stable release.
+            </p>
+          </div>
+          <div class="grid3">
+            <div class="card surface">
+              <h3>In v{{ data.version }}</h3>
+              <ul class="facts">
+                <li>{{ data.components.length }} components</li>
+                <li>{{ data.themes.length }} theme presets and dark mode</li>
+                <li>The heart-ui CLI: {{ data.commands.map((cmd) => cmd.name).join(', ') }}</li>
+                <li>AGENTS.md, written by <code>init</code></li>
+                <li>@heart-ui/theme, the tokens as CSS</li>
+              </ul>
+            </div>
+            <div class="card surface">
+              <h3>Not yet</h3>
+              <ul class="facts">
+                <li>
+                  Layouts. Audit check A1 looks for one, so it fails on every screen until they
+                  ship.
+                </li>
+                <li>Blocks</li>
+                <li>The MCP server</li>
+                <li>The ESLint plugin as a package</li>
+                <li>Charts</li>
+              </ul>
+            </div>
+            <div class="card surface">
+              <h3>Requirements</h3>
+              <ul class="facts">
+                <li>Node 22.18 or later</li>
+                <li>Vue 3.5 or later, TypeScript 6</li>
+                <li>Tailwind CSS 4</li>
+                <li>A Vite or Nuxt 4 app</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -447,8 +500,8 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
 
       <section class="band final">
         <div class="wrap center">
-          <h2 class="final-h">Hand it to your agent.</h2>
-          <p class="lead-sm">One command sets up the components, the rules and the checks.</p>
+          <h2 class="final-h">Try the alpha.</h2>
+          <p class="lead-sm">Set up a Vite or Nuxt 4 app, then add the components you need.</p>
           <a href="/start/getting-started" class="btn btn-primary btn-lg">
             Get started
             <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
@@ -494,83 +547,24 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
 </template>
 
 <style scoped>
-/* The landing page's own palette, from its design; the docs pages keep VitePress's. */
+/* The palette is in landing-tokens.css, shared with the docs pages. */
 .lp {
-  --bg: #ffffff;
-  --muted: #f5f5f7;
-  --card: #f5f5f7;
-  --card-hover: #fafafb;
-  --surface: #ffffff;
-  --tile: #f5f5f7;
-  --fg: #1d1d1f;
-  --on-fg: #f5f5f7;
-  --muted-fg: #6e6e73;
-  --input: #86868b;
-  --input-bg: #ffffff;
-  --brand: #d82a0c;
-  --brand-hover: #c4250a;
-  --link: #d82a0c;
-  --link-hover: #c4250a;
-  --inverse: #1d1d1f;
-  --glass: rgba(255, 255, 255, 0.72);
-  --glass-solid: rgba(255, 255, 255, 0.88);
-  --glass-line: rgba(0, 0, 0, 0.06);
-  --lattice: rgba(29, 29, 31, 0.07);
-  --halo: #000000;
-  --halo-a: 0.5;
-  --halo-b: 0.35;
-  --ease: cubic-bezier(0.32, 0.72, 0, 1);
-  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 14px -4px rgba(0, 0, 0, 0.08);
-  --btn-shadow-primary: 0 1px 2px rgba(216, 42, 12, 0.06), 0 6px 18px -6px rgba(216, 42, 12, 0.28);
-
   position: relative;
   min-height: 100vh;
-  background: var(--bg);
-  color: var(--fg);
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
+  background: var(--lp-bg);
+  color: var(--lp-fg);
+  font-family: var(--lp-font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-:root.dark .lp {
-  --bg: #0a0a0b;
-  --muted: #121214;
-  --card: #121214;
-  --card-hover: #1a1a1d;
-  --surface: #1a1a1d;
-  --tile: #232326;
-  --fg: #f5f5f7;
-  --on-fg: #0a0a0b;
-  --muted-fg: #a1a1a6;
-  --input: #6e6e73;
-  --input-bg: #0a0a0b;
-  --link: #ff6b4f;
-  --link-hover: #ff8a73;
-  --inverse: #000000;
-  --glass: rgba(10, 10, 11, 0.72);
-  --glass-solid: rgba(10, 10, 11, 0.88);
-  --glass-line: rgba(255, 255, 255, 0.08);
-  --lattice: rgba(245, 245, 247, 0.06);
-  --halo: #f5f5f7;
-  --halo-a: 0.08;
-  --halo-b: 0.06;
-  --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 4px 14px -4px rgba(0, 0, 0, 0.4);
-  /* A red glow muddies on near-black: hover brightens the button and lifts it with a neutral shadow. */
-  --brand-hover: #de3412;
-  --btn-shadow-primary: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 2px 8px -2px rgba(0, 0, 0, 0.6);
-}
-
 .lp a {
-  color: var(--link);
+  color: var(--lp-link);
 }
 .lp a:hover {
-  color: var(--link-hover);
+  color: var(--lp-link-hover);
 }
 .lp :focus-visible {
-  outline: 2px solid var(--link);
+  outline: 2px solid var(--lp-link);
   outline-offset: 2px;
 }
 .lp h1,
@@ -616,36 +610,36 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   margin-bottom: -6rem;
   border-bottom: 1px solid transparent;
   transition:
-    border-color 0.5s var(--ease),
-    margin-bottom 0.5s var(--ease);
+    border-color 0.5s var(--lp-ease),
+    margin-bottom 0.5s var(--lp-ease);
 }
 .site-header::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-color: var(--glass);
+  background-color: var(--lp-glass);
   backdrop-filter: saturate(140%) blur(20px);
   opacity: 0;
   transition:
-    opacity 0.5s var(--ease),
-    background-color 0.5s var(--ease);
+    opacity 0.5s var(--lp-ease),
+    background-color 0.5s var(--lp-ease);
 }
 .site-header.is-scrolled,
 .site-header.menu-open {
   margin-bottom: -4rem;
-  border-bottom-color: var(--glass-line);
+  border-bottom-color: var(--lp-glass-line);
 }
 .site-header.is-scrolled::before,
 .site-header.menu-open::before {
   opacity: 1;
 }
 .site-header.menu-open::before {
-  background-color: var(--glass-solid);
+  background-color: var(--lp-glass-solid);
 }
 @supports not (backdrop-filter: blur(1px)) {
   .site-header::before {
-    background-color: var(--glass-solid);
+    background-color: var(--lp-glass-solid);
   }
 }
 .bar {
@@ -654,7 +648,7 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   justify-content: space-between;
   gap: 1rem;
   height: 6rem;
-  transition: height 0.5s var(--ease);
+  transition: height 0.5s var(--lp-ease);
 }
 .is-scrolled .bar,
 .menu-open .bar {
@@ -667,7 +661,7 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  color: var(--fg);
+  color: var(--lp-fg);
   font-weight: 600;
   text-decoration: none;
 }
@@ -677,11 +671,11 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   font-size: 0.875rem;
 }
 .lp .nav-links a {
-  color: var(--fg);
+  color: var(--lp-fg);
   text-decoration: none;
 }
 .lp .nav-links a:hover {
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
 }
 .actions {
   display: flex;
@@ -703,7 +697,7 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: var(--fg);
+  color: var(--lp-fg);
   text-decoration: none;
 }
 .mobile-actions {
@@ -726,11 +720,11 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   border: 0;
   border-radius: 10px;
   background: transparent;
-  color: var(--fg);
+  color: var(--lp-fg);
   cursor: pointer;
 }
 .icon-btn.muted {
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
 }
 .lp .btn {
   display: inline-flex;
@@ -747,15 +741,15 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
   text-decoration: none;
   cursor: pointer;
   transition:
-    box-shadow 0.25s var(--ease),
-    background-color 0.25s var(--ease);
+    box-shadow 0.25s var(--lp-ease),
+    background-color 0.25s var(--lp-ease);
 }
 /* A light lift on hover; the primary button's shadow takes its own hue. */
 .lp .btn:hover {
-  box-shadow: var(--btn-shadow);
+  box-shadow: var(--lp-btn-shadow);
 }
 .lp .btn-primary:hover {
-  box-shadow: var(--btn-shadow-primary);
+  box-shadow: var(--lp-btn-shadow-primary);
 }
 .lp .btn-ghost:hover {
   box-shadow: none;
@@ -771,33 +765,46 @@ Run <span class="t-k">`heart-ui audit &lt;files&gt;`</span>.</pre>
 }
 .lp .btn-primary,
 .lp .btn-primary:hover {
-  background: var(--brand);
-  color: #ffffff;
+  background: var(--lp-brand);
+  color: var(--lp-on-brand);
 }
 .lp .btn-primary:hover {
-  background: var(--brand-hover);
+  background: var(--lp-brand-hover);
 }
 .lp .btn-inverse,
 .lp .btn-inverse:hover {
-  background: var(--fg);
-  color: var(--on-fg);
+  background: var(--lp-fg);
+  color: var(--lp-on-fg);
 }
 .lp .btn-card,
 .lp .btn-card:hover {
-  background: var(--card);
-  color: var(--fg);
+  background: var(--lp-card);
+  color: var(--lp-fg);
 }
 /* One step lighter on hover: a paler grey in light mode, the raised surface in dark. */
 .lp .btn-card:hover {
-  background: var(--card-hover);
+  background: var(--lp-card-hover);
+}
+/* The secondary action: an edge, no fill. The border sits inside the padding, so it is the size of the others. */
+.lp .btn-outline,
+.lp .btn-outline:hover {
+  border: 1px solid var(--lp-input);
+  background: transparent;
+  color: var(--lp-fg);
+}
+.lp .btn-outline.btn-lg {
+  padding: calc(0.75rem - 1px) calc(1.5rem - 1px);
+}
+.lp .btn-outline:hover {
+  background: var(--lp-muted);
 }
 .btn-surface {
-  background: var(--surface);
-  color: var(--fg);
+  background: var(--lp-surface);
+  color: var(--lp-fg);
 }
 .btn-ghost {
   background: transparent;
-  color: var(--fg);
+  color: var(--lp-fg);
 }
 
 /* Sections */
@@ -818,7 +825,7 @@ section {
   padding: 8rem 0;
 }
 .muted-bg {
-  background: var(--muted);
+  background: var(--lp-muted);
 }
 .final {
   padding: 9rem 0;
@@ -844,7 +851,7 @@ section {
 .pill {
   padding: 0.25rem 0.625rem;
   border-radius: 6px;
-  background: var(--card);
+  background: var(--lp-card);
   font-size: 0.8125rem;
   font-weight: 500;
 }
@@ -858,12 +865,12 @@ section {
 }
 .lead {
   max-width: 38rem;
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
   font-size: 1.25rem;
   line-height: 1.6;
 }
 .lead-sm {
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
   font-size: 1.25rem;
 }
 .cta-row {
@@ -880,18 +887,12 @@ section {
   margin-top: 1.5rem;
   padding: 0 0.25rem 0 1.25rem;
   border-radius: 10px;
-  background: var(--card);
+  background: var(--lp-card);
 }
 .command code {
-  color: var(--fg);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: var(--lp-fg);
+  font-family: var(--lp-font-mono);
   font-size: 0.9375rem;
-}
-.eyebrow {
-  color: var(--muted-fg);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
 }
 .lp h2 {
   font-size: 2.75rem;
@@ -913,17 +914,17 @@ section {
   gap: 0.75rem;
   padding: 2.25rem;
   border-radius: 16px;
-  background: var(--card);
+  background: var(--lp-card);
 }
 .card.surface {
-  background: var(--surface);
+  background: var(--lp-surface);
 }
 .card h3 {
   font-size: 1.25rem;
   font-weight: 600;
 }
 .body {
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
   font-size: 1rem;
   line-height: 1.65;
 }
@@ -935,79 +936,144 @@ section {
   height: 2.75rem;
   margin-bottom: 1.25rem;
   border-radius: 10px;
-  background: var(--tile);
+  background: var(--lp-tile);
 }
 
-/* Component showcase */
-.showcase {
-  gap: 1.25rem;
+/* Section intros and the lists that carry the facts. */
+.intro {
+  color: var(--lp-muted-fg);
+  font-size: 1.125rem;
+  line-height: 1.6;
 }
-.row {
+.intro code,
+.facts code,
+.checklist code {
+  font-family: var(--lp-font-mono);
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+.lp .intro a {
+  margin-left: 0.25rem;
+  font-weight: 500;
+}
+.comp-grid,
+.theme-grid,
+.facts,
+.checklist ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.comp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.75rem;
+}
+.lp .comp-grid a {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.label {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-.input {
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.625rem 0.875rem;
-  border: 1px solid var(--input);
+  align-items: center;
+  min-height: 3.25rem;
+  padding: 0 1.25rem;
   border-radius: 10px;
-  background: var(--input-bg);
-  color: var(--fg);
-  font: inherit;
-  font-size: 0.9375rem;
-}
-.input::placeholder {
-  color: var(--muted-fg);
-}
-.badge {
-  padding: 0.25rem 0.625rem;
-  border-radius: 6px;
-  background: var(--surface);
-  font-size: 0.8125rem;
+  background: var(--lp-card);
+  color: var(--lp-fg);
   font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s var(--lp-ease);
 }
-.badge-primary {
-  background: var(--brand);
-  color: #ffffff;
+.lp .comp-grid a:hover {
+  background: var(--lp-tile);
+  color: var(--lp-fg);
 }
-.badge-inverse {
-  background: var(--fg);
-  color: var(--on-fg);
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1rem;
 }
-.tabs {
+.theme-card {
   display: flex;
-  gap: 0.25rem;
-  padding: 0.25rem;
-  border-radius: 10px;
-  background: var(--surface);
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: var(--lp-surface);
 }
-.tab {
-  flex: 1;
-  min-height: 2.75rem;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--muted-fg);
-  font: inherit;
+.swatch {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 1rem;
+}
+.theme-name {
+  margin-bottom: 0.25rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.meta {
+  color: var(--lp-muted-fg);
   font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
+  line-height: 1.5;
 }
-.tab[aria-selected='true'] {
-  background: var(--fg);
-  color: var(--on-fg);
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.checklist h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.checklist ol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
+  gap: 0 3rem;
+}
+.checklist li {
+  display: flex;
+  gap: 1rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--lp-glass-line);
+  line-height: 1.5;
+}
+.check-id {
+  flex: none;
+  width: 2rem;
+  color: var(--lp-muted-fg);
+  font-family: var(--lp-font-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  color: var(--lp-muted-fg);
+  line-height: 1.55;
+}
+.cmd-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+.cmd-list div {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: 1rem;
+}
+.cmd-list dt code {
+  color: #ff6b4f;
+  font-family: var(--lp-font-mono);
+}
+.cmd-list dd {
+  margin: 0;
+  color: #a1a1a6;
+  line-height: 1.55;
 }
 
 /* CLI band: dark in both modes. */
 .inv {
-  background: var(--inverse);
+  background: var(--lp-inverse);
   color: #f5f5f7;
 }
 .lp .inv a {
@@ -1019,7 +1085,7 @@ section {
 .spot-glow,
 .spot-grid {
   opacity: 0;
-  transition: opacity 0.5s var(--ease);
+  transition: opacity 0.5s var(--lp-ease);
 }
 .spot-glow {
   position: absolute;
@@ -1040,14 +1106,6 @@ section {
 .spot-on .spot-grid {
   opacity: 1;
 }
-.inv-muted {
-  color: #a1a1a6;
-}
-.with-icon {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
 .cli-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
@@ -1066,7 +1124,7 @@ section {
 }
 .cli-lead code {
   color: #f5f5f7;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--lp-font-mono);
 }
 .windows {
   position: relative;
@@ -1076,7 +1134,7 @@ section {
 .halo {
   position: absolute;
   border-radius: 50%;
-  background: var(--halo);
+  background: var(--lp-halo);
   pointer-events: none;
 }
 .halo-a {
@@ -1085,7 +1143,7 @@ section {
   width: 96%;
   height: 96%;
   filter: blur(96px);
-  opacity: var(--halo-a);
+  opacity: var(--lp-halo-a);
 }
 .halo-b {
   top: 38%;
@@ -1093,7 +1151,7 @@ section {
   width: 56%;
   height: 56%;
   filter: blur(84px);
-  opacity: var(--halo-b);
+  opacity: var(--lp-halo-b);
 }
 .win {
   padding: 6px;
@@ -1149,7 +1207,7 @@ section {
   margin: 0;
   overflow-x: auto;
   color: #f5f5f7;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--lp-font-mono);
   font-size: 0.9375rem;
   line-height: 1.75;
   white-space: pre;
@@ -1172,7 +1230,7 @@ section {
 /* Footer */
 .ft {
   padding: 4.5rem 0 2.5rem;
-  background: var(--muted);
+  background: var(--lp-muted);
 }
 .ft-stack {
   display: flex;
@@ -1192,7 +1250,7 @@ section {
 }
 .ft-brand p {
   max-width: 18rem;
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
   font-size: 0.875rem;
   line-height: 1.6;
 }
@@ -1207,12 +1265,12 @@ section {
   font-weight: 600;
 }
 .lp .ft-col a {
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
   font-size: 0.875rem;
   text-decoration: none;
 }
 .lp .ft-col a:hover {
-  color: var(--fg);
+  color: var(--lp-fg);
 }
 .ft-bottom {
   display: flex;
@@ -1220,7 +1278,7 @@ section {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem 1.5rem;
-  color: var(--muted-fg);
+  color: var(--lp-muted-fg);
   font-size: 0.8125rem;
 }
 

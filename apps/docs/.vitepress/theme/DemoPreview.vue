@@ -3,7 +3,8 @@ import { useData, withBase } from 'vitepress'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 // The demo runs in a frame so a dialog it opens, or anything it portals, stays inside the preview.
-const props = defineProps<{ name: string; title: string }>()
+// `overlay`: the demo opens a layer outside its own box (a dialog, a menu), so the frame keeps room for it.
+const props = defineProps<{ name: string; title: string; overlay?: boolean }>()
 
 const { isDark } = useData()
 const frame = ref<HTMLIFrameElement>()
@@ -96,6 +97,8 @@ onBeforeUnmount(() => {
   <iframe
     ref="frame"
     class="demo-preview"
+    :class="{ 'demo-preview--overlay': props.overlay }"
+    loading="lazy"
     :src="withBase(`/demo/${props.name}`)"
     :title="`${props.title} preview`"
     :style="height ? { blockSize: `${height}px` } : undefined"

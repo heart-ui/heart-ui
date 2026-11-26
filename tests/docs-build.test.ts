@@ -1,9 +1,10 @@
 import { execFileSync } from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createServer, type Server } from 'node:http'
 import { extname, join, normalize } from 'node:path'
 import { chromium, type Browser, type Page } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { docsItems } from '../apps/docs/scripts/items.ts'
 
 // Builds the docs site the way the task's check does: `pnpm --filter docs build`.
 const root = join(import.meta.dirname, '..')
@@ -33,6 +34,24 @@ describe('docs build', () => {
     expect(existsSync(join(dist, 'components/placeholder.html'))).toBe(false)
     const index = html('components/index.html')
     for (const name of Object.keys(demoText)) expect(index).toContain(`href="/components/${name}"`)
+  })
+
+  it('landing page: its counts, version and component links come from the repo', () => {
+    const page = html('index.html')
+    const items = docsItems()
+    const themes = readdirSync(join(root, 'registry/themes')).filter((file) =>
+      file.endsWith('.json'),
+    )
+    const version = (
+      JSON.parse(readFileSync(join(root, 'packages/cli/package.json'), 'utf8')) as {
+        version: string
+      }
+    ).version
+    expect(page).toContain(`${items.length} components`)
+    expect(page).toContain(`${themes.length} themes`)
+    expect(page).toContain(`v${version}`)
+    for (const item of items) expect(page).toContain(`href="/components/${item.name}"`)
+    for (const id of ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8']) expect(page).toContain(id)
   })
 
   it('guide pages: layout rules and tokens, linked from the nav, the sidebar and item pages', () => {
@@ -142,14 +161,37 @@ describe('docs previews in a browser', () => {
       .evaluate((demo: Element) => {
         ;[...demo.children].slice(1).forEach((child) => child.remove())
       })
-    // One field is left, far shorter than the frame's minimum, so the frame falls to that minimum.
-    const minimum = await page.evaluate(() => {
-      const style = getComputedStyle(document.querySelector('iframe.demo-preview') as Element)
-      return parseFloat(style.minHeight) + 2 * parseFloat(style.borderTopWidth)
-    })
+    // One field is left. The input opens no overlay, so the frame has no minimum and falls to that field.
     await expect
       .poll(async () => (await frameState(page)).frame, { timeout: 10_000 })
-      .toBeLessThanOrEqual(minimum + 1)
+      .toBeLessThan(200)
+    const after = await frameState(page)
+    expect(after.inner).toBe(after.content)
+    await page.close()
+  })
+
+  it('keeps room for the overlay of a demo that opens one, and none for a demo that does not', async () => {
+    // Which frames keep room is in the built HTML; the browser only confirms what each class does.
+    const frameClass = (name: string) =>
+      /<iframe[^>]*class="([^"]*demo-preview[^"]*)"/.exec(html(`components/${name}.html`))?.[1]
+    for (const name of ['dialog', 'dropdown-menu', 'popover', 'select', 'toast', 'tooltip']) {
+      expect(frameClass(name), name).toContain('demo-preview--overlay')
+    }
+    for (const name of ['badge', 'separator', 'skeleton']) {
+      expect(frameClass(name), name).not.toContain('demo-preview--overlay')
+    }
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } })
+    const minimum = () =>
+      page.evaluate(
+        () => getComputedStyle(document.querySelector('iframe.demo-preview') as Element).minHeight,
+      )
+    await page.goto(`${base}/components/dialog`)
+    expect(await minimum()).not.toBe('0px')
+    await page.goto(`${base}/components/badge`)
+    expect(await minimum()).toBe('0px')
+    await expect.poll(async () => (await frameState(page)).content).toBeGreaterThan(0)
+    const state = await frameState(page)
+    expect(state.inner).toBe(state.content)
     await page.close()
   })
 

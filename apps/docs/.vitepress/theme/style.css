@@ -1,15 +1,93 @@
 @import '@heart-ui/theme/theme.css';
+@import './landing-tokens.css';
 @source '../../../../registry';
 
+/* The docs pages wear the landing page's tokens (landing-tokens.css): one palette, one type, one brand across
+   the site. Only the demos inside the frames use the Heart UI theme, because that is what they show. */
+:root {
+  --vp-font-family-base: var(--lp-font-sans);
+  --vp-font-family-mono: var(--lp-font-mono);
+
+  --vp-c-bg: var(--lp-bg);
+  --vp-c-bg-alt: var(--lp-muted);
+  --vp-c-bg-elv: var(--lp-surface);
+  --vp-c-bg-soft: var(--lp-card);
+
+  --vp-c-text-1: var(--lp-fg);
+  --vp-c-text-2: var(--lp-muted-fg);
+  --vp-c-text-3: var(--lp-muted-fg);
+
+  --vp-c-divider: var(--lp-glass-line);
+  --vp-c-gutter: var(--lp-glass-line);
+  --vp-c-border: var(--lp-input);
+
+  --vp-c-brand-1: var(--lp-link);
+  --vp-c-brand-2: var(--lp-link-hover);
+  --vp-c-brand-3: var(--lp-brand);
+  --vp-c-brand-soft: color-mix(in srgb, var(--lp-brand) 12%, transparent);
+
+  --vp-button-brand-text: var(--lp-on-brand);
+  --vp-button-brand-bg: var(--lp-brand);
+  --vp-button-brand-hover-text: var(--lp-on-brand);
+  --vp-button-brand-hover-bg: var(--lp-brand-hover);
+  --vp-button-brand-active-text: var(--lp-on-brand);
+  --vp-button-brand-active-bg: var(--lp-brand-hover);
+
+  --vp-code-color: var(--lp-link);
+  --vp-code-bg: var(--lp-muted);
+  --vp-code-block-bg: var(--lp-muted);
+  --vp-code-lang-color: var(--lp-muted-fg);
+  --vp-code-copy-code-hover-bg: var(--lp-card-hover);
+
+  --vp-nav-bg-color: var(--lp-glass);
+  --vp-local-nav-bg-color: var(--lp-glass);
+  --vp-local-search-highlight-bg: var(--lp-brand);
+  --vp-local-search-highlight-text: var(--lp-on-brand);
+}
+
+/* The header is the landing page's glass: the page shows through it, blurred. Below 960px VitePress colours
+   the whole bar, above it only the part beside the sidebar; the blur goes on the same element as the colour,
+   and on only one of the two, since a blur inside another blur sees nothing behind it. */
+.VPLocalNav,
+.VPNavBar {
+  backdrop-filter: saturate(140%) blur(20px);
+}
+
+@media (min-width: 960px) {
+  .VPNavBar {
+    backdrop-filter: none;
+  }
+
+  .VPNavBar .content-body {
+    backdrop-filter: saturate(140%) blur(20px);
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  :root {
+    --vp-nav-bg-color: var(--lp-glass-solid);
+    --vp-local-nav-bg-color: var(--lp-glass-solid);
+  }
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--lp-brand) 20%, transparent);
+}
+
+/* A demo's frame: the Heart UI theme's surface inside, the landing page's card edge outside. */
 .demo-preview {
   display: block;
   inline-size: 100%;
-  /* Room for a demo's modal, which is fixed and so adds nothing to the frame's measured height. */
-  min-block-size: 28rem;
   margin-block: 1rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border: 1px solid var(--lp-glass-line);
+  border-radius: 16px;
   background-color: var(--h-background);
+}
+
+/* Room for a demo's dialog or menu, which is fixed or portalled and so adds nothing to the frame's measured
+   height. A demo without one is as tall as its content. */
+.demo-preview--overlay {
+  min-block-size: 28rem;
 }
 
 /* Demo pages: VitePress's base styles are unlayered, so they beat Tailwind's layered styles. Reverting every
