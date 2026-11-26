@@ -773,6 +773,7 @@ section {
 }
 .hero-h {
   max-width: 52rem;
+  text-wrap: balance;
   font-size: 4rem;
   font-weight: 700;
   line-height: 1.05;
