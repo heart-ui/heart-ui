@@ -663,3 +663,9 @@ Gaps and conflicts found while building. Format in
   drops from 0.15 to 0.12 so white text on its 500 passes with no moves.
   Added a sixth preset, `rose` (hue 5). Decided by the maintainer
   (step 500, rose) and the agent (ring step, forest chroma).
+  The maintainer then asked for `graphite` to be near black, which no
+  primary knob can reach while the fill is a fixed step. Chose: a primary
+  with chroma 0.04 or less (the neutral knob's range) maps the fill to 900
+  in light mode and 50 in dark, hover and pressed one and two steps in,
+  ring 500. Why: shadcn's neutral theme works the same way, and it needs
+  no new knob. Decided by the agent.

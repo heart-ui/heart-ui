@@ -94,6 +94,11 @@ chroma, rather than the darker 600: every preset still carries white text
 at 4.5:1 there. The focus ring then sits at 800, off the fill and its
 hover and pressed steps (500, 600, 700).
 
+A `primary` knob with chroma 0.04 or less makes a monochrome theme, like
+`graphite`: `primary` is 900 / 50, `primary-hover` 800 / 100,
+`primary-active` 700 / 200 and `ring` 500 / 500, so the fill is near black
+in light mode and near white in dark mode instead of a mid gray.
+
 Each status (`success`, `warning`, `danger`, `info`) gets four tokens:
 `<s>` (600 / 400), `<s>-foreground` (white / neutral-950), `<s>-subtle`
 (50 / 950), `<s>-subtle-foreground` (700 / 300). `danger` also has

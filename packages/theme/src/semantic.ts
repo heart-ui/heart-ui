@@ -77,6 +77,16 @@ const mapping: [string, string, string][] = [
   ]),
 ]
 
+// A primary with no more colour than a neutral (chroma 0.04 or less) makes a monochrome theme: its fill is
+// the scale's darkest step in light mode and its lightest in dark mode, rather than a mid-grey.
+export const monochromeChroma = 0.04
+const monochrome: [string, string, string][] = [
+  ['ring', 'primary-500', 'primary-500'],
+  ['primary', 'primary-900', 'primary-50'],
+  ['primary-hover', 'primary-800', 'primary-100'],
+  ['primary-active', 'primary-700', 'primary-200'],
+]
+
 export const overlay = { light: 'oklch(0 0 0 / 0.5)', dark: 'oklch(0 0 0 / 0.7)' }
 
 const surfaces = ['background', 'surface', 'surface-raised', 'surface-sunken', 'muted']
@@ -121,12 +131,16 @@ const name = ({ scale, at }: Ref) => (at === 0 ? 'white' : `${scale}-${steps[at 
 export type Resolved = Record<Mode, Map<string, string>>
 
 /** Maps every semantic color to a raw step, moving failing tokens until their pairs pass. */
-export function resolveSemantic(scales: Scales): { values: Resolved; report: ContrastReport } {
+export function resolveSemantic(
+  scales: Scales,
+  options: { monochrome?: boolean } = {},
+): { values: Resolved; report: ContrastReport } {
   const report: ContrastReport = { pass: true, checks: [], adjustments: [] }
   const values = {} as Resolved
+  const rows = options.monochrome ? [...mapping, ...monochrome] : mapping
   for (const mode of ['light', 'dark'] as const) {
     const refs = new Map(
-      mapping.map(([token, light, dark]) => [token, ref(mode === 'light' ? light : dark)]),
+      rows.map(([token, light, dark]) => [token, ref(mode === 'light' ? light : dark)]),
     )
     const initial = new Map(refs)
     const color = (token: string) => {

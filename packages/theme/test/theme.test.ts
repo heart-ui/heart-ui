@@ -375,6 +375,26 @@ describe('contrast moves', () => {
     expect(new Set(tokens).size).toBe(4)
   })
 
+  it('gives a monochrome primary the darkest fill in light mode and the lightest in dark', () => {
+    const raw = (step: string) => `var(--h-raw-${step})`
+    const css = generateTheme({ ...defaults, primary: 'oklch(0.21 0.01 260)' })
+    const light = declarations(css, ':root {')
+    const dark = declarations(css, '.dark,\n[data-theme="dark"] {')
+    expect(light.get('primary')).toBe(raw('primary-900'))
+    expect(light.get('primary-hover')).toBe(raw('primary-800'))
+    expect(light.get('primary-active')).toBe(raw('primary-700'))
+    expect(light.get('ring')).toBe(raw('primary-500'))
+    expect(dark.get('primary')).toBe(raw('primary-50'))
+    expect(dark.get('primary-hover')).toBe(raw('primary-100'))
+    expect(dark.get('primary-active')).toBe(raw('primary-200'))
+    // Just above the threshold, the usual mapping holds.
+    const tinted = declarations(
+      generateTheme({ ...defaults, primary: 'oklch(0.21 0.05 260)' }),
+      ':root {',
+    )
+    expect(tinted.get('primary')).toBe(raw('primary-500'))
+  })
+
   it('keeps the ring off the primary fill', () => {
     for (const selector of [':root {', '.dark,\n[data-theme="dark"] {']) {
       const tokens = declarations(generateTheme(defaults), selector)
