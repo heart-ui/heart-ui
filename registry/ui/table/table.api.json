@@ -1,0 +1,91 @@
+{
+  "name": "table",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Table",
+      "props": [
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "required": false,
+          "default": "'md'",
+          "description": "Row density: each row is at least the control height of its size."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "TableBody",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "TableCaption",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "TableCell",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "TableHead",
+      "props": [
+        {
+          "name": "scope",
+          "type": "'col' | 'row' | 'colgroup' | 'rowgroup'",
+          "required": false,
+          "description": "`row` makes the cell a row header, such as a record's id in the first column; `col` inside `TableHeader`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "TableHeader",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "TableRow",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}

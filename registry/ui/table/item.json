@@ -1,0 +1,20 @@
+{
+  "name": "table",
+  "type": "registry:ui",
+  "title": "Table",
+  "description": "Rows of records across shared columns, named by a caption, with row density from size and a container that scrolls when the table is wider.",
+  "dependencies": ["class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils"],
+  "files": [
+    "Table.vue",
+    "TableHeader.vue",
+    "TableBody.vue",
+    "TableRow.vue",
+    "TableHead.vue",
+    "TableCell.vue",
+    "TableCaption.vue",
+    "table.variants.ts",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}

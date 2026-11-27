@@ -31,7 +31,7 @@ list or `card` grid when each record is read on its own.
 | Part | Prop | Type | Default | Notes |
 | --- | --- | --- | --- | --- |
 | `Table` | `size` | `sm \| md \| lg` | `md` | Row density: each row is at least the control height of its size |
-| `TableHead` | `scope` | `col \| row \| colgroup \| rowgroup` | none | `row` makes the cell a row header, such as a record's id in the first column |
+| `TableHead` | `scope` | `col \| row \| colgroup \| rowgroup` | none | `row` makes the cell a row header, such as a record's id in the first column. Inside `TableHeader` it renders `col` when unset |
 
 Every part takes `class`, merged last. `Table` renders a scroll container
 `div` around the `table` and puts `class` and other attributes on that
@@ -86,7 +86,9 @@ The table itself is not focusable; the controls in its cells are.
   names a row with `TableHead scope="row"`.
 - While the table overflows its container, the container gets
   `tabindex="0"` so keyboard users can scroll it, and becomes a region
-  named by the caption.
+  named by the caption. An `aria-label` on `Table` names it instead and
+  makes it a region even when the table fits. A focused container keeps
+  its tab stop until focus moves elsewhere in the page.
 - Align numbers to the end with `class="text-end tabular-nums"` on their
   head and cells; `text-start` and `text-end` follow the reading direction.
 

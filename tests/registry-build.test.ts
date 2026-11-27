@@ -102,6 +102,7 @@ describe('registry:build', () => {
         'separator',
         'skeleton',
         'switch',
+        'table',
         'tabs',
         'textarea',
         'toast',
