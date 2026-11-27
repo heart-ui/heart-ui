@@ -67,3 +67,5 @@
 - 2026-11-26 update docs/sdlc/recurring-defects.md — an undefined attribute bound over an asChild child's computed one (from 2026-11-26-m-p2-12-breadcrumb)
 - 2026-11-27 update knowledge/gotchas/registry-items.md — Reka Pagination English labels and self-disabling buttons; clamp shown values, never write back through v-model (from 2026-11-27-m-p2-13-pagination)
 - 2026-11-27 update docs/sdlc/recurring-defects.md — a component that writes a corrected value back through v-model at setup (from 2026-11-27-m-p2-13-pagination)
+- 2026-11-27 update knowledge/gotchas/registry-items.md — ivya reads a bare th as a cell; unused token utilities aren't generated; focusable-on-overflow containers keep their tab stop while focused (from 2026-11-27-m-p2-14-table)
+- 2026-11-27 update docs/sdlc/recurring-defects.md — a tabindex or role tied to a measured state removed while the element has focus (from 2026-11-27-m-p2-14-table)

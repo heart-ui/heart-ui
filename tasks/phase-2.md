@@ -128,7 +128,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-2-phase-
 | P2-11 | `accordion` | P2-01 | review |
 | P2-12 | `breadcrumb` | P2-01 | review |
 | P2-13 | `pagination` | P2-01 | review |
-| P2-14 | `table` | P2-01 | todo |
+| P2-14 | `table` | P2-01 | review |
 | P2-15 | `drawer` | P2-01 | todo |
 | P2-16 | `combobox` | P2-10 | todo |
 | P2-17 | `empty-state` | P2-01 | todo |

@@ -693,3 +693,15 @@ Gaps and conflicts found while building. Format in
   in light mode and 50 in dark, hover and pressed one and two steps in,
   ring 500. Why: shadcn's neutral theme works the same way, and it needs
   no new knob. Decided by the agent.
+
+- 2026-11-27 P2-14: the catalog row says `table` "scrolls inside its own
+  container" but not where `class` and attributes go, nor how keyboard
+  users reach a scrolling table. Chose: `Table` renders a container `div`
+  that takes `class` and attributes (the root element, per the API rules,
+  so a height set there scrolls the rows), and the container gets
+  `tabindex="0"`, and `role="region"` named by the caption, only while the
+  table overflows it. `TableHead` declares `scope`, since spec examples
+  may only pass global attributes through, and renders `scope="col"`
+  inside `TableHeader`. Why: axe's `scrollable-region-focusable` needs a
+  scrolling region to be reachable, and a tab stop on every table that
+  fits is noise. Decided by the agent (delegated).
