@@ -32,7 +32,15 @@ describe('docs pages', () => {
     const overlays = pages
       .filter((entry) => /<DemoPreview [^>]* overlay \/>/.test(entry.item))
       .map((entry) => entry.name)
-    expect(overlays).toEqual(['dialog', 'dropdown-menu', 'popover', 'select', 'toast', 'tooltip'])
+    expect(overlays).toEqual([
+      'dialog',
+      'drawer',
+      'dropdown-menu',
+      'popover',
+      'select',
+      'toast',
+      'tooltip',
+    ])
   })
 
   it('turns the edit link off on the generated component index', () => {
@@ -105,6 +113,7 @@ describe('docs pages', () => {
       'card',
       'checkbox',
       'dialog',
+      'drawer',
       'dropdown-menu',
       'input',
       'label',
@@ -133,6 +142,7 @@ describe('docs pages', () => {
       ['card', 'Card.demo.vue'],
       ['checkbox', 'Checkbox.demo.vue'],
       ['dialog', 'Dialog.demo.vue'],
+      ['drawer', 'Drawer.demo.vue'],
       ['dropdown-menu', 'DropdownMenu.demo.vue'],
       ['input', 'Input.demo.vue'],
       ['label', 'Label.demo.vue'],
@@ -591,6 +601,7 @@ describe('docs page generator edge cases', () => {
       'Card',
       'Checkbox',
       'Dialog',
+      'Drawer',
       'Dropdown Menu',
       'Input',
       'Label',

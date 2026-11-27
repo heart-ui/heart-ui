@@ -93,7 +93,8 @@ named `<Component><Part>.vue`. Blocks and layouts use the same anatomy with
   stale.
 - Styles are Tailwind utilities mapped to tokens
   ([tokens.md](tokens.md#tailwind-mapping)). No `<style>` blocks except
-  for keyframes that utilities cannot express.
+  for keyframes that utilities cannot express, and the rules that apply
+  them inside a private `@layer heart-<name>` (`accordion`, `drawer`).
 - Logical properties only: `ps-*`, `pe-*`, `ms-*`, `me-*`, `start-*`, `end-*`.
 - SSR-safe: no `window` or `document` at setup time; ids from `useId()`.
 

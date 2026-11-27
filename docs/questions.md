@@ -705,3 +705,17 @@ Gaps and conflicts found while building. Format in
   inside `TableHeader`. Why: axe's `scrollable-region-focusable` needs a
   scrolling region to be reachable, and a tab stop on every table that
   fits is noise. Decided by the agent (delegated).
+
+- 2026-11-27 P2-15: the catalog row gives `drawer` a `side` (start, end,
+  bottom) and a content `size`, but not which part takes `side`, what
+  `size` means on the bottom, or how the slide follows the text direction.
+  Chose: `side` (default `end`) and `size` are `DrawerContent` props, as
+  `dialog` keeps its look props on the content; `size` caps a side
+  drawer's width (24, 32, 48 rem, as `dialog`) and a bottom drawer's
+  height (a third, a half, three quarters of the window). A side panel
+  slides by animating `inset-inline-start` or `-end` from -100% inside a
+  layer as wide as the panel, since `translate` is physical and `:dir()`
+  and `rtl:` are ruled out; the keyframes live in `DrawerContent.vue`'s
+  private layer, as `accordion`'s do, so `@heart-ui/theme` is unchanged.
+  Why: closest to `dialog` and shadcn's sheet, and correct in right-to-left
+  text. Decided by the agent (delegated).

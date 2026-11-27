@@ -24,3 +24,4 @@ One line per defect: what it looks like, then the severity.
 - A part that binds an attribute (`href`, `id`) onto an `asChild` or `as` child even when unset, replacing what a `RouterLink` or `NuxtLink` child computes: high.
 - A component that corrects its `v-model` value by emitting at setup or from an immediate watch (clamping, defaulting), which resets a deep-linked value while data loads, emits during SSR and passes `NaN` through: medium.
 - A `tabindex` or role tied to a measured state (overflow, size) that is removed while the element has focus, or on a `blur` from a window switch, dropping keyboard focus to the page: medium.
+- An enter or exit animation tested only at its first frame and after `finish()`, so a property that can't interpolate (to or from `auto`) and jumps midway passes: high.
