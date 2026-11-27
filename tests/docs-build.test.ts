@@ -208,8 +208,9 @@ describe('docs previews in a browser', () => {
     await page.goto(`${base}/components/badge`)
     expect(await minimum()).toBe('0px')
     await expect.poll(async () => (await frameState(page)).content).toBeGreaterThan(0)
-    const state = await frameState(page)
-    expect(state.inner).toBe(state.content)
+    // The frame sizes itself to the demo after the demo renders, so wait for that under load.
+    const { content } = await frameState(page)
+    await expect.poll(async () => (await frameState(page)).inner, { timeout: 10_000 }).toBe(content)
     await page.close()
   })
 

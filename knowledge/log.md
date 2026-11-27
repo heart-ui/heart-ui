@@ -69,3 +69,4 @@
 - 2026-11-27 update docs/sdlc/recurring-defects.md — a component that writes a corrected value back through v-model at setup (from 2026-11-27-m-p2-13-pagination)
 - 2026-11-27 update knowledge/gotchas/registry-items.md — ivya reads a bare th as a cell; unused token utilities aren't generated; focusable-on-overflow containers keep their tab stop while focused (from 2026-11-27-m-p2-14-table)
 - 2026-11-27 update docs/sdlc/recurring-defects.md — a tabindex or role tied to a measured state removed while the element has focus (from 2026-11-27-m-p2-14-table)
+- 2026-11-27 update knowledge/gotchas/test-harness.md — vitest parallelizes files only; split heavy spawnSync test files; VITEST_MAX_WORKERS=2 locally
