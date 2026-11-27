@@ -1,0 +1,62 @@
+{
+  "name": "pagination",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Pagination",
+      "props": [
+        {
+          "name": "total",
+          "type": "number",
+          "required": true,
+          "description": "How many items the list holds."
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": "10"
+        },
+        {
+          "name": "navLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Pagination'",
+          "description": "The landmark's accessible name."
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Previous page'"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Next page'"
+        },
+        {
+          "name": "pageLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Page {page}'",
+          "description": "Each page button's accessible name; every `{page}` becomes its number."
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "required": false,
+          "default": "1"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "update:page",
+          "payload": "number"
+        }
+      ]
+    }
+  ]
+}
