@@ -14,13 +14,13 @@ or result list; use `tabs` to switch between views of the same content.
 
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `total` | `number` | none | How many items the list holds; required |
+| `total` | `number` | none | How many items the list holds; required. `0` or a value that isn't a number shows one page |
 | `pageSize` | `number` | `10` | Items per page |
-| `page` | `number` | `1` | The current page, from `1`; `v-model:page` |
+| `page` | `number` | `1` | The current page, from `1`; `v-model:page`. A page outside `1` to the last page (say `total` shrinks after a filter) is shown as the nearest end, without emitting; the next press steps from there. A fraction rounds; `NaN` shows page `1` |
 | `navLabel` | `string` | `Pagination` | The landmark's accessible name |
 | `previousLabel` | `string` | `Previous page` | The previous button's accessible name |
 | `nextLabel` | `string` | `Next page` | The next button's accessible name |
-| `pageLabel` | `string` | `Page {page}` | Each page button's accessible name; `{page}` becomes its number |
+| `pageLabel` | `string` | `Page {page}` | Each page button's accessible name; every `{page}` becomes its number |
 
 The root takes `class`, merged last, and other attributes, on the `nav`.
 
@@ -32,7 +32,7 @@ None.
 
 | Event | Payload | When |
 | --- | --- | --- |
-| `update:page` | `number` | A page, previous or next button is pressed |
+| `update:page` | `number` | A page, previous or next button changes the page |
 
 ## Tokens
 
@@ -51,7 +51,7 @@ labels; 375 px; RTL.
 | Key | Action |
 | --- | --- |
 | `Tab` | Moves through previous, each page and next |
-| `Enter` / `Space` | Goes to that page |
+| `Enter` / `Space` | On a page button, goes to that page; on previous or next, steps one page, and does nothing at an end |
 
 ## Accessibility
 
@@ -64,8 +64,10 @@ labels; 375 px; RTL.
 - The chevrons point the reading way: previous points right in RTL. They
   read the direction from Reka's `ConfigProvider`, so an RTL app sets
   `<ConfigProvider dir="rtl">`.
-- Pages show the first and last page, one page either side of the
-  current one, and a gap between.
+- Between previous and next the row holds up to seven slots: the first
+  and last page, the current page with one page either side, and gaps
+  (`…`) between. Near an end the gap fills with pages, so page 1 of 20
+  shows `1 2 3 4 5 … 20`.
 
 ## Do
 

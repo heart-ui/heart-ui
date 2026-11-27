@@ -3,6 +3,19 @@
 Gaps and conflicts found while building. Format in
 [tasks/README.md](../tasks/README.md#questions). Newest first.
 
+- 2026-11-27 P2-13: the catalog row for `pagination` names Reka
+  Pagination, no parts, and `total`, `pageSize`, `v-model:page`, but not the
+  range shown, the accessible names or what happens at either end. Chose:
+  one `Pagination` component; first and last page, one page either side of
+  the current one, gaps between (Reka `showEdges`, `siblingCount` 1);
+  `navLabel`, `previousLabel`, `nextLabel` and `pageLabel` (`Page {page}`)
+  replace Reka's English names; previous and next stay focusable with
+  `aria-disabled` at the ends; buttons use the `button` variants. Why: the
+  `*Label` rule, nine buttons fit 375 px, and a button disabled under focus
+  drops focus to the page. The gap glyph `…` is a fixed, `aria-hidden`
+  literal like the chevron icons, not text a reader hears, so it has no
+  prop. Decided by the agent (delegated).
+
 - 2026-11-26 P2-12: the catalog row for `breadcrumb` names the parts and
   a `nav` with an ordered list, but not its name, the separator or how
   links meet a router. Chose: `navLabel` (default `Breadcrumb`) names the

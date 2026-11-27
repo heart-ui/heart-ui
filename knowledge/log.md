@@ -65,3 +65,5 @@
 - 2026-11-26 update docs/sdlc/recurring-defects.md — expanding panel with permanent overflow-hidden clips focus rings (from 2026-11-26-m-p2-11-accordion)
 - 2026-11-26 update knowledge/gotchas/registry-items.md — router-link href overwritten through asChild (from 2026-11-26-m-p2-12-breadcrumb)
 - 2026-11-26 update docs/sdlc/recurring-defects.md — an undefined attribute bound over an asChild child's computed one (from 2026-11-26-m-p2-12-breadcrumb)
+- 2026-11-27 update knowledge/gotchas/registry-items.md — Reka Pagination English labels and self-disabling buttons; clamp shown values, never write back through v-model (from 2026-11-27-m-p2-13-pagination)
+- 2026-11-27 update docs/sdlc/recurring-defects.md — a component that writes a corrected value back through v-model at setup (from 2026-11-27-m-p2-13-pagination)

@@ -1,0 +1,10 @@
+{
+  "name": "pagination",
+  "type": "registry:ui",
+  "title": "Pagination",
+  "description": "Pages through a long list with previous, next and the page numbers around the current one, as a nav landmark.",
+  "dependencies": ["reka-ui@2.11.0"],
+  "registryDependencies": ["utils", "icon", "button"],
+  "files": ["Pagination.vue", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}
