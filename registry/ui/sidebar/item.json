@@ -1,0 +1,20 @@
+{
+  "name": "sidebar",
+  "type": "registry:ui",
+  "title": "Sidebar",
+  "description": "The app's main navigation down the start edge, with groups and items, that collapses to a rail of icons and becomes a drawer below 768 px.",
+  "dependencies": ["reka-ui@2.11.0"],
+  "registryDependencies": ["utils", "icon", "button", "drawer"],
+  "files": [
+    "Sidebar.vue",
+    "SidebarHeader.vue",
+    "SidebarContent.vue",
+    "SidebarGroup.vue",
+    "SidebarItem.vue",
+    "SidebarFooter.vue",
+    "SidebarTrigger.vue",
+    "context.ts",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}

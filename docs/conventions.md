@@ -131,6 +131,7 @@ pull request.
 | Reka control inside a `label` that wraps it and its text slot; `state-*` variants for `data-state` | `checkbox` |
 | Hidden native input for forms under a Reka control (`registry/lib/form-control`: focus hand-off, form events on user changes, `id` on the control) | `checkbox`, `radio-group`, `switch`, `select` |
 | Parts sharing state through a provided context, including a fix to a Reka root context the primitive leaves stale (the image's name relayed to the fallback; the loading status reset when the last image goes) | `avatar` |
+| One slot rendered in two places (a desktop `nav`, and a `drawer` below 768 px) under a context provided again for the second copy; a breakpoint read in code by a `ResizeObserver` on the element CSS hides, never `matchMedia` or a length literal | `sidebar` |
 
 ## Checks
 

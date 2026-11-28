@@ -27,3 +27,10 @@ One line per defect: what it looks like, then the severity.
 - An enter or exit animation tested only at its first frame and after `finish()`, so a property that can't interpolate (to or from `auto`) and jumps midway passes: high.
 - A hidden copy of a primitive's parts (rendered to measure or to read text) that still registers with the primitive, so its keyboard and ARIA act on elements nobody can see: high.
 - A highlight or `aria-activedescendant` that keeps pointing at an element after it unmounts (the list closed or filtered to nothing), so the reference names a removed id and Enter falls through to the form: high.
+- A part whose root is a wrapper (`li`, a layer) that leaves fallthrough attributes (`target`, `rel`, `to`, `aria-*`) on the wrapper instead of the element they belong to: high.
+- A click handler that skips its work on `event.defaultPrevented`, which a `RouterLink` or `NuxtLink` sets on every click it navigates: high.
+- `sr-only` (absolutely positioned) text inside a scrolling box with no positioned ancestor in between, so the scroller doesn't clip it and the page grows to hold it: high.
+- A fix that puts library classes after the caller's `class` in `cn()` to protect a behaviour; protect it with a variant the caller's class doesn't conflict with (`max-md:hidden`) and keep `class` last: high.
+- An overlay closed by a condition only after it rendered, so its exit animation still plays; gate its `open` on the condition instead: medium.
+- A value read from `useAttrs()` in another component's render (through a context): attributes aren't reactive and compiled slots don't rerender children, so mirror it into a ref in `onBeforeUpdate`: medium.
+- A focus fallback written as one `querySelector('a, b')` expecting `a` to win: a selector list returns the first match in document order: medium.

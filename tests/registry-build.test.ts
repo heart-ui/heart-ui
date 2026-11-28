@@ -52,6 +52,7 @@ describe('registry:build', () => {
         'radio-group',
         'select',
         'separator',
+        'sidebar',
         'skeleton',
         'switch',
         'table',

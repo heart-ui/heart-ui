@@ -741,3 +741,20 @@ Gaps and conflicts found while building. Format in
   `description` optional. Why: the heading level depends on the page, the
   state shows on load rather than as news, and one icon look across
   screens. Decided by the agent (delegated).
+
+- 2026-11-28 P2-18: the catalog row gives `sidebar` Reka Collapsible, the
+  parts Header, Content, Group, Item, Footer, Trigger and
+  `v-model:collapsed`, and says it becomes a drawer below 768 px, but not
+  what opens that drawer, how a group is named, or what a collapsed item
+  shows. Chose: `Sidebar` is a `CollapsibleRoot` rendered as a `nav` named
+  by `navLabel`; below 768 px CSS hides it and the same slot renders in a
+  start `drawer` opened by a second model, `v-model:open`, which the
+  page's own menu button sets (no provider part); the drawer closes on an
+  item click and when the window grows past the breakpoint.
+  `SidebarTrigger` works only inside `Sidebar`. `SidebarGroup` takes a
+  `heading` prop, as `combobox`; collapsed, headings and item text are
+  visually hidden and only each item's `leading` icon shows; an `asChild`
+  item's own content is clipped to the rail instead. No tooltip on
+  collapsed items. Why: SSR-safe with no hydration mismatch, closest to
+  `drawer`, `breadcrumb` and `combobox`, and nothing beyond the catalog
+  row. Decided by the agent (delegated).

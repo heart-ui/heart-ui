@@ -1,0 +1,155 @@
+{
+  "name": "sidebar",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Sidebar",
+      "props": [
+        {
+          "name": "navLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Navigation'",
+          "description": "Accessible name of the `nav` and of the drawer below 768 px."
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Close'"
+        },
+        {
+          "name": "collapsed",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean"
+        },
+        {
+          "name": "update:collapsed",
+          "payload": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "SidebarContent",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "SidebarFooter",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "SidebarGroup",
+      "props": [
+        {
+          "name": "heading",
+          "type": "string",
+          "required": false,
+          "description": "Names the group; visually hidden while the sidebar is collapsed."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "SidebarHeader",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "SidebarItem",
+      "props": [
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "The page's address. Ignored with `asChild`: the child's link applies."
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "The current page: sets `aria-current=\"page\"`."
+        },
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Change the default rendered element for the one passed as a child, merging their props and behavior.\n\nRead our [Composition](https://www.reka-ui.com/docs/guides/composition) guide for more details."
+        },
+        {
+          "name": "as",
+          "type": "AsTag | Component",
+          "required": false,
+          "description": "The element or component this component should render as. Can be overwritten by `asChild`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        },
+        {
+          "name": "leading"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "SidebarTrigger",
+      "props": [
+        {
+          "name": "toggleLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Toggle sidebar'"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}
