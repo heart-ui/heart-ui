@@ -132,7 +132,7 @@ Recipe C. Specs: [components/index.md](../docs/components/index.md#tier-2-phase-
 | P2-15 | `drawer` | P2-01 | review |
 | P2-16 | `combobox` | P2-10 | review |
 | P2-17 | `empty-state` | P2-01 | review |
-| P2-18 | `sidebar` | P2-15 | todo |
+| P2-18 | `sidebar` | P2-15 | review |
 | P2-19 | `form` | P2-02 | todo |
 
 ## Layouts
