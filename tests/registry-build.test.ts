@@ -38,6 +38,7 @@ describe('registry:build', () => {
         'card',
         'checkbox',
         'dialog',
+        'drawer',
         'dropdown-menu',
         'form-control',
         'icon',

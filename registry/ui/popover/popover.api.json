@@ -65,7 +65,7 @@
         },
         {
           "name": "align",
-          "type": "'start' | 'center' | 'end'",
+          "type": "'end' | 'start' | 'center'",
           "required": false,
           "default": "'center'"
         }

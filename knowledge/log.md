@@ -70,3 +70,6 @@
 - 2026-11-27 update knowledge/gotchas/registry-items.md — ivya reads a bare th as a cell; unused token utilities aren't generated; focusable-on-overflow containers keep their tab stop while focused (from 2026-11-27-m-p2-14-table)
 - 2026-11-27 update docs/sdlc/recurring-defects.md — a tabindex or role tied to a measured state removed while the element has focus (from 2026-11-27-m-p2-14-table)
 - 2026-11-27 update knowledge/gotchas/test-harness.md — vitest parallelizes files only; split heavy spawnSync test files; VITEST_MAX_WORKERS=2 locally
+- 2026-11-28 update knowledge/gotchas/registry-items.md — keyframes blending with auto jump at 50%; direction-aware slides by inset; fixed shrink-to-fit layers grow past the page (from 2026-11-27-m-p2-15-drawer)
+- 2026-11-28 update knowledge/gotchas/test-harness.md — 414 px default viewport, hidden scrollbars, hover left by an earlier click (from 2026-11-27-m-p2-15-drawer)
+- 2026-11-28 update docs/sdlc/recurring-defects.md — an animation tested only at its first and last frame (from 2026-11-27-m-p2-15-drawer)
