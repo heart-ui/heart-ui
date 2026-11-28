@@ -1,0 +1,33 @@
+{
+  "name": "list-filters",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "ListFilters",
+      "props": [
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "The data is loading: sets `aria-busy` on the data region."
+        }
+      ],
+      "slots": [
+        {
+          "name": "header"
+        },
+        {
+          "name": "filters"
+        },
+        {
+          "name": "data"
+        },
+        {
+          "name": "pagination"
+        }
+      ],
+      "events": []
+    }
+  ]
+}

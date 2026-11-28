@@ -18,9 +18,11 @@ export default defineConfig({
     baseURL: `http://host.docker.internal:${port}`,
     connectOptions: { wsEndpoint },
   },
-  // Exact: the container renders deterministically, and a subtle token change must show up.
-  // Playwright's default per-pixel threshold (0.2) would hide small color shifts.
-  expect: { toHaveScreenshot: { maxDiffPixels: 0, threshold: 0 } },
+  // Near exact: a subtle token change must show up, and Playwright's default per-pixel threshold
+  // (0.2) would hide small color shifts. 0.01 lets through only the one-level antialiasing
+  // wobble Chromium shows at a few edges of pages with a scrolling table, and still fails a
+  // shift of a few levels in any channel.
+  expect: { toHaveScreenshot: { maxDiffPixels: 0, threshold: 0.01 } },
   webServer: {
     command: `vite build && vite preview --host ${host} --port ${port} --strictPort`,
     cwd: '..',

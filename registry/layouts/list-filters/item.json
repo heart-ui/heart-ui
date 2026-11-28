@@ -1,0 +1,24 @@
+{
+  "name": "list-filters",
+  "type": "registry:block",
+  "title": "List with filters",
+  "description": "A screen of many records of one type: a header, filters directly above the data, and pagination below it on the trailing side.",
+  "categories": ["layout"],
+  "registryDependencies": ["utils"],
+  "files": ["ListFilters.vue", "index.ts"],
+  "meta": {
+    "version": "0.1.0",
+    "useWhen": "Users scan, search, and filter many records of one type, such as customers, orders or an audit log.",
+    "avoidWhen": "Users read one record at a time beside the list: use list-detail. Users watch several measures at a glance: use dashboard.",
+    "regions": {
+      "header": "One page-header: the title and the page's one primary action",
+      "filters": "filter-bar, search first; more than four filters collapse into a popover",
+      "data": "A table or a list of cards, rendering empty, loading, error and long",
+      "pagination": "pagination, past 50 rows, on the trailing side"
+    },
+    "data": {
+      "loading": "boolean: sets aria-busy on the data region"
+    },
+    "states": ["empty", "loading", "error", "long"]
+  }
+}
