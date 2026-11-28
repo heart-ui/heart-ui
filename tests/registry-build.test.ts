@@ -41,6 +41,7 @@ describe('registry:build', () => {
         'dialog',
         'drawer',
         'dropdown-menu',
+        'empty-state',
         'form-control',
         'icon',
         'input',

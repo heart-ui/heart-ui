@@ -1,0 +1,9 @@
+{
+  "name": "empty-state",
+  "type": "registry:ui",
+  "title": "Empty State",
+  "description": "What a region shows when it has nothing yet: a title, an optional description, a decorative icon and the actions that fill it.",
+  "registryDependencies": ["utils"],
+  "files": ["EmptyState.vue", "index.ts"],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}
