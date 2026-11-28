@@ -1,0 +1,19 @@
+{
+  "name": "combobox",
+  "type": "registry:ui",
+  "title": "Combobox",
+  "description": "Pick one option from a long list by typing to filter it: a field like an input with three sizes and an invalid state, groups with headings, an empty message, and filtering that a caller can turn off to load results.",
+  "dependencies": ["reka-ui@2.11.0", "class-variance-authority@0.7.1"],
+  "registryDependencies": ["utils", "icon"],
+  "files": [
+    "Combobox.vue",
+    "ComboboxInput.vue",
+    "ComboboxContent.vue",
+    "ComboboxItem.vue",
+    "ComboboxGroup.vue",
+    "ComboboxEmpty.vue",
+    "combobox.variants.ts",
+    "index.ts"
+  ],
+  "meta": { "version": "0.1.0", "tier": 2 }
+}

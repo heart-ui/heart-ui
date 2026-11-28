@@ -33,6 +33,7 @@ describe('docs pages', () => {
       .filter((entry) => /<DemoPreview [^>]* overlay \/>/.test(entry.item))
       .map((entry) => entry.name)
     expect(overlays).toEqual([
+      'combobox',
       'dialog',
       'drawer',
       'dropdown-menu',
@@ -112,6 +113,7 @@ describe('docs pages', () => {
       'button',
       'card',
       'checkbox',
+      'combobox',
       'dialog',
       'drawer',
       'dropdown-menu',
@@ -141,6 +143,7 @@ describe('docs pages', () => {
       ['button', 'Button.demo.vue'],
       ['card', 'Card.demo.vue'],
       ['checkbox', 'Checkbox.demo.vue'],
+      ['combobox', 'Combobox.demo.vue'],
       ['dialog', 'Dialog.demo.vue'],
       ['drawer', 'Drawer.demo.vue'],
       ['dropdown-menu', 'DropdownMenu.demo.vue'],
@@ -600,6 +603,7 @@ describe('docs page generator edge cases', () => {
       'Button',
       'Card',
       'Checkbox',
+      'Combobox',
       'Dialog',
       'Drawer',
       'Dropdown Menu',

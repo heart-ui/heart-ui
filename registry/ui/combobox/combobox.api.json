@@ -1,0 +1,163 @@
+{
+  "name": "combobox",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "Combobox",
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "Submits the chosen item's value in its form."
+        },
+        {
+          "name": "filter",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Hides items whose text doesn't contain the typed text; `false` for a list the caller loads."
+        },
+        {
+          "name": "modelValue",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string | undefined"
+        },
+        {
+          "name": "update:open",
+          "payload": "boolean | undefined"
+        }
+      ]
+    },
+    {
+      "name": "ComboboxContent",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "ComboboxEmpty",
+      "props": [],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "ComboboxGroup",
+      "props": [
+        {
+          "name": "heading",
+          "type": "string",
+          "required": false,
+          "description": "Shown above the items, and names the group."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "ComboboxInput",
+      "props": [
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "required": false,
+          "default": "'md'"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": "Shown while the field is empty."
+        },
+        {
+          "name": "displayValue",
+          "type": "((value: string) => string)",
+          "required": false,
+          "description": "Text shown for the chosen value; defaults to the chosen item's text."
+        },
+        {
+          "name": "toggleLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Show options'",
+          "description": "Accessible name of the button that opens the list."
+        },
+        {
+          "name": "modelValue",
+          "type": "string",
+          "required": false,
+          "default": "''"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string"
+        }
+      ]
+    },
+    {
+      "name": "ComboboxItem",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default"
+        }
+      ],
+      "events": []
+    }
+  ]
+}
