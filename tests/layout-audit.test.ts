@@ -24,8 +24,8 @@ afterEach(() => {
 describe('layout demos', () => {
   const layouts = demoFiles().filter((entry) => entry.kind === 'layouts')
 
-  it('include app-shell', () => {
-    expect(layouts.map((entry) => entry.name)).toContain('app-shell')
+  it('include every layout built so far', () => {
+    expect(layouts.map((entry) => entry.name).sort()).toEqual(['app-shell', 'list-filters'])
   })
 
   it.each(layouts.map((entry) => entry.name))('pass heart-ui audit: %s', async (name) => {

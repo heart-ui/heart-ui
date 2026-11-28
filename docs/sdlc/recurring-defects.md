@@ -36,3 +36,5 @@ One line per defect: what it looks like, then the severity.
 - A focus fallback written as one `querySelector('a, b')` expecting `a` to win: a selector list returns the first match in document order: medium.
 - A control shown only below 768 px (a menu button, a mobile action) sized `sm`, under the `control-md` touch target `layout-rules.md` requires there: high.
 - A sticky header with no matching scroll padding, so a link target or a focused element scrolls under it (WCAG 2.4.11): medium.
+- A list demo that filters and pages: the page isn't reset when the filter changes (Pagination clamps only for display), and a filter matching nothing shows an empty table instead of a no-results state: medium.
+- A loading skeleton of plain full-width bars standing in for a table, instead of its header row and columns: low.

@@ -781,3 +781,21 @@ Gaps and conflicts found while building. Format in
   decision (P1-14, P2-50). Options: point Nuxt's `layouts` alias at
   `@/components/layouts`, or keep it and document wrapping `AppShell` in
   `layouts/default.vue`. Raised by the P2-20 code review.
+
+- 2026-11-28 P2-21: the layout catalog gives `list-filters` the regions
+  `header`, `filters`, `data` and `pagination`, but not what the layout
+  renders itself or which states it lists. Chose: `ListFilters` only
+  arranges named slots (filters `gap-md` above the data, pagination on the
+  trailing side, the header `section-gap` above), drops a region with no
+  content, renders no landmark (it goes in `app-shell`'s `main`), and takes
+  `loading` to set `aria-busy` on the data region; `meta.states` lists all
+  four, which its demo's data region renders. Why: the list rules in
+  layout-rules.md are about arrangement, and the blocks that fill the
+  regions are their own tasks. Decided by the agent (delegated).
+
+- 2026-11-28 P2-21: layout-rules.md paginates past 50 rows, but the demo
+  fixtures hold 36 customers. Chose: the `default` demo state pages them
+  10 at a time, so the pagination region shows in the gallery and its
+  screenshots; `long` shows all 36 unpaged. Why: a larger fixture would
+  change every block demo that uses it. The demo comment says the real
+  rule. Raised by the P2-21 code review. Decided by the agent (delegated).

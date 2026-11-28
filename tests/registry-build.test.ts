@@ -47,6 +47,7 @@ describe('registry:build', () => {
         'icon',
         'input',
         'label',
+        'list-filters',
         'pagination',
         'popover',
         'progress',
