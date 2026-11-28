@@ -2,7 +2,7 @@
 import axe from 'axe-core'
 import { userEvent } from 'vitest/browser'
 import { createApp, type App, type VNode } from 'vue'
-import { demoStateKey, demos, galleryState } from '../../gallery-rules'
+import { demoKind, demoStateKey, demos, galleryState } from '../../gallery-rules'
 import '../src/style.css'
 
 const mounted: { app: App; root: HTMLElement }[] = []
@@ -15,8 +15,8 @@ export async function mountDemo(
   const load = demos.get(name)
   if (!load) throw new Error(`No demo named "${name}"`)
   document.documentElement.classList.toggle('dark', mode === 'dark')
-  // A page landmark around the demo, as the gallery pages have.
-  const root = document.createElement('main')
+  // A page landmark around the demo, as the gallery pages have; a layout renders its own.
+  const root = document.createElement(demoKind(name) === 'layouts' ? 'div' : 'main')
   document.body.append(root)
   const app = createApp((await load()).default).provide(demoStateKey, galleryState(name, { state }))
   app.mount(root)

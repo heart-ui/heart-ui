@@ -142,7 +142,7 @@ All depend on P2-03 and P2-04.
 
 | ID | Item | Also depends on | Status |
 | --- | --- | --- | --- |
-| P2-20 | `app-shell` | P2-18 | todo |
+| P2-20 | `app-shell` | P2-18 | review |
 | P2-21 | `list-filters` | P2-20 | todo |
 | P2-22 | `list-detail` | P2-20 | todo |
 | P2-23 | `dashboard` | P2-20 | todo |

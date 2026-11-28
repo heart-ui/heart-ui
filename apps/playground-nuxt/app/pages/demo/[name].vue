@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent, provide } from 'vue'
-import { demoStateKey, demos, galleryState } from '../../../../gallery-rules'
+import { demoKind, demoStateKey, demos, galleryState } from '../../../../gallery-rules'
 
 const route = useRoute()
 const name = String(route.params.name)
@@ -14,8 +14,10 @@ if (!load) {
   })
 }
 const Demo = defineAsyncComponent(load)
+// A layout demo renders the page's main itself.
+const wrapper = demoKind(name) === 'layouts' ? 'div' : 'main'
 </script>
 
 <template>
-  <main><Demo /></main>
+  <component :is="wrapper"><Demo /></component>
 </template>

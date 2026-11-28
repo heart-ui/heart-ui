@@ -1,0 +1,26 @@
+{
+  "name": "app-shell",
+  "type": "registry:block",
+  "title": "App shell",
+  "description": "The frame of every signed-in screen: a collapsible sidebar that becomes a drawer below 768 px, a sticky topbar and the page's main region, capped at content-max.",
+  "categories": ["layout"],
+  "registryDependencies": ["utils", "button", "sidebar"],
+  "files": ["AppShell.vue", "index.ts"],
+  "meta": {
+    "version": "0.1.0",
+    "useWhen": "Any signed-in screen that shares navigation. Every other layout except auth sits inside it.",
+    "avoidWhen": "Signed-out screens such as sign in or reset password: use auth.",
+    "regions": {
+      "sidebar": "SidebarHeader (brand, SidebarTrigger), SidebarContent with groups of SidebarItems, SidebarFooter (user-menu)",
+      "topbar": "breadcrumb-bar, search, notification-list in a popover, user-menu; after the menu button below 768 px",
+      "default": "The page: one page-header and its sections, or another layout such as list-filters or dashboard"
+    },
+    "data": {
+      "collapsed": "boolean, v-model:collapsed",
+      "navLabel": "string, default Navigation",
+      "menuLabel": "string, default Menu",
+      "closeLabel": "string, default Close"
+    },
+    "states": ["long"]
+  }
+}

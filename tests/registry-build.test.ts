@@ -31,6 +31,7 @@ describe('registry:build', () => {
       expect(names).toEqual([
         'accordion',
         'alert',
+        'app-shell',
         'avatar',
         'badge',
         'breadcrumb',
