@@ -34,6 +34,14 @@ const demoPaths = new Map(
   ]),
 )
 
+/**
+ * The kind of item the demo for a name belongs to. A layout renders the page's `main` itself, so
+ * galleries and the test harness wrap only other demos in one.
+ */
+export function demoKind(name: string) {
+  return demoPaths.get(name)?.split('/').at(-3)
+}
+
 /** The states the demo for an item name is shown in, as the Node runners compute them. */
 export function demoStatesOf(name: string) {
   const path = demoPaths.get(name)

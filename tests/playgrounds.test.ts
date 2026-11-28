@@ -277,6 +277,14 @@ describe('nuxt playground', () => {
     expect(await response.text()).toContain(placeholderText)
   })
 
+  it('nuxt playground renders a layout demo with one main', async () => {
+    const response = await fetch(`${base}/demo/app-shell`)
+    expect(response.status).toBe(200)
+    const html = await response.text()
+    // The layout renders the page's main; the gallery's wrapper must not add a second.
+    expect(html.match(/<main[\s>]/g)?.length).toBe(1)
+  })
+
   it('nuxt playground server-renders mode, dir and theme', async () => {
     const attributes = await htmlAttributes('/demo/placeholder?mode=dark&dir=rtl&theme=ocean')
     expect(attributes).toMatch(/\bclass="dark"/)

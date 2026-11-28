@@ -758,3 +758,26 @@ Gaps and conflicts found while building. Format in
   collapsed items. Why: SSR-safe with no hydration mismatch, closest to
   `drawer`, `breadcrumb` and `combobox`, and nothing beyond the catalog
   row. Decided by the agent (delegated).
+
+- 2026-11-28 P2-20: the layout catalog gives `app-shell` the regions
+  `sidebar`, `topbar` and `default`, but not whether the shell or the page
+  renders the `Sidebar`, what opens it below 768 px, which states the shell
+  renders, or who owns `main` (the galleries already wrap every demo in
+  one). Chose: `AppShell` renders the `Sidebar` (its slot takes the
+  sidebar's parts), passes `v-model:collapsed`, `navLabel` and `closeLabel`
+  through and owns the drawer's open state behind a topbar `Menu` button
+  (visible text, since `icon` 0.2.0 has no menu icon); it renders the
+  page's only `main`, so galleries and the test harness wrap layout demos
+  in a `div`; `meta.states` is `long` only, since empty, loading and error
+  belong to the blocks in `default`. Why: one shell owns navigation and
+  landmarks for every screen (layout-rules.md, Page structure), and a
+  nested `main` fails axe. Decided by the agent (delegated).
+
+- 2026-11-28 P2-20 (open, for a later task): `init` maps the `layouts`
+  alias to `@/layouts`, which in a Nuxt project is `app/layouts`, the
+  folder Nuxt scans for its own page layouts. `app-shell` is the first item
+  installed there, so Nuxt may register `app-shell/AppShell.vue` (and its
+  `index.ts`) as nested layouts. Not changed here: it is the CLI's alias
+  decision (P1-14, P2-50). Options: point Nuxt's `layouts` alias at
+  `@/components/layouts`, or keep it and document wrapping `AppShell` in
+  `layouts/default.vue`. Raised by the P2-20 code review.

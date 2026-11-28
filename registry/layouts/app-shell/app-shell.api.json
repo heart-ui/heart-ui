@@ -1,0 +1,55 @@
+{
+  "name": "app-shell",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "AppShell",
+      "props": [
+        {
+          "name": "navLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Navigation'",
+          "description": "Accessible name of the navigation."
+        },
+        {
+          "name": "menuLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Menu'",
+          "description": "Text of the menu button that opens the navigation below 768 px."
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "required": false,
+          "default": "'Close'",
+          "description": "Accessible name of the navigation drawer's close button."
+        },
+        {
+          "name": "collapsed",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        }
+      ],
+      "slots": [
+        {
+          "name": "sidebar"
+        },
+        {
+          "name": "topbar"
+        },
+        {
+          "name": "default"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:collapsed",
+          "payload": "boolean"
+        }
+      ]
+    }
+  ]
+}

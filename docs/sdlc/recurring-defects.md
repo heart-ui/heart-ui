@@ -34,3 +34,5 @@ One line per defect: what it looks like, then the severity.
 - An overlay closed by a condition only after it rendered, so its exit animation still plays; gate its `open` on the condition instead: medium.
 - A value read from `useAttrs()` in another component's render (through a context): attributes aren't reactive and compiled slots don't rerender children, so mirror it into a ref in `onBeforeUpdate`: medium.
 - A focus fallback written as one `querySelector('a, b')` expecting `a` to win: a selector list returns the first match in document order: medium.
+- A control shown only below 768 px (a menu button, a mobile action) sized `sm`, under the `control-md` touch target `layout-rules.md` requires there: high.
+- A sticky header with no matching scroll padding, so a link target or a focused element scrolls under it (WCAG 2.4.11): medium.
