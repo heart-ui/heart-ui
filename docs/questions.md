@@ -732,3 +732,12 @@ Gaps and conflicts found while building. Format in
   choice are left out until a task asks for them. Why: closest to `select`,
   and Reka shows the raw value by default. Decided by the agent
   (delegated).
+
+- 2026-11-28 P2-17: the catalog row gives `empty-state` the props `title`
+  and `description` and the slots `icon` and `actions`, but not the title's
+  element, whether it has a live role, or how the icon is framed. Chose: the
+  title is a `div` (as `alert`), no live role, and the `icon` slot sits in a
+  muted circle hidden from screen readers; `title` is required and
+  `description` optional. Why: the heading level depends on the page, the
+  state shows on load rather than as news, and one icon look across
+  screens. Decided by the agent (delegated).

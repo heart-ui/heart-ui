@@ -1,0 +1,30 @@
+{
+  "name": "empty-state",
+  "version": "0.1.0",
+  "components": [
+    {
+      "name": "EmptyState",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "icon"
+        },
+        {
+          "name": "actions"
+        }
+      ],
+      "events": []
+    }
+  ]
+}
