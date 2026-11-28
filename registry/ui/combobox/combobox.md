@@ -21,19 +21,19 @@ the list is short enough to scan, and `command` for a palette of actions.
 
 | Part | Prop | Type | Default | Notes |
 | --- | --- | --- | --- | --- |
-| `Combobox` | `modelValue` | `string` | none | `v-model`; the chosen item's `value` |
+| `Combobox` | `modelValue` | `string` | none | `v-model`; the chosen item's `value`. The user can't clear a choice from the field; set it in code |
 | `Combobox` | `open` | `boolean` | none | `v-model:open` |
 | `Combobox` | `disabled` | `boolean` | `false` | |
 | `Combobox` | `name` | `string` | none | Form field name; submits the chosen `value`, not the text |
-| `Combobox` | `filter` | `boolean` | `true` | Hides items whose text doesn't contain the typed text, ignoring case and accents. `false` shows every item, for a list the caller loads as the text changes |
+| `Combobox` | `filter` | `boolean` | `true` | Hides items whose text doesn't contain the typed text, ignoring case and accents. `false` shows every item, for a list the caller loads as the text changes; such a list needs `displayValue`, since the chosen item may not be in the results |
 | `Combobox` | `class` | `ClassValue` | none | On the element around the field |
-| `ComboboxInput` | `modelValue` | `string` | `''` | `v-model`; the text in the field. Read it to load results when `filter` is `false` |
+| `ComboboxInput` | `modelValue` | `string` | `''` | `v-model`; the text in the field. Read it to load results when `filter` is `false`. It is also set to the chosen item's text (the value until that text is known) on mount, when the value changes and each time the list closes, so load every result when it equals that text |
 | `ComboboxInput` | `size` | `sm \| md \| lg` | `md` | Same heights as `input` |
 | `ComboboxInput` | `invalid` | `boolean` | `false` | Sets `aria-invalid` and the danger border |
 | `ComboboxInput` | `placeholder` | `string` | none | Shown while the field is empty |
-| `ComboboxInput` | `displayValue` | `(value: string) => string` | none | Text shown for the chosen value. Without it, the chosen item's text, once the list has rendered; until then the value itself |
+| `ComboboxInput` | `displayValue` | `(value: string) => string` | none | Text shown for the chosen value. Without it, the chosen item's text once the items have rendered on the client; until then, and in server-rendered HTML, the value itself |
 | `ComboboxInput` | `toggleLabel` | `string` | `Show options` | Accessible name of the button that opens the list |
-| `ComboboxItem` | `value` | `string` | none | Required, not empty |
+| `ComboboxItem` | `value` | `string` | none | Required, not empty; convert a numeric id with `String()` |
 | `ComboboxItem` | `disabled` | `boolean` | `false` | |
 | `ComboboxGroup` | `heading` | `string` | none | Shown above the group's items, and names the group |
 
@@ -80,8 +80,8 @@ room below the field (scrolls); `filter` off with results the caller loads.
 | Letters | Type in the field; the list opens and shows the matches, the first highlighted |
 | `ArrowDown`, `ArrowUp` | Open the list; move between items, skipping disabled ones |
 | `Home`, `End` | Highlight the first or last item |
-| `Enter` | Choose the highlighted item and close; the field shows its text |
-| `Escape` | Close without choosing; focus stays in the field |
+| `Enter` | Choose the highlighted item and close; the field shows its text. While the list is open it never submits the form, even when nothing matches |
+| `Escape` | Close without choosing; focus stays in the field, which shows the chosen item's text again |
 | `Tab` | Leave the field and close the list; the field shows the chosen item's text again |
 
 ## Accessibility
@@ -101,12 +101,17 @@ room below the field (scrolls); `filter` off with results the caller loads.
 
 ```vue
 <Combobox v-model="assignee" :filter="false">
-  <ComboboxInput v-model="query" aria-label="Assignee" placeholder="Search people" />
+  <ComboboxInput
+    v-model="query"
+    aria-label="Assignee"
+    placeholder="Search people"
+    :display-value="nameOf"
+  />
   <ComboboxContent>
-    <ComboboxItem v-for="person in people" :key="person.id" :value="person.id">
+    <ComboboxItem v-for="person in people" :key="person.id" :value="String(person.id)">
       {{ person.name }}
     </ComboboxItem>
-    <ComboboxEmpty>No one matches.</ComboboxEmpty>
+    <ComboboxEmpty v-if="searched">No one matches.</ComboboxEmpty>
   </ComboboxContent>
 </Combobox>
 ```

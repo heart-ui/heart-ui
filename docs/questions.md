@@ -719,3 +719,16 @@ Gaps and conflicts found while building. Format in
   private layer, as `accordion`'s do, so `@heart-ui/theme` is unchanged.
   Why: closest to `dialog` and shadcn's sheet, and correct in right-to-left
   text. Decided by the agent (delegated).
+
+- 2026-11-28 P2-16: the catalog row gives `combobox` the parts Input,
+  Content, Item, Group, Empty and a `filter` prop, but no group heading
+  part, no word on what the field shows for the chosen value, and nothing
+  on `required` or clearing. Chose: `ComboboxGroup` takes a `heading` prop
+  (no Label part); the field shows the chosen item's text, which items
+  register by rendering hidden in place while the list is closed, and
+  `ComboboxInput`'s `displayValue` overrides it for async lists;
+  `ComboboxInput`'s `v-model` is the typed text; `name` submits the value
+  through Reka's hidden field. `required`, a clear button and multiple
+  choice are left out until a task asks for them. Why: closest to `select`,
+  and Reka shows the raw value by default. Decided by the agent
+  (delegated).

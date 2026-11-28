@@ -73,3 +73,5 @@
 - 2026-11-28 update knowledge/gotchas/registry-items.md — keyframes blending with auto jump at 50%; direction-aware slides by inset; fixed shrink-to-fit layers grow past the page (from 2026-11-27-m-p2-15-drawer)
 - 2026-11-28 update knowledge/gotchas/test-harness.md — 414 px default viewport, hidden scrollbars, hover left by an earlier click (from 2026-11-27-m-p2-15-drawer)
 - 2026-11-28 update docs/sdlc/recurring-defects.md — an animation tested only at its first and last frame (from 2026-11-27-m-p2-15-drawer)
+- 2026-11-28 update knowledge/gotchas/registry-items.md — Reka Combobox: hide-others on a kept-mounted list, stale highlight after unmount, English fallbacks, disabled options without aria-disabled, group label id timing (from 2026-11-28-m-p2-16-combobox)
+- 2026-11-28 update docs/sdlc/recurring-defects.md — hidden copies registering as live parts; highlights pointing at unmounted elements (from 2026-11-28-m-p2-16-combobox)

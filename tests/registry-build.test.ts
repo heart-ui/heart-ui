@@ -37,6 +37,7 @@ describe('registry:build', () => {
         'button',
         'card',
         'checkbox',
+        'combobox',
         'dialog',
         'drawer',
         'dropdown-menu',

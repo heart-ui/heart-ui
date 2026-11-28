@@ -25,3 +25,5 @@ One line per defect: what it looks like, then the severity.
 - A component that corrects its `v-model` value by emitting at setup or from an immediate watch (clamping, defaulting), which resets a deep-linked value while data loads, emits during SSR and passes `NaN` through: medium.
 - A `tabindex` or role tied to a measured state (overflow, size) that is removed while the element has focus, or on a `blur` from a window switch, dropping keyboard focus to the page: medium.
 - An enter or exit animation tested only at its first frame and after `finish()`, so a property that can't interpolate (to or from `auto`) and jumps midway passes: high.
+- A hidden copy of a primitive's parts (rendered to measure or to read text) that still registers with the primitive, so its keyboard and ARIA act on elements nobody can see: high.
+- A highlight or `aria-activedescendant` that keeps pointing at an element after it unmounts (the list closed or filtered to nothing), so the reference names a removed id and Enter falls through to the form: high.
